@@ -49,17 +49,11 @@ class UserController extends Controller
     {
         User::create([
             'nombre' => $request['nombre'],
-            'username' => $request['username'],
-            'profesor_id' => $request['profesor_id'],
-            'servicio_id' => $request['servicio_id'],
+            'telefono' => $request['telefono'],
             'email' => $request['email'],
             'direccion' => $request['direccion'],
-            'inicio' => $request['inicio'],
             'nacimiento' => $request['nacimiento'],
-            'dni' => $request['dni'],
-            'edad' => $request['edad'],
-            'peso' => $request['peso'],
-            'altura' => $request['altura'],
+            'type' => $request['type'],
             'password' => bcrypt($request['password'])
         ]);
         

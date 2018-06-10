@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->integer('codigo');
             $table->string('nombre');
             $table->integer('cantidad');
+            $table->integer('cantidad_res');
             $table->float('costo', 8, 2);
             $table->float('monto', 8, 2);
             $table->timestamps();
