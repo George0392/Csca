@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPaidAtToUsers extends Migration
+class CreateProductCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddPaidAtToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->date('paid_at')->nullable()->after('inicio');
+        Schema::create('product_categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class AddPaidAtToUsers extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('paid_at');
-        });
+        Schema::dropIfExists('product_categories');
     }
 }

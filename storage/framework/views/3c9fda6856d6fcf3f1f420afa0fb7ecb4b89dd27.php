@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="<?php echo e(app()->getLocale()); ?>">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title><?php echo e(config('app.name', 'Laravel')); ?></title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('/css/open-iconic-bootstrap.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/css/open-iconic-bootstrap.css')); ?>" rel="stylesheet">
     
     <!-- Bootstrap Core CSS -->
         <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -102,8 +102,9 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                    <a class="navbar-brand" href="<?php echo e(url('/')); ?>">
+                        <?php echo e(config('app.name', 'Laravel')); ?>
+
                     </a>
                 </div>
 
@@ -116,41 +117,42 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                        @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
-                        @else
+                        <?php if(auth()->guard()->guest()): ?>
+                            <li><a href="<?php echo e(route('login')); ?>">Login</a></li>
+                            <li><a href="<?php echo e(route('register')); ?>">Register</a></li>
+                        <?php else: ?>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                                    {{ Auth::user()->nombre }} <span class="caret"></span>
+                                    <?php echo e(Auth::user()->nombre); ?> <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="{{ route('logout') }}"
+                                        <a href="<?php echo e(route('logout')); ?>"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                             Cerrar sesión
                                         </a>
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
+                                        <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                                            <?php echo e(csrf_field()); ?>
+
                                         </form>
                                     </li>
                                 </ul>
                             </li>
-                        @endguest
+                        <?php endif; ?>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        @yield('content')
+        <?php echo $__env->yieldContent('content'); ?>
         
     </div>
     
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="<?php echo e(asset('js/app.js')); ?>"></script>
         <footer class="footer">
             <div class="container">
                 <span class="text-muted">Por <b>JABlack Software</b> 2018 - Copyright © Todos los derechos reservados
@@ -158,13 +160,7 @@
             </div>
         </footer>
       
-          {{--  <!-- Bootstrap core JavaScript
-          ================================================== -->
-          <!-- Placed at the end of the document so the pages load faster -->
-          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-          <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-          <script src="../../assets/js/vendor/popper.min.js"></script>
-          <script src="../../dist/js/bootstrap.min.js"></script>  --}}
+          
           <!-- wrapper -->
           <!-- Metis Menu Plugin JavaScript -->
           <script src="/metisMenu/metisMenu.min.js"></script>

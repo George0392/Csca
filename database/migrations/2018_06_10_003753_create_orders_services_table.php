@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDescriptionsTable extends Migration
+class CreateOrdersServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateDescriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('descriptions', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('orders_services', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
+            $table->integer('id_order');
+            $table->integer('id_servicio');
+            $table->text('detalle');
+            $table->boolean('completada');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateDescriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('descriptions');
+        Schema::dropIfExists('orders_services');
     }
 }

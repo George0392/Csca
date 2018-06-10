@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrainersTable extends Migration
+class CreateUserTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,10 @@ class CreateTrainersTable extends Migration
      */
     public function up()
     {
-        Schema::create('trainers', function (Blueprint $table) {
+        Schema::create('user_types', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('nombre', 100)->unique();
-            $table->string('telefono', 15);
-            $table->string('email')->unique();
-            $table->string('direccion');
-            $table->date('nacimiento');
-            $table->date('inicio');
-            $table->rememberToken();
+            $table->string('nombre');
             $table->timestamps();
         });
     }
@@ -34,6 +28,6 @@ class CreateTrainersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trainers');
+        Schema::dropIfExists('user_types');
     }
 }

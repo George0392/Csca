@@ -15,6 +15,10 @@ class CreateOrdersProductsTable extends Migration
     {
         Schema::create('orders_products', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_order');
+            $table->integer('id_producto');
+            $table->integer('cantidad');
+            $table->boolean('completada');
             $table->timestamps();
         });
     }
