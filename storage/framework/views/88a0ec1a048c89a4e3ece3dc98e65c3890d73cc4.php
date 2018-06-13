@@ -1,5 +1,5 @@
 <?php $__env->startSection('content2'); ?>
-    <h1 class="form-group col-md-12">Crear Socio</h1>
+    <h1 class="form-group col-md-12">Agregar <?php echo e($userType->nombre); ?></h1>
     
     <?php if($errors->any()): ?>
         <ul>
@@ -9,93 +9,54 @@
         </ul>
     <?php endif; ?>
 
-    <form method="POST" action="<?php echo e(url('admin/socios')); ?>">
+    <form method="POST" action="/admin/<?php echo e($type); ?>s">
         <?php echo csrf_field(); ?>
 
         <div class="form-row">
-            <div class="form-group col-md-2">
-                <label for="inputEmail4">Nombre</label>
-                <input type="text" class="form-control" name="nombre" value="<?php echo e(old('nombre')); ?>" >
+            <div class="form-group col-md-3">
+                <label>Nombre</label>
+                <input require type="text" class="form-control" name="nombre" value="<?php echo e(old('nombre')); ?>" >
             </div>
             
             <div class="form-group col-md-2">
-                <label for="inputEmail4">Usuario</label>
-                <input type="text" class="form-control" name="username" value="<?php echo e(old('username')); ?>" >
+                <label>Teléfono</label>
+                <input require type="number" class="form-control" name="telefono" placeholder="Sin 0 ni 15" value="<?php echo e(old('telefono')); ?>" >
+            </div>
+            
+            <div class="form-group col-md-3">
+                <label>Email</label>
+                <input require type="email" class="form-control" name="email" value="<?php echo e(old('email')); ?>" >
+            </div>
+            
+            <div class="form-group col-md-2">
+                <label>Dirección</label>
+                <input require type="text" class="form-control" name="direccion" value="<?php echo e(old('direccion')); ?>" >
             </div>
 
             <div class="form-group col-md-2">
-                <label for="inputZip">Email</label>
-                <input type="email" class="form-control" name="email" value="<?php echo e(old('email')); ?>" >
+                <label>Fecha de nac.</label>
+                <input require type="date" class="form-control" name="nacimiento" value="<?php echo e(old('nacimiento')); ?>" >
             </div>
-    
-            <div class="form-group col-md-2">
-                <label for="inputPassword4">Password</label>
-                <input type="password" class="form-control" name="password" value="<?php echo e(old('password')); ?>" >
+            
+            <?php if($userType->nombre == "encargado"): ?>
+            <div class="form-group col-md-3">
+                <label>Password</label>
+                <input require type="password" class="form-control" name="password" value="<?php echo e(old('password')); ?>" >
             </div>
-        
-            <div class="form-group col-md-2">
-                <label for="inputAddress">DNI</label>
-                <input type="number" class="form-control" name="dni" value="<?php echo e(old('dni')); ?>" >
-            </div>
-    
-            <div class="form-group col-md-2">
-                <label for="inputCity">Dirección</label>
-                <input type="text" class="form-control" name="direccion" value="<?php echo e(old('direccion')); ?>" >
-            </div>
+            <?php endif; ?>
         </div>
 
         <div class="form-row">
-            <div class="form-group col-md-2">
-                <label for="inputState">Fecha de nac.</label>
-                <input type="date" class="form-control" name="nacimiento" value="<?php echo e(old('nacimiento')); ?>" >
-            </div>
-    
-            <div class="form-group col-md-1">
-                <label for="inputZip">Edad</label>
-                <input type="number" class="form-control" name="edad" value="<?php echo e(old('edad')); ?>" >
-            </div>
-        
-            <div class="form-group col-md-1">
-                <label for="inputAddress">Peso</label>
-                <input type="text" class="form-control" name="peso" value="<?php echo e(old('peso')); ?>" >
-            </div>
-
-            <div class="form-group col-md-1">
-                <label for="inputCity">Altura</label>
-                <input type="number" class="form-control" name="altura" value="<?php echo e(old('altura')); ?>" >
-            </div>
-
-            <div class="form-group col-md-2">
-                <label for="inputCity">Inicio</label>
-                <input type="date" class="form-control" name="inicio" value="<?php echo e(old('inicio')); ?>" >
-            </div>
-
+            <input type="hidden" name="id_uType" value="<?php echo e($userType->id); ?>" >
+            
             <div class="form-group col-md-3">
-                <label for="inputCity">Profesores</label>
-                <select class="form-control" name="profesor_id" value="<?php echo e(old('profesor_id')); ?>">
-                    <?php $__currentLoopData = $trainers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $trainer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($trainer->id); ?>"><?php echo e($trainer->nombre); ?></option>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </select>
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-success form-control">Agregar <?php echo e($type); ?></button>
             </div>
 
             <div class="form-group col-md-2">
-                <label for="inputCity">Servicios</label>
-                <select class="form-control" name="servicio_id" value="<?php echo e(old('servicio_id')); ?>">
-                    <?php $__currentLoopData = $services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($service->id); ?>"><?php echo e($service->nombre); ?></option>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </select>
-            </div>
-            
-            <div class="form-group col-md-2">
                 <label>&nbsp;</label>
-                <a href="/admin/socios" class="btn btn-primary form-control">Volver</a>
-            </div>
-            
-            <div class="form-group col-md-2">
-                <label>&nbsp;</label>
-                <button type="submit" class="btn btn-success form-control">Agregar socio</button>
+                <a href="/admin/<?php echo e($type); ?>s" class="btn btn-primary form-control">Volver</a>
             </div>
         </div>
     </form>

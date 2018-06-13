@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Service;
+use App\Product;
 use Illuminate\Http\Request;
-use App\Trainer;
 
-class TrainerController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,10 @@ class TrainerController extends Controller
      */
     public function index()
     {
-        $trainers = Trainer::all();
-        $titulo = "Listado de Profesores";
-        return view('trainers.index', compact('trainers','titulo'));
+        $services = Service::all();
+        $users = \App\User::all();
+        $titulo = "Listado de servicios";
+        return view('products.index', compact('services','titulo','users'));
     }
 
     /**
@@ -26,7 +27,7 @@ class TrainerController extends Controller
      */
     public function create()
     {
-        return view('trainers.create');
+        return view('services.create');
     }
 
     /**
@@ -37,16 +38,12 @@ class TrainerController extends Controller
      */
     public function store(Request $request)
     {
-        Trainer::create([
+        Service::create([
             'nombre' => $request['nombre'],
-            'telefono' => $request['telefono'],
-            'email' => $request['email'],
-            'direccion' => $request['direccion'],
-            'inicio' => $request['inicio'],
-            'nacimiento' => $request['nacimiento']
+            'monto' => $request['monto']
         ]);
         
-        return redirect()->route('trainers.index');
+        return redirect()->route('services.create');
     }
 
     /**
@@ -57,14 +54,14 @@ class TrainerController extends Controller
      */
     public function show($id)
     {
-        $trainer = Trainer::find($id);
+        $service = Service::find($id);
         
-        if ($trainer == null) 
+        if ($service == null) 
         {
             return view('errors.404');
         }
 
-        return view('trainers.show', compact('trainer'));
+        return view('services.show', compact('service'));
     }
 
     /**
@@ -75,8 +72,8 @@ class TrainerController extends Controller
      */
     public function edit($id)
     {
-        $trainer = Trainer::find($id);
-        return view('trainers.edit', compact('trainer'));
+        $service = Service::find($id);
+        return view('services.edit', compact('service'));
     }
 
     /**
@@ -86,20 +83,16 @@ class TrainerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Trainer $trainer)
+    public function update(Service $service)
     {
         $data = request()->validate([
             'nombre' => 'required',
-            'telefono' => 'required',
-            'email' => 'required|email|unique:users,email,'.$trainer->id,
-            'direccion' => 'required',
-            'inicio' => 'required',
-            'nacimiento' => 'required',
+            'monto' => 'required',
         ]);
         
-        $trainer->update($data);
+        $service->update($data);
         
-        return redirect("/admin/profesores/");
+        return redirect("/admin/servicios/");
     }
 
     /**
@@ -108,9 +101,9 @@ class TrainerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete(Trainer $trainer)
+    public function delete(Service $service)
     {
-        $trainer->delete();
-        return redirect('/admin/profesores/');
+        $service->delete();
+        return redirect('/admin/servicios/');
     }
 }

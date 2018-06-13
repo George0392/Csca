@@ -24,37 +24,21 @@ Route::get('/admin', 'AdminController@admin')
     ->middleware('is_admin')    
     ->name('admin');
 
-// <-- Socios -->
-    
-Route::get('/admin/socios', 'UserController@index')->name('users.index');
-
-Route::get('/admin/socios/nuevo', 'UserController@create')->name('users.create');
-
-Route::post('/admin/socios', 'UserController@store');
-
-Route::get('/admin/socios/{id}', 'UserController@show')->name('users.show');
-
-Route::get('/admin/socios/{user}/editar', 'UserController@edit')->name('users.edit');
-
-Route::put('/admin/socios/{user}', 'UserController@update');
-
-Route::delete('/admin/socios/{user}', 'UserController@delete')->name('users.delete');
-
 // <-- Profesores -->
     
-Route::get('/admin/profesores', 'TrainerController@index')->name('trainers.index');
+// Route::get('/admin/profesores', 'TrainerController@index')->name('trainers.index');
 
-Route::get('/admin/profesores/nuevo', 'TrainerController@create')->name('trainers.create');
+// Route::get('/admin/profesores/nuevo', 'TrainerController@create')->name('trainers.create');
 
-Route::post('/admin/profesores', 'TrainerController@store');
+// Route::post('/admin/profesores', 'TrainerController@store');
 
-Route::get('/admin/profesores/{id}', 'TrainerController@show')->name('trainers.show');
+// Route::get('/admin/profesores/{id}', 'TrainerController@show')->name('trainers.show');
 
-Route::get('/admin/profesores/{id}/editar', 'TrainerController@edit')->name('trainers.edit');
+// Route::get('/admin/profesores/{id}/editar', 'TrainerController@edit')->name('trainers.edit');
 
-Route::put('/admin/profesores/{trainer}', 'TrainerController@update');
+// Route::put('/admin/profesores/{trainer}', 'TrainerController@update');
 
-Route::delete('/admin/profesores/{trainer}', 'TrainerController@delete')->name('trainers.delete');
+// Route::delete('/admin/profesores/{trainer}', 'TrainerController@delete')->name('trainers.delete');
 
 // <-- Servicios -->
     
@@ -71,6 +55,22 @@ Route::get('/admin/servicios/{id}/editar', 'ServiceController@edit')->name('serv
 Route::put('/admin/servicios/{service}', 'ServiceController@update');
 
 Route::delete('/admin/servicios/{service}', 'ServiceController@delete')->name('services.delete');
+
+// <-- Productoss -->
+    
+Route::get('/admin/productos', 'ProductController@index')->name('products.index');
+
+Route::get('/admin/productos/nuevo', 'ProductController@create')->name('products.create');
+
+Route::post('/admin/productos', 'ProductController@store');
+
+Route::get('/admin/productos/{id}', 'ProductController@show')->name('products.show');
+
+Route::get('/admin/productos/{id}/editar', 'ProductController@edit')->name('products.edit');
+
+Route::put('/admin/productos/{service}', 'ProductController@update');
+
+Route::delete('/admin/productos/{service}', 'ProductController@delete')->name('products.delete');
 
 // <-- Control -->
     
@@ -122,3 +122,19 @@ Route::get('/admin/control/sueldos/otros', 'ControlController@historial_sueldos_
 //Route::post('/admin/control/sueldos/otros', 'ControlController@historial_sueldos');
 
 // nande (prueba commit)
+
+// <-- Usuarios -->
+    
+Route::get('/admin/{type}s', 'UserController@index')->name('users.index');
+
+Route::get('/admin/{type}s/nuevo', 'UserController@create')->name('users.create');
+
+Route::post('/admin/{type}s', 'UserController@store');
+
+Route::get('/admin/{type}s/{nombre}', 'UserController@show')->name('users.show'); // ID por USER
+
+Route::get('/admin/{type}s/{nombre}/editar', 'UserController@edit')->name('users.edit');
+
+Route::put('/admin/{type}s/{user}', 'UserController@update')->name('users.update');
+
+Route::delete('/admin/{type}s/{user}', 'UserController@delete')->name('users.delete');

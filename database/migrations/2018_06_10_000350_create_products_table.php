@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->integer('id_categoria');
             $table->integer('codigo');
-            $table->string('nombre');
+            $table->string('nombre', 25);
             $table->integer('cantidad');
             $table->integer('cantidad_res');
             $table->float('costo', 8, 2);

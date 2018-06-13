@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Trainer;
-use App\Service;
+use App\UserType;
 
 use Illuminate\Http\Request;
 
@@ -15,15 +14,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($type)
     {
-        $users = User::all();
-        $trainers = Trainer::all();
-        $services = Service::all();
+        $userType = UserType::where('nombre', $type)->first();
         
-        $titulo = "Listado de Socios";
-
-        return view('users.index', compact('users','titulo','trainers','services'));
+        $users = User::all()->where('id_uType', $userType->id);
+        
+        return view('users.index', compact('users', 'type'));
     }
 
     /**
@@ -31,12 +28,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($type)
     {
-        $trainers = Trainer::all();
-        $services = Service::all();
+        //$type_id = \DB::table('user_types')->where('nombre', $type)->value('id');
+        $userType = UserType::where('nombre', $type)->first();
         
-        return view('users.create', compact('trainers','services'));
+        return view('users.create', compact('type','userType'));
     }
 
     /**
@@ -53,11 +50,15 @@ class UserController extends Controller
             'email' => $request['email'],
             'direccion' => $request['direccion'],
             'nacimiento' => $request['nacimiento'],
-            'type' => $request['type'],
+            'id_uType' => $request['id_uType'],
             'password' => bcrypt($request['password'])
         ]);
         
-        return redirect()->route('users.index');
+        $id_uType = $request->id_uType;
+        $userType = UserType::find($id_uType);
+        $type = $userType->nombre;
+
+        return redirect()->route('users.index', compact('type'));
     }
 
     /**
@@ -66,18 +67,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($type, $nombre)
     {
-        $user = User::find($id);
-        $trainers = Trainer::all(['id', 'nombre']);
-        $services = Service::all();
-
+        $user = User::where('nombre', $nombre)->first();
+        //dd($type);
         if ($user == null) 
         {
             return view('errors.404');
         }
 
-        return view('users.show', compact('user', 'trainers', 'services'));
+        return view('users.show', compact('user', 'type'));
     }
 
     /**
@@ -86,44 +85,37 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($type, $nombre)
     {
-        $trainers = Trainer::all(['id', 'nombre']);
-        $services = Service::all();
-
-        return view('users.edit', compact('user', 'trainers', 'services'));
+        $user = User::where('nombre', $nombre)->first();
+        return view('users.edit', compact('user', 'type'));
     }
 
-    public function update(User $user)
+    public function update($type, User $user)
     {
+        //dd($user);
         $data = request()->validate([
             'nombre' => 'required',
-            'username' => 'required',
-            'profesor_id' => 'required',
-            'servicio_id' => 'required',
+            'telefono' => 'required',
             'email' => 'required|email|unique:users,email,'.$user->id,
             'direccion' => 'required',
-            'inicio' => 'required',
             'nacimiento' => 'required',
-            'dni' => 'required',
-            'edad' => 'required',
-            'peso' => 'required',
-            'altura' => 'required',
             'password' => 'required',
+            'id_uType' => 'required',
         ]);
         
         $data['password'] = bcrypt($data['password']);
-        
+        //dd($data);
         $user->update($data);
         
-        //return redirect("admin/socios/{$user->id}/editar");
-        return redirect("/admin/socios/");
-        
+        $users = User::all()->where('id_uType', $data['id_uType']);
+
+        return redirect()->route('users.index', compact('type'));
     }
 
-    public function delete(User $user)
+    public function delete($type, User $user)
     {
         $user->delete();
-        return redirect('/admin/socios/');
+        return redirect()->route('users.index', compact('type'));
     }
 }

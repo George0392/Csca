@@ -118,7 +118,7 @@
                         <!-- Authentication Links -->
                         @guest
                             <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            {{--  <li><a href="{{ route('register') }}">Register</a></li>  --}}
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
@@ -165,10 +165,10 @@
           <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
           <script src="../../assets/js/vendor/popper.min.js"></script>
           <script src="../../dist/js/bootstrap.min.js"></script>  --}}
-          <!-- wrapper -->
-          <!-- Metis Menu Plugin JavaScript -->
-          <script src="/metisMenu/metisMenu.min.js"></script>
-          <!-- Custom Theme JavaScript -->
-          <script src="/js/sb-admin-2.js"></script>
+        <!-- wrapper -->
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="/metisMenu/metisMenu.min.js"></script>
+        <!-- Custom Theme JavaScript -->
+        <script src="/js/sb-admin-2.js"></script>
     </body>
 </html>

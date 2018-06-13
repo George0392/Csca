@@ -119,7 +119,7 @@
                         <!-- Authentication Links -->
                         <?php if(auth()->guard()->guest()): ?>
                             <li><a href="<?php echo e(route('login')); ?>">Login</a></li>
-                            <li><a href="<?php echo e(route('register')); ?>">Register</a></li>
+                            
                         <?php else: ?>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
@@ -161,10 +161,10 @@
         </footer>
       
           
-          <!-- wrapper -->
-          <!-- Metis Menu Plugin JavaScript -->
-          <script src="/metisMenu/metisMenu.min.js"></script>
-          <!-- Custom Theme JavaScript -->
-          <script src="/js/sb-admin-2.js"></script>
+        <!-- wrapper -->
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="/metisMenu/metisMenu.min.js"></script>
+        <!-- Custom Theme JavaScript -->
+        <script src="/js/sb-admin-2.js"></script>
     </body>
 </html>
