@@ -24,22 +24,6 @@ Route::get('/admin', 'AdminController@admin')
     ->middleware('is_admin')    
     ->name('admin');
 
-// <-- Profesores -->
-    
-// Route::get('/admin/profesores', 'TrainerController@index')->name('trainers.index');
-
-// Route::get('/admin/profesores/nuevo', 'TrainerController@create')->name('trainers.create');
-
-// Route::post('/admin/profesores', 'TrainerController@store');
-
-// Route::get('/admin/profesores/{id}', 'TrainerController@show')->name('trainers.show');
-
-// Route::get('/admin/profesores/{id}/editar', 'TrainerController@edit')->name('trainers.edit');
-
-// Route::put('/admin/profesores/{trainer}', 'TrainerController@update');
-
-// Route::delete('/admin/profesores/{trainer}', 'TrainerController@delete')->name('trainers.delete');
-
 // <-- Servicios -->
     
 Route::get('/admin/servicios', 'ServiceController@index')->name('services.index');
@@ -47,8 +31,6 @@ Route::get('/admin/servicios', 'ServiceController@index')->name('services.index'
 Route::get('/admin/servicios/nuevo', 'ServiceController@create')->name('services.create');
 
 Route::post('/admin/servicios', 'ServiceController@store');
-
-Route::get('/admin/servicios/{id}', 'ServiceController@show')->name('services.show');
 
 Route::get('/admin/servicios/{id}/editar', 'ServiceController@edit')->name('services.edit');
 
@@ -64,13 +46,25 @@ Route::get('/admin/productos/nuevo', 'ProductController@create')->name('products
 
 Route::post('/admin/productos', 'ProductController@store');
 
-Route::get('/admin/productos/{id}', 'ProductController@show')->name('products.show');
-
 Route::get('/admin/productos/{id}/editar', 'ProductController@edit')->name('products.edit');
 
-Route::put('/admin/productos/{service}', 'ProductController@update');
+Route::put('/admin/productos/{product}', 'ProductController@update');
 
-Route::delete('/admin/productos/{service}', 'ProductController@delete')->name('products.delete');
+Route::delete('/admin/productos/{product}', 'ProductController@delete')->name('products.delete');
+
+// <-- Categorias -->
+    
+Route::get('/admin/categorias', 'ProductCategoryController@index')->name('categories.index');
+
+Route::get('/admin/categorias/nueva', 'ProductCategoryController@create')->name('categories.create');
+
+Route::post('/admin/categorias', 'ProductCategoryController@store');
+
+Route::get('/admin/categorias/{id}/editar', 'ProductCategoryController@edit')->name('categories.edit');
+
+Route::put('/admin/categorias/{category}', 'ProductCategoryController@update');
+
+Route::delete('/admin/categorias/{category}', 'ProductCategoryController@delete')->name('categories.delete');
 
 // <-- Control -->
     

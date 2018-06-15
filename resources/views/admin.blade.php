@@ -28,6 +28,10 @@
                             </li>
                             
                             <li class="nav-item">
+                                <a class="nav-link" href="/admin/productos">Productos</a>
+                            </li>
+                            
+                            <li class="nav-item">
                                 <a class="nav-link" href="/admin/control">Control de Caja</a>
                             </li>
                         </ul>

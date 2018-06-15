@@ -15,9 +15,8 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::all();
-        $users = \App\User::all();
-        $titulo = "Listado de servicios";
-        return view('services.index', compact('services','titulo','users'));
+        $type = "servicio";
+        return view('services.index', compact('services','type'));
     }
 
     /**

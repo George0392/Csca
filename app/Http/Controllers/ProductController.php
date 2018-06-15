@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Service;
+
+use \Milon\Barcode\DNS1D;
+use \Milon\Barcode\DNS2D;
+use App\ProductCategory;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -14,10 +18,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $services = Service::all();
-        $users = \App\User::all();
-        $titulo = "Listado de servicios";
-        return view('products.index', compact('services','titulo','users'));
+        $barra = new DNS1D();
+        $categories = ProductCategory::all();
+        $products = Product::all();
+        $type = "producto";
+        
+        return view('products.index', compact('products','categories','type','barra'));
     }
 
     /**
@@ -27,7 +33,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('services.create');
+        $type = "producto";
+        $categories = ProductCategory::all();
+        return view('products.create', compact('categories','type'));
     }
 
     /**
@@ -38,12 +46,26 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        Service::create([
+        $file = $request->file('archivo');
+        //obtenemos la extension del archivo
+        $ext = $file->getClientOriginalExtension();
+        $filename = $request->codigo . "." . $ext;
+        //dd($filename);
+        
+        Storage::disk('local')->put($filename,  \File::get($file));
+        
+        Product::create([
             'nombre' => $request['nombre'],
-            'monto' => $request['monto']
+            'id_categoria' => $request['id_categoria'],
+            'codigo' => $request['codigo'],
+            'pedido' => $request['pedido'],
+            'quedan' => $request['pedido'],
+            'costo' => $request['costo'],
+            'monto' => $request['monto'],
+            'archivo' => $filename
         ]);
         
-        return redirect()->route('services.create');
+        return redirect()->route('products.create');
     }
 
     /**
@@ -54,14 +76,14 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $service = Service::find($id);
+        $product = Product::find($id);
         
-        if ($service == null) 
+        if ($product == null) 
         {
             return view('errors.404');
         }
 
-        return view('services.show', compact('service'));
+        return view('products.show', compact('product'));
     }
 
     /**
@@ -72,8 +94,10 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $service = Service::find($id);
-        return view('services.edit', compact('service'));
+        $type = "producto";
+        $categories = ProductCategory::all();
+        $product = Product::find($id);
+        return view('products.edit', compact('product','categories','type'));
     }
 
     /**
@@ -83,16 +107,41 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Service $service)
+    public function update(Product $product, Request $request)
     {
         $data = request()->validate([
             'nombre' => 'required',
+            'id_categoria' => 'required',
+            'codigo' => 'required',
+            'pedido' => 'required',
+            'quedan' => 'required',
+            'costo' => 'required',
             'monto' => 'required',
         ]);
         
-        $service->update($data);
+        $file = $request->file('archivo');
+        if ($file != null)
+        {
+            //obtenemos la extension del archivo
+            $ext = $file->getClientOriginalExtension();
+            $filename = $request->codigo . "." . $ext;
+            $data['archivo'] = $filename;
+            Storage::disk('local')->put($filename,  \File::get($file));
+        }
         
-        return redirect("/admin/servicios/");
+        if($data['pedido'] == "0")
+        {
+            array_forget($data, 'pedido');
+            array_forget($data, 'quedan');
+        }
+        else 
+        {
+            $data['quedan'] = $data['pedido'] + $data['quedan'];
+        }
+        
+        $product->update($data);
+        
+        return redirect("/admin/productos/");
     }
 
     /**
@@ -101,9 +150,11 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete(Service $service)
+    public function delete(Product $product)
     {
-        $service->delete();
-        return redirect('/admin/servicios/');
+        Storage::delete($product->archivo);
+        $product->delete();
+        
+        return redirect('/admin/productos/');
     }
 }

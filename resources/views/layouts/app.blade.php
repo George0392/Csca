@@ -56,8 +56,7 @@
         line-height: 60px; /* Vertically center the text there */
         background-color: #ffffffd9;
     }
-  
-  
+    
     /* Custom page CSS
     -------------------------------------------------- */
     /* Not required for template or sticky footer method. */
@@ -80,6 +79,18 @@
         background-size: contain;
         background-repeat: no-repeat;
         background-position: right;
+    }
+    /* Para las imagenes de Productos. */
+    .zoom {
+        padding: 1px;
+        background-color: #dbdbdb;
+        transition: transform .2s;
+    }
+    
+    .zoom:hover {
+        -ms-transform: scale(8); /* IE 9 */
+        -webkit-transform: scale(8); /* Safari 3-8 */
+        transform: scale(8); 
     }
     
     code {

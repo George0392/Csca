@@ -14,7 +14,9 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = ProductCategory::all();
+        $type = "categoria";
+        return view('categories.index', compact('categories','type'));
     }
 
     /**
@@ -24,7 +26,8 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
-        //
+        $type = "categoria";
+        return view('categories.create', compact('type'));
     }
 
     /**
@@ -35,51 +38,71 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        ProductCategory::create([
+            'nombre' => $request['nombre'],
+        ]);
+        
+        return redirect()->route('categories.create');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\ProductCategory  $productCategory
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductCategory $productCategory)
+    public function show($id)
     {
-        //
+        $category = ProductCategory::find($id);
+        
+        if ($category == null) 
+        {
+            return view('errors.404');
+        }
+
+        return view('categories.show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ProductCategory  $productCategory
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductCategory $productCategory)
+    public function edit($id)
     {
-        //
+        $type = "categoria";
+        $category = ProductCategory::find($id);
+        return view('categories.edit', compact('type','category'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ProductCategory  $productCategory
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductCategory $productCategory)
+    public function update(ProductCategory $category)
     {
-        //
+        $data = request()->validate([
+            'nombre' => 'required',
+        ]);
+        
+        $category->update($data);
+        
+        return redirect("/admin/categorias/");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ProductCategory  $productCategory
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductCategory $productCategory)
+    public function delete(ProductCategory $category)
     {
-        //
+        $category->delete();
+        return redirect('/admin/categorias/');
     }
 }

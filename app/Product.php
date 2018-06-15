@@ -10,9 +10,10 @@ class Product extends Model
         'id_categoria',
         'codigo',
         'nombre',
-        'cantidad',
-        'cantidad_res',
+        'pedido',
+        'quedan',
         'costo',
         'monto',
+        'archivo',
     ];
 }
