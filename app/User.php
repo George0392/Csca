@@ -38,10 +38,10 @@ class User extends Authenticatable
      *
      * 
      */
-    const ADMIN_TYPE = 'admin';
-    const DEFAULT_TYPE = 'default';
-
-    public function isAdmin()    {        
-        return $this->type === self::ADMIN_TYPE;    
+    const ADMIN_TYPE = 1;
+    
+    public function isAdmin()
+    {        
+        return $this->id_uType === self::ADMIN_TYPE;    
     }
 }
