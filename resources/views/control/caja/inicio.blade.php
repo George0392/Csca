@@ -9,7 +9,7 @@
                 {!!csrf_field()!!}
                 <div class="form-group mx-sm-3 mb-2">
                     <input type="hidden" class="form-control" name="admin" value="{{ Auth::user()->nombre }}">
-                    <input type="number" required class="form-control" name="monto" placeholder="Cargar caja inicial">
+                    <input type="number" min="0" required class="form-control" name="monto" placeholder="Cargar caja inicial">
                     <input type="hidden" class="form-control" name="id_desc" value="1">
                     <input type="hidden" class="form-control" name="detalle" value="Caja Inicial">
                     <input type="hidden" class="form-control" name="caja_abierta" value="1">

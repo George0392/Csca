@@ -40,6 +40,26 @@
                                 
                             <li>
                                 <a href="/admin/control/gastos/servicios">Servicios</a>
+                            </li>    
+                            
+                            <li>
+                                <a href="/admin/control/gastos/mercaderias">Mercaderias</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="oi oi-chevron-bottom"></span>
+                            Ingresos
+                        </a>
+                        
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="/admin/control/ingresos/servicios">Servicios</a>
+                            </li>    
+                            
+                            <li>
+                                <a href="/admin/control/ingresos/productos">Productos</a>
                             </li>
                         </ul>
                     </li>

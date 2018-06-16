@@ -94,9 +94,23 @@ Route::get('/admin/control/gastos/limpieza', 'ControlController@gastos')->name('
 
 Route::get('/admin/control/gastos/servicios', 'ControlController@gastos')->name('control.gastos.servicios');
 
+Route::get('/admin/control/gastos/mercaderias', 'ControlController@gastos')->name('control.gastos.mercaderias');
+
 Route::post('/admin/control/gastos/limpieza', 'ControlController@historial_gastos');
 
 Route::post('/admin/control/gastos/servicios', 'ControlController@historial_gastos');
+
+Route::post('/admin/control/gastos/mercaderias', 'ControlController@historial_gastos');
+
+// Control.Gastos
+
+Route::get('/admin/control/ingresos/productos', 'ControlController@ingresos')->name('control.ingresos.productos');
+
+Route::get('/admin/control/ingresos/servicios', 'ControlController@ingresos')->name('control.ingresos.servicios');
+
+Route::post('/admin/control/ingresos/productos', 'ControlController@historial_ingresos');
+
+Route::post('/admin/control/ingresos/servicios', 'ControlController@historial_ingresos');
 
 // Control.Sueldos
 
@@ -116,8 +130,6 @@ Route::get('/admin/control/sueldos/otros', 'ControlController@historial_sueldos_
 //Route::post('/admin/control/sueldos/profesores/{nombre}', 'ControlController@historial_sueldo');
 
 //Route::post('/admin/control/sueldos/otros', 'ControlController@historial_sueldos');
-
-// nande (prueba commit)
 
 // <-- Usuarios -->
     

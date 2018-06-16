@@ -58,13 +58,15 @@ class ControlController extends Controller
     {
         if (\Request::is('*/limpieza')) 
         { 
-            $nombre = "limpieza";  
-            $id_desc = 3;  
+            $nombre = "limpieza"; $id_desc = 3;  
         }
         else if(\Request::is('*/servicios'))
         {
-            $nombre = "servicios";
-            $id_desc = 4;
+            $nombre = "servicios"; $id_desc = 4;
+        }
+        else if(\Request::is('*/mercaderias'))
+        {
+            $nombre = "mercaderias"; $id_desc = 7;
         }
         else {}
           
@@ -87,6 +89,10 @@ class ControlController extends Controller
         else if(\Request::is('*/servicios'))
         { 
             $nombre = "servicios"; $id_desc = 4; 
+        }
+        else if(\Request::is('*/mercaderias'))
+        { 
+            $nombre = "mercaderias"; $id_desc = 7; 
         }
         else {}
 
@@ -271,6 +277,10 @@ class ControlController extends Controller
             
             case '6':
                 return redirect()->route('control.caja.retiros');
+                break;
+            
+            case '7':
+                return redirect()->route('control.gastos.mercaderias');
                 break;
             
             default:
