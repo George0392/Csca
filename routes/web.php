@@ -42,6 +42,8 @@ Route::delete('/admin/servicios/{service}', 'ServiceController@delete')->name('s
     
 Route::get('/admin/productos', 'ProductController@index')->name('products.index');
 
+Route::post('/admin/productos/filtro', 'ProductController@filter');
+
 Route::get('/admin/productos/nuevo', 'ProductController@create')->name('products.create');
 
 Route::post('/admin/productos', 'ProductController@store');

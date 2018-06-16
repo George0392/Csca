@@ -26,6 +26,17 @@ class ProductController extends Controller
         return view('products.index', compact('products','categories','type','barra'));
     }
 
+    public function filter(Request $request)
+    {
+        $barra = new DNS1D();
+        $categories = ProductCategory::all();
+        $products = Product::all()->where('id_categoria', $request->id_categoria);
+        //dd($request->id_categoria);
+        $type = "producto";
+        
+        return view('products.index', compact('products','categories','type','barra'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

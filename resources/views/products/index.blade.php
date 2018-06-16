@@ -6,7 +6,32 @@
         <p>
             <a href="{{route('products.create')}}" class="btn btn-primary">Nuevo {{ $type }}</a>
             <a href="{{route('categories.index')}}" class="btn btn-info">ir a Categorias</a>
+            <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <span class="oi oi-list"></span> <b>Filtrar</b>
+            </button>
         </p>
+    </div>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+            <p>
+                <form class="form-inline" method="POST" action="/admin/productos/filtro">
+                    
+                    {!!csrf_field()!!}
+                    
+                    <div class="form-group">
+                        <select class="form-control" name="id_categoria" value="{{ old('id_categoria') }}">
+                            @foreach($categories as $category)
+                                <option value="{{$category->id}}">{{$category->nombre}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success"><span class="oi oi-check"></span></button>
+                    <a href="{{ route('products.index') }}" class="btn btn-danger"><span class="oi oi-x"></span><b> Borrar filtro</b></a>
+
+                </form>
+            </p>
+        </div>
     </div>
     
     <table class="table">
@@ -46,7 +71,7 @@
                     <td><b>$</b> {{ $product->costo }}</td>
                     <td><b>$</b> {{ $product->monto }}</td>
                     <td>
-                        <img class="zoom" width="36px" src="../uploads/{{$product->archivo}}">
+                        <img class="zoom" width="36px" src="../../uploads/{{$product->archivo}}">
                     </td>
                     <td>
                         <form action="{{ route('products.delete', $product) }}" method="POST">
