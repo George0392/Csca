@@ -10,6 +10,8 @@ class OrderService extends Model
         'id_order',
         'id_servicio',
         'detalle',
-        'completada',
+        'monto',
     ];
+
+    protected $table = 'orders_services';
 }

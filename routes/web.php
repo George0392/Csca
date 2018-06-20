@@ -102,15 +102,30 @@ Route::post('/admin/control/gastos/servicios', 'ControlController@historial_gast
 
 Route::post('/admin/control/gastos/mercaderias', 'ControlController@historial_gastos');
 
-// Control.Gastos
+// Control.Ingresos
 
-Route::get('/admin/control/ingresos/productos', 'ControlController@ingresos')->name('control.ingresos.productos');
+Route::get('/admin/control/ingresos/productos', 'ControlController@ordenes')->name('control.ingresos.productos');
 
-Route::get('/admin/control/ingresos/servicios', 'ControlController@ingresos')->name('control.ingresos.servicios');
+Route::get('/admin/control/ingresos/servicios', 'ControlController@ordenes')->name('control.ingresos.servicios');
 
-Route::post('/admin/control/ingresos/productos', 'ControlController@historial_ingresos');
+Route::post('/admin/control/ingresos/productos', 'ControlController@store_orden');
 
-Route::post('/admin/control/ingresos/servicios', 'ControlController@historial_ingresos');
+Route::post('/admin/control/ingresos/servicios', 'ControlController@store_orden');
+//---DESCUENTO en ORDEN---//
+Route::post('/admin/control/productos/descuento/{id_order}', 'ControlController@descuento_orden');
+Route::post('/admin/control/servicios/descuento/{id_order}', 'ControlController@descuento_orden');
+//-----------FIN----------//
+//---CERRAR ORDEN---//
+Route::post('/admin/control/productos/cerrar/{id_order}', 'ControlController@cerrar_orden');
+Route::post('/admin/control/servicios/cerrar/{id_order}', 'ControlController@cerrar_orden');
+//-----------FIN----------//
+Route::get('/admin/control/ingresos/productos/{id_order}', 'ControlController@subordenes')->name('control.ingresos.productos.agregar');
+
+Route::get('/admin/control/ingresos/servicios/{id_order}', 'ControlController@subordenes')->name('control.ingresos.servicios.agregar');
+
+Route::post('/admin/control/ingresos/productos/{id_order}', 'ControlController@store_suborden');
+
+Route::post('/admin/control/ingresos/servicios/{id_order}', 'ControlController@store_suborden');
 
 // Control.Sueldos
 

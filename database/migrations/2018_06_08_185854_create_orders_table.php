@@ -17,7 +17,10 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('id_empleado');
             $table->integer('id_cliente');
-            $table->float('monto', 8, 2);
+            $table->integer('id_type');
+            $table->unsignedSmallInteger('monto');
+            $table->unsignedSmallInteger('desc');
+            $table->boolean('completada');
             $table->boolean('deHoy');
             $table->timestamps();
         });

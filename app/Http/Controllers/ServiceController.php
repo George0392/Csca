@@ -71,8 +71,9 @@ class ServiceController extends Controller
      */
     public function edit($id)
     {
+        $type = "servicio";
         $service = Service::find($id);
-        return view('services.edit', compact('service'));
+        return view('services.edit', compact('service', 'type'));
     }
 
     /**

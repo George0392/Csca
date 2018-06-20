@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Control;
 use App\User;
+use App\Order;
+use App\OrderService;
+use App\Service;
 
 class ControlController extends Controller
 {
@@ -188,15 +191,141 @@ class ControlController extends Controller
         return view('control.sueldos.profesores', compact('controls', 'titulo', 'nombre', 'tipo'));
     }
 
-    public function ingresos()
+    public function ordenes()
     {
-        $tipo = "socios";
-        $users = \DB::table('users')->select('id', 'nombre', 'servicio_id', 'created_at', 'paid_at')->orderBy('id')->get();
-        $services = \DB::table('services')->select('id','nombre','monto')->get();
-
-        $titulo = "Cuotas de " . $tipo;
+        if (\Request::is('*/productos')) 
+        { 
+            $tipo = "productos";
+            $id_type = 1;
+        }
+        else if(\Request::is('*/servicios'))
+        {
+            $tipo = "servicios";
+            $id_type = 2;
+        }
+        $orders = \DB::table('orders')->where('id_type', $id_type)->where('deHoy', 1)->get();
+        $empleados = \DB::table('users')->select('id', 'nombre')->where('id_uType', 2)->orderBy('nombre')->get();
+        $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
+        $titulo = "Ingresos por " . $tipo . " del día";
         
-        return view('control.caja.ingresos', compact('users', 'titulo', 'tipo', 'services'));
+        return view('control.ingresos.index', compact('titulo', 'tipo', 'empleados', 'clientes', 'id_type', 'orders'));
+    }
+
+    public function store_orden(Request $request)
+    {
+        $order = Order::create([
+            'id_empleado' => $request['id_empleado'],
+            'id_cliente' => $request['id_cliente'],
+            'id_type' => $request['id_type'],
+            'monto' => $request['monto'],
+            'desc' => $request['monto'],
+            'completada' => $request['monto'],
+            'deHoy' => $request['deHoy']
+        ]);
+        
+        $id_order = $order->id;
+        
+        switch ($request['id_type']) 
+        {
+            case '1':
+                return redirect()->route('control.ingresos.productos.agregar', compact('id_order'));
+                break;
+            
+            case '2':
+                return redirect()->route('control.ingresos.servicios.agregar', compact('id_order'));
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+    }
+
+    public function subordenes($id_order)
+    {
+        if (\Request::is('*/productos/*')) 
+        { 
+            $tipo = "productos";
+            $id_type = 1;
+        }
+        else if(\Request::is('*/servicios/*'))
+        {
+            $tipo = "servicios";
+            $id_type = 2;
+            $servicios = \DB::table('services')->get();
+            $orders_indiv = \DB::table('orders_services')->where('id_order', $id_order)->get();
+        }
+        
+        $order = Order::find($id_order);
+        if ($order!=null) 
+        {
+            $empleado = User::find($order->id_empleado);
+            $cliente = User::find($order->id_cliente);
+            $subtitulo = "Cliente: " . $cliente->nombre . " | Empleado: " . $empleado->nombre;
+        }
+        else {
+            $subtitulo = "La orden todavía no existe";
+        }
+        
+        $titulo = "Orden #" . $id_order;
+        
+        return view('control.ingresos.create', compact('titulo', 'subtitulo', 'tipo', 'id_type', 'id_order', 'order', 'servicios', 'orders_indiv'));
+    }
+
+    public function store_suborden(Request $request, $id_order)
+    {
+        if (\Request::is('*/productos/*')) 
+        { 
+            //falta la logica
+            return redirect()->route('control.ingresos.productos', compact('id_order'));
+        }
+        else if(\Request::is('*/servicios/*'))
+        {
+            $id = $request->id_servicio;
+            $service = Service::find($id);
+            $monto = $service->monto;
+            
+            OrderService::create([
+                'id_order' => $request['id_order'],
+                'id_servicio' => $request['id_servicio'],
+                'detalle' => $request['detalle'],
+                'monto' => $monto
+            ]);
+            
+            \DB::table('orders')->increment('monto', $monto);
+            
+            return redirect()->route('control.ingresos.servicios.agregar', compact('id_order'));
+        }
+    }
+
+    public function descuento_orden(Request $request, $id_order)
+    {
+        $desc = $request->desc;
+        
+        \DB::table('orders')->where('id', $id_order)->update(['desc' => $desc]);
+        
+        if (\Request::is('*/productos/*')) 
+        { 
+            return redirect()->route('control.ingresos.productos.agregar', compact('id_order'));
+        }
+        else if(\Request::is('*/servicios/*'))
+        {
+            return redirect()->route('control.ingresos.servicios.agregar', compact('id_order'));
+        }
+    }
+
+    public function cerrar_orden($id_order)
+    {
+        \DB::table('orders')->where('id', $id_order)->update(['completada' => 1]);
+        
+        if (\Request::is('*/productos/*')) 
+        { 
+            return redirect()->route('control.ingresos.productos.agregar', compact('id_order'));
+        }
+        else if(\Request::is('*/servicios/*'))
+        {
+            return redirect()->route('control.ingresos.servicios.agregar', compact('id_order'));
+        }
     }
 
     public function historial_ingresos(Request $request)

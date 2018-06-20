@@ -1,6 +1,6 @@
-<?php $__env->startSection('title', 'Editar Servicio'); ?>
+<?php $__env->startSection('title', 'Editar <?php echo e($type); ?>'); ?>
 <?php $__env->startSection('content2'); ?>
-    <h1 class="mt-5form-group col-md-12">Editar servicio</h1>
+    <h1 class="mt-5form-group col-md-12">Editar <?php echo e($type); ?></h1>
     
     <?php if($errors->any()): ?>
         <div class="alert alert-danger">
@@ -13,7 +13,7 @@
         </div>
     <?php endif; ?>
     
-    <form method="POST" action="<?php echo e(url("admin/servicios/{$service->id}")); ?>">
+    <form method="POST" action="/admin/<?php echo e($type); ?>s/<?php echo e($service->id); ?>">
         <?php echo e(method_field('PUT')); ?>
 
         <?php echo e(csrf_field()); ?>

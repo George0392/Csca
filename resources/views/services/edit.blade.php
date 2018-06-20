@@ -1,8 +1,8 @@
 @extends('admin')
 
-@section('title', 'Editar Servicio')
+@section('title', 'Editar {{$type}}')
 @section('content2')
-    <h1 class="mt-5form-group col-md-12">Editar servicio</h1>
+    <h1 class="mt-5form-group col-md-12">Editar {{$type}}</h1>
     
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -15,7 +15,7 @@
         </div>
     @endif
     
-    <form method="POST" action="admin/{{$type}}s/{{$service->id}}">
+    <form method="POST" action="/admin/{{$type}}s/{{$service->id}}">
         {{method_field('PUT')}}
         {{csrf_field()}}
         <div class="form-row">

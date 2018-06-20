@@ -18,7 +18,7 @@ class CreateOrdersProductsTable extends Migration
             $table->integer('id_order');
             $table->integer('id_producto');
             $table->integer('cantidad');
-            $table->boolean('completada');
+            $table->unsignedSmallInteger('monto');
             $table->timestamps();
         });
     }

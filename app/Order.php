@@ -9,7 +9,10 @@ class Order extends Model
     protected $fillable = [
         'id_empleado',
         'id_cliente',
+        'id_type',
         'monto',
+        'desc',
+        'completada',
         'deHoy',
     ];
 }
