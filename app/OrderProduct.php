@@ -10,6 +10,8 @@ class OrderProduct extends Model
         'id_order',
         'id_producto',
         'cantidad',
-        'completada',
+        'monto',
     ];
+
+    protected $table = 'orders_products';
 }

@@ -71,7 +71,7 @@
                         
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="/admin/control/sueldos/profesores">Profesores</a>
+                                <a href="/admin/control/sueldos/empleados">Empleados</a>
                             </li>
                         </ul>
                     </li>

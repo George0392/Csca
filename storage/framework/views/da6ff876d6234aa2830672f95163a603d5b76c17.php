@@ -39,7 +39,8 @@
                 <form method="POST" action="/admin/control/ingresos/<?php echo e($tipo); ?>/<?php echo e($id_order); ?>">
                     <?php echo csrf_field(); ?>
 
-                        
+                    
+                    <?php if($id_type == 2): ?>    
                     <div class="form-group col-md-2" style="padding-left: 0px;">
                         <label>Servicio</label>
                         <select class="form-control" name="id_servicio" value="<?php echo e(old('id_servicio')); ?>">
@@ -53,6 +54,22 @@
                         <label>Detalle</label>
                         <input required type="text" class="form-control" name="detalle" value="<?php echo e(old('detalle')); ?>">
                     </div>
+                    
+                    <?php else: ?>
+                    <div class="form-group col-md-3" style="padding-left: 0px;">
+                        <label>Producto</label>
+                        <select class="form-control" name="id_producto" value="<?php echo e(old('id_producto')); ?>">
+                            <?php $__currentLoopData = $productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($producto->id); ?>"><?php echo e($producto->nombre); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                    </div>
+                                
+                    <div class="form-group col-md-2" style="padding-left: 0px;">
+                        <label>Cant</label>
+                        <input required type="number" min="0" class="form-control" name="cantidad" value="<?php echo e(old('cantidad')); ?>">
+                    </div>
+                    <?php endif; ?>
                     <input type="hidden" class="form-control" name="id_type" value="<?php echo e($id_type); ?>">
                     <input type="hidden" class="form-control" name="id_order" value="<?php echo e($id_order); ?>">
                         
@@ -61,6 +78,7 @@
                         <button type="submit" class="btn btn-success form-control">Agregar</button>
                     </div>
                 </form>
+                
                 <form method="POST" action="/admin/control/<?php echo e($tipo); ?>/cerrar/<?php echo e($id_order); ?>">
                     <?php echo csrf_field(); ?>
 
@@ -80,8 +98,13 @@
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
+                <?php if($id_type == 2): ?>  
                 <th scope="col">Servicio</th>
                 <th scope="col">Detalle</th>
+                <?php else: ?>
+                <th scope="col">Producto</th>
+                <th scope="col">Cant.</th>
+                <?php endif; ?>
                 <th scope="col">Monto</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>
@@ -90,6 +113,7 @@
         <tbody>
             <?php $__currentLoopData = $orders_indiv; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
+                    <?php if($id_type == 2): ?>
                     <td scope="row">
                         <?php $__currentLoopData = $servicios; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $servicio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php if($servicio->id == $order->id_servicio): ?>
@@ -100,6 +124,19 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </td>
                     <td><?php echo e($order->detalle); ?></td>
+                    <?php else: ?>
+                    <td scope="row">
+                        <?php $__currentLoopData = $productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($producto->id == $order->id_producto): ?>
+                                <?php echo e($producto->nombre); ?>
+
+                                <?php break; ?>
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </td>
+                    <td><?php echo e($order->cantidad); ?></td>
+                    <?php endif; ?>
+                    
                     <td><b>$</b> <?php echo e($order->monto); ?></td>
                     <td><?php echo e(date('d/m/y', strtotime($order->created_at))); ?></td>
                     <td><?php echo e(date('H:i', strtotime($order->created_at))); ?></td>

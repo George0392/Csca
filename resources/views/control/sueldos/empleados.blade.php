@@ -5,12 +5,19 @@
     <script language="javascript">
         function fAgrega()
         {
-            [].forEach.call(document.querySelectorAll(".porc"), function(element, index)
+            [].forEach.call(document.querySelectorAll(".porcS"), function(element, index)
             {
                 element.addEventListener("input", function()
                 {
-                    document.querySelectorAll(".sueldo")[index].value = this.value*document.querySelectorAll(".total")[index].value/100;
-                }, false);
+                    document.querySelectorAll(".sueldo")[index].value = parseInt(this.value) / 100 * parseInt(document.querySelectorAll(".totalS")[index].value) +  parseInt(document.querySelectorAll(".porcP")[index].value) * parseInt(document.querySelectorAll(".totalP")[index].value) / 100;
+                },  false);
+            });
+            [].forEach.call(document.querySelectorAll(".porcP"), function(element, index)
+            {
+                element.addEventListener("input", function()
+                {
+                    document.querySelectorAll(".sueldo")[index].value = parseInt(this.value) / 100 * parseInt(document.querySelectorAll(".totalP")[index].value) +  parseInt(document.querySelectorAll(".porcS")[index].value) * parseInt(document.querySelectorAll(".totalS")[index].value) / 100;
+                },  false);
             });
         }
     </script>
@@ -56,12 +63,12 @@
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
-                <th scope="col">#</th>
                 @if($titulo == "Sueldos de " . $tipo)
                     <th scope="col">Nombre</th>
-                    <th scope="col">Alumnos</th>
-                    <th scope="col">Total $</th>
-                    <th scope="col">Porc. %</th>
+                    <th scope="col">$ por Serv</th>
+                    <th scope="col">% X Serv</th>
+                    <th scope="col">$ por Prod</th>
+                    <th scope="col">% X Prod</th>
                     <th scope="col">Sueldo</th>
                     <th scope="col">Pagos</th>
                 @else
@@ -74,63 +81,64 @@
         </thead>
         <tbody>
             @if($titulo == "Sueldos de " . $tipo)
-                @foreach ($trainers as $trainer)
+                @foreach ($empleados as $empleado)
                     <tr>
-                        <th scope="row">{{ $trainer->id }}</th>
-                        <td>
-                            {{ $trainer->nombre }}
+                        <td style="vertical-align: middle;">
+                            {{ $empleado->nombre }}
                         </td>
                         <td>
-                            <?php $i=0; $total=0 ?>
-                            @foreach ($users as $user)
-                                @if ($user->profesor_id == $trainer->id)
-                                    <?php ++$i ?>
-                                    @foreach ($services as $service)
-                                        @if ($service->id == $user->servicio_id)
-                                            <?php $total=$total+$service->monto ?>
-                                        @endif
-                                    @endforeach 
+                            <?php $totalS=0 ?>
+                            @foreach ($ordenes_serv as $orden_serv)
+                                @if ($orden_serv->id_empleado == $empleado->id)
+                                    <?php $totalS=$totalS+$orden_serv->monto ?>
                                 @endif
                             @endforeach
-                            @if($i>0)
-                                <b class="btn btn-success">{{$i}} <span class="oi oi-people"></span></b>
-                            @else
-                                <b class="btn btn-default" disabled>{{$i}} <span class="oi oi-people"></span></b>
-                            @endif
+                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalS}}</label>
+                            <input type="hidden" class="totalS" value="{{ $totalS }}">
                         </td>
                         <td>
-                            <label style="width: 75px;" class="form-control">{{$total}}</label>
-                            <input type="hidden" id="Total" class="form-control total" value="{{ $total }}" >
+                            <?php $porcS=10 ?>
+                            <input required type="number" min="7" max="30" id="PorcS" class="form-control porcS" style="width: 60px;" placeholder="Porcentaje" value="{{ $porcS }}" onchange="fAgrega();">
                         </td>
                         <td>
-                            <?php $porc=30 ?>
-                            <input type="number" id="Porc" class="form-control porc" style="width: 60px;" placeholder="Porcentaje" value="{{ $porc }}" onchange="fAgrega();">
+                            <?php $totalP=0 ?>
+                            @foreach ($ordenes_prod as $orden_prod)
+                                @if ($orden_prod->id_empleado == $empleado->id)
+                                    <?php $totalP=$totalP+$orden_prod->monto ?>
+                                @endif
+                            @endforeach
+                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalP}}</label>
+                            <input type="hidden" class="totalP" value="{{ $totalP }}">
+                        </td>
+                        <td>
+                            <?php $porcP=10 ?>
+                            <input required type="number" min="7" max="30" id="PorcP" class="form-control porcP" style="width: 60px;" placeholder="Porcentaje" value="{{ $porcP }}" onchange="fAgrega();">
                         </td>
                         <td>
                             <form class="form-inline" name="myForm" method="POST" action="{{ url('admin/control/') }}">
                                 {!!csrf_field()!!}
                                 
-                                <input id="Sueldo" style="width: 65px;" required class="form-control sueldo" name="monto" placeholder="Sueldo" value="{{ $porc*$total/100 }}">
+                                <input id="Sueldo" style="width: 65px;" required class="form-control sueldo" name="monto" placeholder="Sueldo" value="{{ ($porcP*$totalP/100)+($porcS*$totalS/100) }}">
                                 <input type="hidden" name="admin" value="{{ Auth::user()->nombre }}">
                                 <input type="hidden" name="id_desc" value="5">
-                                <input type="hidden" name="detalle" value="Pago de sueldo a {{ $trainer->nombre }} ({{$i}} socios / ${{$total}})">
+                                <input type="hidden" name="detalle" value="Pago de sueldo a {{ $empleado->nombre }}">
                                 <input type="hidden" name="caja_abierta" value="1">
                                 <button type="submit" class="btn btn-primary mb-2">Pagar</button>
                             </form>
                         </td>
                         <td>
-                            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample{{ $trainer->id }}" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample{{ $empleado->id }}" aria-expanded="false" aria-controls="collapseExample">
                                 <span class="oi oi-clock"></span>
                             </button>
                         </td>
                     </tr>
-                    <tr class="collapse" id="collapseExample{{ $trainer->id }}">
+                    <tr class="collapse" id="collapseExample{{ $empleado->id }}">
                         <td class="col-xs-10" colspan="7" >
-                            <form class="form-inline" method="POST" action="{{ url('/admin/control/sueldos/' . $tipo . '/'. $trainer->nombre) }}">
+                            <form class="form-inline" method="POST" action="{{ url('/admin/control/sueldos/' . $tipo . '/'. $empleado->nombre) }}">
                                 {!!csrf_field()!!}
                                 <div class="form-group">
-                                    <label>Historial de sueldos para {{ $trainer->nombre }} desde</label>
-                                    <input type="hidden" name="profesor" value="{{ $trainer->nombre }}">
+                                    <label>Historial de sueldos para {{ $empleado->nombre }} desde</label>
+                                    <input type="hidden" name="profesor" value="{{ $empleado->nombre }}">
                                     <input required type="date" class="form-control" name="desde">
                                 </div>
                                 <div class="form-group">

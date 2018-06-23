@@ -39,7 +39,8 @@
                 @if($order->completada != "1")
                 <form method="POST" action="/admin/control/ingresos/{{$tipo}}/{{ $id_order }}">
                     {!!csrf_field()!!}
-                        
+                    {{-------------------  Servicios  -------------------}}
+                    @if($id_type == 2)    
                     <div class="form-group col-md-2" style="padding-left: 0px;">
                         <label>Servicio</label>
                         <select class="form-control" name="id_servicio" value="{{ old('id_servicio') }}">
@@ -53,14 +54,31 @@
                         <label>Detalle</label>
                         <input required type="text" class="form-control" name="detalle" value="{{ old('detalle') }}">
                     </div>
+                    {{-------------------  Productos  -------------------}}
+                    @else
+                    <div class="form-group col-md-3" style="padding-left: 0px;">
+                        <label>Producto</label>
+                        <select class="form-control" name="id_producto" value="{{ old('id_producto') }}">
+                            @foreach($productos as $producto)
+                                <option value="{{$producto->id}}">{{$producto->nombre}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                                
+                    <div class="form-group col-md-2" style="padding-left: 0px;">
+                        <label>Cant</label>
+                        <input required type="number" min="0" class="form-control" name="cantidad" value="{{ old('cantidad') }}">
+                    </div>
+                    @endif
                     <input type="hidden" class="form-control" name="id_type" value="{{ $id_type }}">
                     <input type="hidden" class="form-control" name="id_order" value="{{ $id_order }}">
-                        
+                    {{-------------------  Agregar  -------------------}}    
                     <div class="form-group col-md-2" style="padding-left: 0px;">
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-success form-control">Agregar</button>
                     </div>
                 </form>
+                {{-------------------  Cerrar  -------------------}}
                 <form method="POST" action="/admin/control/{{$tipo}}/cerrar/{{ $id_order }}">
                     {!!csrf_field()!!}
                     <input type="hidden" class="form-control" name="completada" value="1">
@@ -79,8 +97,13 @@
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
+                @if($id_type == 2)  
                 <th scope="col">Servicio</th>
                 <th scope="col">Detalle</th>
+                @else
+                <th scope="col">Producto</th>
+                <th scope="col">Cant.</th>
+                @endif
                 <th scope="col">Monto</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>
@@ -89,6 +112,7 @@
         <tbody>
             @foreach ($orders_indiv as $order)
                 <tr>
+                    @if($id_type == 2)
                     <td scope="row">
                         @foreach($servicios as $servicio)
                             @if($servicio->id == $order->id_servicio)
@@ -98,6 +122,18 @@
                         @endforeach
                     </td>
                     <td>{{ $order->detalle }}</td>
+                    @else
+                    <td scope="row">
+                        @foreach($productos as $producto)
+                            @if($producto->id == $order->id_producto)
+                                {{$producto->nombre}}
+                                @break
+                            @endif
+                        @endforeach
+                    </td>
+                    <td>{{ $order->cantidad }}</td>
+                    @endif
+                    
                     <td><b>$</b> {{ $order->monto }}</td>
                     <td>{{ date('d/m/y', strtotime($order->created_at)) }}</td>
                     <td>{{ date('H:i', strtotime($order->created_at)) }}</td>

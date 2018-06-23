@@ -38,7 +38,7 @@ Route::put('/admin/servicios/{service}', 'ServiceController@update');
 
 Route::delete('/admin/servicios/{service}', 'ServiceController@delete')->name('services.delete');
 
-// <-- Productoss -->
+// <-- Productos -->
     
 Route::get('/admin/productos', 'ProductController@index')->name('products.index');
 
@@ -54,7 +54,7 @@ Route::put('/admin/productos/{product}', 'ProductController@update');
 
 Route::delete('/admin/productos/{product}', 'ProductController@delete')->name('products.delete');
 
-// <-- Categorias -->
+// <-- Categorias de productos -->
     
 Route::get('/admin/categorias', 'ProductCategoryController@index')->name('categories.index');
 
@@ -129,22 +129,13 @@ Route::post('/admin/control/ingresos/servicios/{id_order}', 'ControlController@s
 
 // Control.Sueldos
 
-Route::get('/admin/control/sueldos/profesores', 'ControlController@sueldos')->name('control.sueldos.profesores');
+Route::get('/admin/control/sueldos/empleados', 'ControlController@sueldos')->name('control.sueldos.empleados');
 
-Route::get('/admin/control/sueldos/otros', 'ControlController@sueldos')->name('control.sueldos.otros');
+Route::post('/admin/control/sueldos/empleados', 'ControlController@historial_sueldos_all');
 
-Route::post('/admin/control/sueldos/profesores', 'ControlController@historial_sueldos_all');
+Route::get('/admin/control/sueldos/empleados/{nombre}', 'ControlController@historial_sueldos_one')->name('control.sueldos.empleado');
 
-Route::post('/admin/control/sueldos/otros', 'ControlController@historial_sueldos_all');
-
-
-Route::get('/admin/control/sueldos/profesores/{nombre}', 'ControlController@historial_sueldos_one')->name('control.sueldos.profesor');
-
-Route::get('/admin/control/sueldos/otros', 'ControlController@historial_sueldos_one')->name('control.sueldos.otros');
-
-//Route::post('/admin/control/sueldos/profesores/{nombre}', 'ControlController@historial_sueldo');
-
-//Route::post('/admin/control/sueldos/otros', 'ControlController@historial_sueldos');
+Route::post('/admin/control/sueldos/empleados/{nombre}', 'ControlController@historial_sueldo');
 
 // <-- Usuarios -->
     

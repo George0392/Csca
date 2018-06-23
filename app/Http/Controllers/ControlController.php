@@ -7,7 +7,9 @@ use App\Control;
 use App\User;
 use App\Order;
 use App\OrderService;
+use App\OrderProduct;
 use App\Service;
+use App\Product;
 
 class ControlController extends Controller
 {
@@ -115,83 +117,78 @@ class ControlController extends Controller
 
     public function sueldos()
     {
-        if (\Request::is('*/profesores')) 
+        if (\Request::is('*/empleados')) 
         { 
-            $tipo = "profesores";  
-            $id_desc = 3;  
+            $tipo = "empleados";  
+            $id_uType = 2;  
         }
-        else if(\Request::is('*/otros'))
-        {
-            $tipo = "otros empleados";
-            $id_desc = 4;
-        }
-        else {}
           
-        $users = \DB::table('users')->select('id', 'profesor_id', 'servicio_id')->get();
-        $trainers = \DB::table('trainers')->select('id','nombre')->orderBy('id')->get();
-        $services = \DB::table('services')->select('id','monto')->get();
-
+        //$users = \DB::table('users')->select('id', 'profesor_id', 'servicio_id')->get();
+        $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
+        $ordenes_serv = \DB::table('orders')->where('id_type', 2)->select('id_empleado','monto','desc')->get();
+        $ordenes_prod = \DB::table('orders')->where('id_type', 1)->select('id_empleado','monto','desc')->get();
+        //dd($ordenes_serv);
         $titulo = "Sueldos de " . $tipo;
         
-        return view('control.sueldos.profesores', compact('users', 'titulo', 'tipo', 'trainers', 'services'));
+        return view('control.sueldos.empleados', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
     }
 
-    public function historial_sueldos_all(Request $request)
-    {
-        if (\Request::is('*/profesores'))
-        {
-            $tipo = "profesores"; $id_desc = 5;
-        }
-        else if(\Request::is('*/otros'))
-        { 
-            $tipo = "otros empleados"; $id_desc = 5; 
-        }
-        else {}
+    // public function historial_sueldos_all(Request $request)
+    // {
+    //     if (\Request::is('*/profesores'))
+    //     {
+    //         $tipo = "profesores"; $id_desc = 5;
+    //     }
+    //     else if(\Request::is('*/otros'))
+    //     { 
+    //         $tipo = "otros empleados"; $id_desc = 5; 
+    //     }
+    //     else {}
 
-        $desde = $request->desde;
-        $hasta = $request->hasta;
-        $controls = \DB::table('controls')
-                    ->where('id_desc', '=', $id_desc)
-                    ->whereBetween('created_at', [$desde, $hasta])
-                    ->get();
+    //     $desde = $request->desde;
+    //     $hasta = $request->hasta;
+    //     $controls = \DB::table('controls')
+    //                 ->where('id_desc', '=', $id_desc)
+    //                 ->whereBetween('created_at', [$desde, $hasta])
+    //                 ->get();
         
-        $desde = date('d/m/y', strtotime($desde));
-        $hasta = date('d/m/y', strtotime($hasta));
-        $titulo = "Sueldos de " . $tipo . " desde " . $desde . " hasta " . $hasta;
+    //     $desde = date('d/m/y', strtotime($desde));
+    //     $hasta = date('d/m/y', strtotime($hasta));
+    //     $titulo = "Sueldos de " . $tipo . " desde " . $desde . " hasta " . $hasta;
         
-        return view('control.sueldos.profesores', compact('controls', 'titulo', 'tipo'));
-    }
+    //     return view('control.sueldos.profesores', compact('controls', 'titulo', 'tipo'));
+    // }
 
-    public function historial_sueldos_one(Request $request, $nombre)
-    {
-        if (\Request::is('*/profesores/*'))
-        {
-            $tipo = "profesores";
-            $id_desc = 5;
-        }
-        else if(\Request::is('*/otros'))
-        { 
-            $id_desc = 5;
-            $tipo = "otros";
-        }
-        else {}
+    // public function historial_sueldos_one(Request $request, $nombre)
+    // {
+    //     if (\Request::is('*/profesores/*'))
+    //     {
+    //         $tipo = "profesores";
+    //         $id_desc = 5;
+    //     }
+    //     else if(\Request::is('*/otros'))
+    //     { 
+    //         $id_desc = 5;
+    //         $tipo = "otros";
+    //     }
+    //     else {}
 
-        $desde = $request->desde;
-        $hasta = $request->hasta;
-        $controls = \DB::table('controls')
-                    ->where('id_desc', '=', $id_desc)
-                    ->where('detalle', 'like', '%'.$nombre.'%')
-                    ->whereBetween('created_at', [$desde, $hasta])
-                    ->get();
+    //     $desde = $request->desde;
+    //     $hasta = $request->hasta;
+    //     $controls = \DB::table('controls')
+    //                 ->where('id_desc', '=', $id_desc)
+    //                 ->where('detalle', 'like', '%'.$nombre.'%')
+    //                 ->whereBetween('created_at', [$desde, $hasta])
+    //                 ->get();
         
-        $desde = date('d/m/y', strtotime($desde));
-        $hasta = date('d/m/y', strtotime($hasta));
-        $titulo = "Historial de sueldos para " . $nombre . " desde " . $desde . " hasta " . $hasta;
+    //     $desde = date('d/m/y', strtotime($desde));
+    //     $hasta = date('d/m/y', strtotime($hasta));
+    //     $titulo = "Historial de sueldos para " . $nombre . " desde " . $desde . " hasta " . $hasta;
         
-        return view('control.sueldos.profesores', compact('controls', 'titulo', 'nombre', 'tipo'));
-    }
+    //     return view('control.sueldos.profesores', compact('controls', 'titulo', 'nombre', 'tipo'));
+    // }
 
-    public function ordenes()
+    public function ordenes()//lista
     {
         if (\Request::is('*/productos')) 
         { 
@@ -247,6 +244,8 @@ class ControlController extends Controller
         { 
             $tipo = "productos";
             $id_type = 1;
+            $productos = \DB::table('products')->get();
+            $orders_indiv = \DB::table('orders_products')->where('id_order', $id_order)->get();
         }
         else if(\Request::is('*/servicios/*'))
         {
@@ -269,15 +268,29 @@ class ControlController extends Controller
         
         $titulo = "Orden #" . $id_order;
         
-        return view('control.ingresos.create', compact('titulo', 'subtitulo', 'tipo', 'id_type', 'id_order', 'order', 'servicios', 'orders_indiv'));
+        return view('control.ingresos.create', compact('titulo', 'subtitulo', 'tipo', 'id_type', 'id_order', 'order', 'servicios', 'productos', 'orders_indiv'));
     }
 
     public function store_suborden(Request $request, $id_order)
     {
         if (\Request::is('*/productos/*')) 
         { 
-            //falta la logica
-            return redirect()->route('control.ingresos.productos', compact('id_order'));
+            $id = $request->id_producto;
+            $cant = $request->cantidad;
+            $product = Product::find($id);
+            $monto = $product->monto;
+            
+            OrderProduct::create([
+                'id_order' => $request['id_order'],
+                'id_producto' => $request['id_producto'],
+                'cantidad' => $request['cantidad'],
+                'monto' => $monto
+            ]);
+            
+            \DB::table('orders')->where('id', $id_order)->increment('monto', $monto * $cant);
+            \DB::table('products')->where('id', $id)->decrement('quedan', $cant);
+
+            return redirect()->route('control.ingresos.productos.agregar', compact('id_order'));
         }
         else if(\Request::is('*/servicios/*'))
         {
@@ -292,7 +305,7 @@ class ControlController extends Controller
                 'monto' => $monto
             ]);
             
-            \DB::table('orders')->increment('monto', $monto);
+            \DB::table('orders')->where('id', $id_order)->increment('monto', $monto);
             
             return redirect()->route('control.ingresos.servicios.agregar', compact('id_order'));
         }
