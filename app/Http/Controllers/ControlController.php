@@ -117,78 +117,107 @@ class ControlController extends Controller
 
     public function sueldos()
     {
-        if (\Request::is('*/empleados')) 
-        { 
-            $tipo = "empleados";  
-            $id_uType = 2;  
-        }
-          
-        //$users = \DB::table('users')->select('id', 'profesor_id', 'servicio_id')->get();
+        $tipo = "empleados";  
+        $id_uType = 2;  
         $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
         $ordenes_serv = \DB::table('orders')->where('id_type', 2)->select('id_empleado','monto','desc')->get();
         $ordenes_prod = \DB::table('orders')->where('id_type', 1)->select('id_empleado','monto','desc')->get();
         //dd($ordenes_serv);
         $titulo = "Sueldos de " . $tipo;
         
-        return view('control.sueldos.empleados', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
+        return view('control.sueldos.index', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
     }
 
-    // public function historial_sueldos_all(Request $request)
-    // {
-    //     if (\Request::is('*/profesores'))
-    //     {
-    //         $tipo = "profesores"; $id_desc = 5;
-    //     }
-    //     else if(\Request::is('*/otros'))
-    //     { 
-    //         $tipo = "otros empleados"; $id_desc = 5; 
-    //     }
-    //     else {}
-
-    //     $desde = $request->desde;
-    //     $hasta = $request->hasta;
-    //     $controls = \DB::table('controls')
-    //                 ->where('id_desc', '=', $id_desc)
-    //                 ->whereBetween('created_at', [$desde, $hasta])
-    //                 ->get();
+    public function historial_sueldos_all(Request $request)
+    {
+        $tipo = "empleados"; 
+        $id_desc = 5;
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $controls = \DB::table('controls')
+                    ->where('id_desc', '=', $id_desc)
+                    ->whereBetween('created_at', [$desde, $hasta])
+                    ->get();
         
-    //     $desde = date('d/m/y', strtotime($desde));
-    //     $hasta = date('d/m/y', strtotime($hasta));
-    //     $titulo = "Sueldos de " . $tipo . " desde " . $desde . " hasta " . $hasta;
+        $desde = date('d/m/y', strtotime($desde));
+        $hasta = date('d/m/y', strtotime($hasta));
+        $titulo = "Sueldos de " . $tipo . " desde " . $desde . " hasta " . $hasta;
         
-    //     return view('control.sueldos.profesores', compact('controls', 'titulo', 'tipo'));
-    // }
+        return view('control.sueldos.index', compact('controls', 'titulo', 'tipo'));
+    }
 
-    // public function historial_sueldos_one(Request $request, $nombre)
-    // {
-    //     if (\Request::is('*/profesores/*'))
-    //     {
-    //         $tipo = "profesores";
-    //         $id_desc = 5;
-    //     }
-    //     else if(\Request::is('*/otros'))
-    //     { 
-    //         $id_desc = 5;
-    //         $tipo = "otros";
-    //     }
-    //     else {}
-
-    //     $desde = $request->desde;
-    //     $hasta = $request->hasta;
-    //     $controls = \DB::table('controls')
-    //                 ->where('id_desc', '=', $id_desc)
-    //                 ->where('detalle', 'like', '%'.$nombre.'%')
-    //                 ->whereBetween('created_at', [$desde, $hasta])
-    //                 ->get();
+    public function historial_sueldos_one(Request $request, $nombre)
+    {
+        $tipo = "empleados";
+        $id_desc = 5;
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $controls = \DB::table('controls')
+                    ->where('id_desc', '=', $id_desc)
+                    ->where('detalle', 'like', '%'.$nombre.'%')
+                    ->whereBetween('created_at', [$desde, $hasta])
+                    ->get();
         
-    //     $desde = date('d/m/y', strtotime($desde));
-    //     $hasta = date('d/m/y', strtotime($hasta));
-    //     $titulo = "Historial de sueldos para " . $nombre . " desde " . $desde . " hasta " . $hasta;
+        $desde = date('d/m/y', strtotime($desde));
+        $hasta = date('d/m/y', strtotime($hasta));
+        $titulo = "Sueldos de " . $nombre . " desde " . $desde . " hasta " . $hasta;
         
-    //     return view('control.sueldos.profesores', compact('controls', 'titulo', 'nombre', 'tipo'));
-    // }
+        return view('control.sueldos.index', compact('controls', 'titulo', 'nombre', 'tipo'));
+    }
 
-    public function ordenes()//lista
+    public function comisiones()
+    {
+        $tipo = "empleados";  
+        $id_uType = 2;  
+        $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
+        $ordenes_serv = \DB::table('orders')->where('id_type', 2)->where('created_at', '>=', date('Y-m-10').' 07:00:00')
+        ->select('id_empleado','monto','desc')->get();
+        $ordenes_prod = \DB::table('orders')->where('id_type', 1)->where('created_at', '>=', date('Y-m-10').' 07:00:00')
+        ->select('id_empleado','monto','desc')->get();
+        //dd($ordenes_serv);
+        $titulo = "Comisiones de " . $tipo;
+        
+        return view('control.comisiones.index', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
+    }
+
+    public function historial_comisiones_all(Request $request)
+    {
+        $tipo = "empleados"; 
+        $id_desc = 2;
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $controls = \DB::table('controls')
+                    ->where('id_desc', '=', $id_desc)
+                    ->whereBetween('created_at', [$desde, $hasta])
+                    ->get();
+        
+        $desde = date('d/m/y', strtotime($desde));
+        $hasta = date('d/m/y', strtotime($hasta));
+        $titulo = "Comisiones de " . $tipo . " desde " . $desde . " hasta " . $hasta;
+        
+        return view('control.comisiones.index', compact('controls', 'titulo', 'tipo'));
+    }
+
+    public function historial_comisiones_one(Request $request, $nombre)
+    {
+        $tipo = "empleados";
+        $id_desc = 2;
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $controls = \DB::table('controls')
+                    ->where('id_desc', '=', $id_desc)
+                    ->where('detalle', 'like', '%'.$nombre.'%')
+                    ->whereBetween('created_at', [$desde, $hasta])
+                    ->get();
+        
+        $desde = date('d/m/y', strtotime($desde));
+        $hasta = date('d/m/y', strtotime($hasta));
+        $titulo = "Comisiones de " . $nombre . " desde " . $desde . " hasta " . $hasta;
+        
+        return view('control.comisiones.index', compact('controls', 'titulo', 'nombre', 'tipo'));
+    }
+
+    public function ordenes()
     {
         if (\Request::is('*/productos')) 
         { 
@@ -201,11 +230,38 @@ class ControlController extends Controller
             $id_type = 2;
         }
         $orders = \DB::table('orders')->where('id_type', $id_type)->where('deHoy', 1)->get();
-        $empleados = \DB::table('users')->select('id', 'nombre')->where('id_uType', 2)->orderBy('nombre')->get();
+        $empleados = \DB::table('users')->select('id', 'nombre')->where('id_uType', 2)->orWhere('id_uType', 1)->orderBy('nombre')->get();
         $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
         $titulo = "Ingresos por " . $tipo . " del día";
         
         return view('control.ingresos.index', compact('titulo', 'tipo', 'empleados', 'clientes', 'id_type', 'orders'));
+    }
+
+    public function historial_ordenes(Request $request)
+    {
+        if (\Request::is('*/productos/historial'))
+        {
+            $tipo = "productos"; $id_type = 1;
+        }
+        else if(\Request::is('*/servicios/historial'))
+        { 
+            $tipo = "servicios"; $id_type = 2; 
+        }
+        
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $orders = \DB::table('orders')
+                    ->where('id_type', '=', $id_type)
+                    ->whereBetween('created_at', [$desde, $hasta])
+                    ->get();
+        $empleados = \DB::table('users')->select('id', 'nombre')->where('id_uType', 2)->orderBy('nombre')->get();
+        $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
+        
+        $desde = date('d/m/y', strtotime($desde));
+        $hasta = date('d/m/y', strtotime($hasta));
+        $titulo = "Ingresos por " . $tipo . " desde " . $desde . " hasta " . $hasta;
+        
+        return view('control.ingresos.index', compact('orders', 'id_type', 'titulo', 'tipo', 'empleados', 'clientes'));
     }
 
     public function store_orden(Request $request)
@@ -260,7 +316,7 @@ class ControlController extends Controller
         {
             $empleado = User::find($order->id_empleado);
             $cliente = User::find($order->id_cliente);
-            $subtitulo = "Cliente: " . $cliente->nombre . " | Empleado: " . $empleado->nombre;
+            $subtitulo = "Cliente: " . $cliente->nombre . " | Atendió: " . $empleado->nombre;
         }
         else {
             $subtitulo = "La orden todavía no existe";
@@ -314,6 +370,9 @@ class ControlController extends Controller
     public function descuento_orden(Request $request, $id_order)
     {
         $desc = $request->desc;
+        $order = Order::find($id_order);
+        $monto = $order->monto;
+        $desc = $monto * $desc /100;
         
         \DB::table('orders')->where('id', $id_order)->update(['desc' => $desc]);
         
@@ -341,45 +400,6 @@ class ControlController extends Controller
         }
     }
 
-    public function historial_ingresos(Request $request)
-    {
-        $id_desc = 2;
-        $tipo = "ingresos";
-        
-        $desde = $request->desde;
-        $hasta = $request->hasta;
-        $controls = \DB::table('controls')
-                    ->where('id_desc', '=', $id_desc)
-                    ->whereBetween('created_at', [$desde, $hasta])
-                    ->get();
-        
-        $desde = date('d/m/y', strtotime($desde));
-        $hasta = date('d/m/y', strtotime($hasta));
-        $titulo = "Historial de " . $tipo . " desde " . $desde . " hasta " . $hasta;
-        
-        return view('control.caja.ingresos', compact('controls', 'titulo', 'tipo'));
-    }
-
-    public function historial_ingreso(Request $request, $nombre)
-    {
-        $id_desc = 2;
-        $tipo = "ingresos";
-        
-        $desde = $request->desde;
-        $hasta = $request->hasta;
-        $controls = \DB::table('controls')
-                    ->where('id_desc', '=', $id_desc)
-                    ->where('detalle', 'like', '%'.$nombre.'%')
-                    ->whereBetween('created_at', [$desde, $hasta])
-                    ->get();
-        
-        $desde = date('d/m/y', strtotime($desde));
-        $hasta = date('d/m/y', strtotime($hasta));
-        $titulo = "Historial de " . $tipo . " para " . $nombre . " desde " . $desde . " hasta " . $hasta;
-        
-        return view('control.caja.ingresos', compact('controls', 'titulo', 'tipo'));
-    }
-
     public function store(Request $request)
     {
         Control::create([
@@ -397,12 +417,7 @@ class ControlController extends Controller
                 break;
             
             case '2':
-                $paid_at = $request->paid_at;
-                $id = $request->id;
-                
-                \DB::table('users')->where('id', $id)->update(['paid_at' => $paid_at]);
-                
-                return redirect()->route('control.caja.ingresos');
+                return redirect()->route('control.comisiones');
                 break;
             
             case '3':
@@ -414,7 +429,7 @@ class ControlController extends Controller
                 break;
             
             case '5':
-                return redirect()->route('control.sueldos.profesores');// SUELDOS O 2 DE EMPLEADOS?
+                return redirect()->route('control.sueldos');
                 break;
             
             case '6':

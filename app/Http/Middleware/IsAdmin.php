@@ -15,9 +15,16 @@ class IsAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->IsAdmin()) 
+        if (auth()->check()) 
         {
-            return $next($request);
+            if (auth()->user()->IsAdmin()) 
+            {
+                return $next($request);
+            }
+            else
+            {
+                return redirect('home');
+            }
         }
         else
         {

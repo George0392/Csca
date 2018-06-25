@@ -15,7 +15,7 @@
                     @if($order->completada == 0)
                     <form method="POST" action="/admin/control/{{$tipo}}/descuento/{{ $id_order }}">
                         {!!csrf_field()!!}
-                        <input class="btn btn-default" type="number" name="desc" placeholder="DESC ${{ $order->desc }}" style="width: 105px;">
+                        <input class="btn btn-default" type="number" min="0" max="25" name="desc" placeholder="DESC %" style="width: 105px;">
                     </form>
                     @else
                         <label class="btn btn-default">DESC ${{ $order->desc }}</label>

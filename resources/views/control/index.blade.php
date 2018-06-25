@@ -17,13 +17,9 @@
                             
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="/admin/control/caja/inicio">Caja Inicial</a>
+                                <a href="/admin/control/caja/inicio">Inicio</a>
                             </li>
 
-                            <li>
-                                <a href="/admin/control/caja/ingresos">Ingresos</a>
-                            </li>
-                                
                             <li>
                                 <a href="/admin/control/caja/retiros">Retiros</a>
                             </li>
@@ -66,16 +62,16 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#">
-                            <span class="oi oi-chevron-bottom"></span>
+                        <a href="/admin/control/sueldos">
+                            <span class="oi oi-dollar"></span>
                             Sueldos
                         </a>
-                        
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="/admin/control/sueldos/empleados">Empleados</a>
-                            </li>
-                        </ul>
+                    </li>
+                    <li>
+                        <a href="/admin/control/comisiones">
+                            <span class="oi oi-dollar"></span>
+                            Comisiones
+                        </a>
                     </li>
                     <li>
                         <a href="#">

@@ -14,6 +14,10 @@
             </button>
         @else
             <h2 class="mt-2 mb-3">{{ $titulo }}</h2>
+            <a href="/admin/control/ingresos/{{$tipo}}/" class="btn btn-primary">Volver</a>
+            <button class="btn btn-info" data-toggle="collapse" data-target="#collapseExample2">
+                Historial
+            </button>
         @endif
         
         <div class="collapse indent" id="collapseExample">
@@ -23,7 +27,7 @@
                         {!!csrf_field()!!}
                         
                         <div class="form-group col-md-3" style="padding-left: 0px;">
-                            <label>Empleado</label>
+                            <label>Atendió</label>
                             <select class="form-control" name="id_empleado" value="{{ old('id_empleado') }}">
                                 @foreach($empleados as $empleado)
                                     <option value="{{$empleado->id}}">{{$empleado->nombre}}</option>
@@ -58,7 +62,7 @@
         <div class="collapse indent" id="collapseExample2">
             <div class="card card-body">
                 <p>
-                    <form class="form-inline" method="POST" action="{{ url('/admin/control/gastos/' . $tipo) }}">
+                    <form class="form-inline" method="POST" action="{{ url('/admin/control/ingresos/' . $tipo . '/historial') }}">
                         {!!csrf_field()!!}
                         <div class="form-group">
                             <label> Desde </label>
@@ -84,7 +88,7 @@
             <tr></tr>
                 <th scope="col">#</th>
                 <th scope="col">Cliente</th>
-                <th scope="col">Empleado</th>
+                <th scope="col">Atendió</th>
                 <th scope="col">Monto</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>

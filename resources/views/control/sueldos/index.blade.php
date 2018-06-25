@@ -3,29 +3,21 @@
 @section('content3')
     
     <div class="d-flex justify-content-between align-items-end">
-        {{-- SI ES EL INDEX --}}
-        @if($titulo == "Cuotas de " . $tipo)
+        @if($titulo == "Sueldos de " . $tipo)
             <h1 class="mt-2 mb-3">{{ $titulo }}</h1>
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Historial
             </button>
-        @elseif(strpos($titulo, "para"))
-            <h2 class="mt-2 mb-3">{{ $titulo }}</h2>
-            <a href="{{ url('/admin/control/caja/' . $tipo) }}" class="btn btn-primary">Volver</a>
         @else
             <h2 class="mt-2 mb-3">{{ $titulo }}</h2>
-            <a href="{{ url('/admin/control/caja/' . $tipo) }}" class="btn btn-primary">Volver</a>
-            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                Historial
-            </button>
+            <a href="{{ url('/admin/control/sueldos/') }}" class="btn btn-primary">Volver</a>
         @endif 
-        
-        <p></p>
     </div>
+    <p></p>
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
             <p>
-                <form class="form-inline" method="POST" action="{{ url('/admin/control/caja/ingresos') }}">
+                <form class="form-inline" method="POST" action="{{ url('/admin/control/sueldos/historial') }}">
                     {!!csrf_field()!!}
                     <div class="form-group">
                         <label> Desde </label>
@@ -41,19 +33,17 @@
             </p>
         </div>
     </div>
+
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
-                <th scope="col">#</th>
-                {{-- SI ES EL INDEX --}}
-                @if($titulo == "Cuotas de " . $tipo)
+                @if($titulo == "Sueldos de " . $tipo)
                     <th scope="col">Nombre</th>
-                    <th scope="col">Servicio</th>
-                    <th scope="col">Monto</th>
-                    <th scope="col">Inicio</th>
-                    <th scope="col">Último</th>
-                {{-- SI ES HISTORIAL GENERAL O PARTICULAR --}}
-                @else 
+                    <th scope="col">$ por Serv</th>
+                    <th scope="col">$ por Prod</th>
+                    <th scope="col">Sueldo</th>
+                    <th scope="col">Pagos</th>
+                @else
                     <th scope="col">Detalle</th>
                     <th scope="col">Monto</th>
                     <th scope="col">Fecha</th>
@@ -62,50 +52,57 @@
             </tr>
         </thead>
         <tbody>
-            {{-- SI ES EL INDEX --}}
-            @if($titulo == "Cuotas de " . $tipo)
-                @foreach ($users as $user)
+            @if($titulo == "Sueldos de " . $tipo)
+                @foreach ($empleados as $empleado)
                     <tr>
-                        <th scope="row">{{ $user->id }}</th>
-                        <td>
-                            {{ $user->nombre }}
+                        <td style="vertical-align: middle;">
+                            {{ $empleado->nombre }}
                         </td>
                         <td>
-                            @foreach ($services as $service)
-                                @if ($service->id == $user->servicio_id)
-                                    <?php $monto=$service->monto ?>
-                                    {{ $service->nombre }}
+                            <?php $totalS=0 ?>
+                            @foreach ($ordenes_serv as $orden_serv)
+                                @if ($orden_serv->id_empleado == $empleado->id)
+                                    <?php $totalS=$totalS+$orden_serv->monto ?>
                                 @endif
                             @endforeach
+                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalS}}</label>
+                            <input type="hidden" class="totalS" value="{{ $totalS }}">
+                        </td>
+                        <td>
+                            <?php $totalP=0 ?>
+                            @foreach ($ordenes_prod as $orden_prod)
+                                @if ($orden_prod->id_empleado == $empleado->id)
+                                    <?php $totalP=$totalP+$orden_prod->monto ?>
+                                @endif
+                            @endforeach
+                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalP}}</label>
+                            <input type="hidden" class="totalP" value="{{ $totalP }}">
                         </td>
                         <td>
                             <form class="form-inline" name="myForm" method="POST" action="{{ url('admin/control/') }}">
                                 {!!csrf_field()!!}
                                 
-                                <input style="width: 65px;" required class="form-control" name="monto" placeholder="Cuota" value="{{ $monto }}">
+                                <input id="Sueldo" style="width: 65px;" required class="form-control sueldo" name="monto" placeholder="$">
                                 <input type="hidden" name="admin" value="{{ Auth::user()->nombre }}">
-                                <input type="hidden" name="id_desc" value="2">
-                                <input type="hidden" name="detalle" value="Cobro de cuota a {{ $user->nombre }}">
+                                <input type="hidden" name="id_desc" value="5">
+                                <input type="hidden" name="detalle" value="Pago de sueldo a {{ $empleado->nombre }}">
                                 <input type="hidden" name="caja_abierta" value="1">
-                                <input type="hidden" name="id" value="{{ $user->id }}">
-                                <input type="hidden" name="paid_at" value="{{ date('Y-m-d') }}">
-                                <button type="submit" class="btn btn-success mb-2">Cobrar</button>
+                                <button type="submit" class="btn btn-primary mb-2">Pagar</button>
                             </form>
                         </td>
-                        <td>{{ date('d/m/y', strtotime($user->created_at)) }}</td>
-                        <td>{{ date('d/m/y', strtotime($user->paid_at)) }}</td>
                         <td>
-                            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample{{ $user->id }}" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample{{ $empleado->id }}" aria-expanded="false" aria-controls="collapseExample">
                                 <span class="oi oi-clock"></span>
                             </button>
                         </td>
                     </tr>
-                    <tr class="collapse" id="collapseExample{{ $user->id }}">
+                    <tr class="collapse" id="collapseExample{{ $empleado->id }}">
                         <td class="col-xs-10" colspan="7" >
-                            <form class="form-inline" method="POST" action="{{ url('/admin/control/caja/ingresos/'. $user->nombre) }}">
+                            <form class="form-inline" method="POST" action="{{ url('/admin/control/sueldos/'. $empleado->nombre) }}">
                                 {!!csrf_field()!!}
                                 <div class="form-group">
-                                    <label>Historial de cuotas para {{ $user->nombre }} desde</label>
+                                    <label>Historial de sueldos para {{ $empleado->nombre }} desde</label>
+                                    <input type="hidden" name="profesor" value="{{ $empleado->nombre }}">
                                     <input required type="date" class="form-control" name="desde">
                                 </div>
                                 <div class="form-group">
@@ -118,18 +115,14 @@
                         </td>
                     </tr>
                 @endforeach
-
-            {{-- SI ES HISTORIAL GENERAL O PARTICULAR --}}
-
             @else
                 @foreach ($controls as $control)
-                    <tr>
-                        <th scope="row">{{ $control->id }}</th>
-                        <td>{{ $control->detalle }}</td>
-                        <td><b>$ </b>{{ $control->monto }}</td>
-                        <td>{{ date('d/m/y', strtotime($control->created_at)) }}</td>
-                        <td>{{ date('H:i', strtotime($control->created_at)) }}</td>
-                    </tr>
+                <tr>
+                    <td>{{ $control->detalle }}</td>
+                    <td><b>$ </b>{{ $control->monto }}</td>
+                    <td>{{ date('d/m/y', strtotime($control->created_at)) }}</td>
+                    <td>{{ date('H:i', strtotime($control->created_at)) }}</td>
+                </tr>
                 @endforeach
             @endif
         </tbody>

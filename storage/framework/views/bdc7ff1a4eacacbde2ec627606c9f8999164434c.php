@@ -21,28 +21,21 @@
     </script>
 
     <div class="d-flex justify-content-between align-items-end">
-        <?php if($titulo == "Sueldos de " . $tipo): ?>
+        <?php if($titulo == "Comisiones de " . $tipo): ?>
             <h1 class="mt-2 mb-3"><?php echo e($titulo); ?></h1>
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Historial
             </button>
-        <?php elseif(strpos($titulo, "istorial")): ?>
-            <h2 class="mt-2 mb-3"><?php echo e($titulo); ?></h2>
-            <a href="<?php echo e(url('/admin/control/sueldos/' . $tipo)); ?>" class="btn btn-primary">Volver</a>
         <?php else: ?>
             <h2 class="mt-2 mb-3"><?php echo e($titulo); ?></h2>
-            <a href="<?php echo e(url('/admin/control/sueldos/' . $tipo)); ?>" class="btn btn-primary">Volver</a>
-            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                Historial
-            </button>
+            <a href="<?php echo e(url('/admin/control/comisiones/')); ?>" class="btn btn-primary">Volver</a>
         <?php endif; ?> 
-        
-        <p></p>
     </div>
+    <p></p>
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
             <p>
-                <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/sueldos/' . $tipo)); ?>">
+                <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/comisiones/historial')); ?>">
                     <?php echo csrf_field(); ?>
 
                     <div class="form-group">
@@ -59,16 +52,17 @@
             </p>
         </div>
     </div>
+
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
-                <?php if($titulo == "Sueldos de " . $tipo): ?>
+                <?php if($titulo == "Comisiones de " . $tipo): ?>
                     <th scope="col">Nombre</th>
                     <th scope="col">$ por Serv</th>
                     <th scope="col">% X Serv</th>
                     <th scope="col">$ por Prod</th>
                     <th scope="col">% X Prod</th>
-                    <th scope="col">Sueldo</th>
+                    <th scope="col">Comisión</th>
                     <th scope="col">Pagos</th>
                 <?php else: ?>
                     <th scope="col">Detalle</th>
@@ -79,7 +73,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php if($titulo == "Sueldos de " . $tipo): ?>
+            <?php if($titulo == "Comisiones de " . $tipo): ?>
                 <?php $__currentLoopData = $empleados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $empleado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
                         <td style="vertical-align: middle;">
@@ -90,7 +84,7 @@
                             <?php $totalS=0 ?>
                             <?php $__currentLoopData = $ordenes_serv; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_serv): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php if($orden_serv->id_empleado == $empleado->id): ?>
-                                    <?php $totalS=$totalS+$orden_serv->monto ?>
+                                    <?php $totalS = $totalS + $orden_serv->monto - $orden_serv->desc ?>
                                 <?php endif; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalS); ?></label>
@@ -104,7 +98,7 @@
                             <?php $totalP=0 ?>
                             <?php $__currentLoopData = $ordenes_prod; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_prod): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php if($orden_prod->id_empleado == $empleado->id): ?>
-                                    <?php $totalP=$totalP+$orden_prod->monto ?>
+                                    <?php $totalP = $totalP + $orden_prod->monto - $orden_prod->desc ?>
                                 <?php endif; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalP); ?></label>
@@ -121,8 +115,8 @@
                                 
                                 <input id="Sueldo" style="width: 65px;" required class="form-control sueldo" name="monto" placeholder="Sueldo" value="<?php echo e(($porcP*$totalP/100)+($porcS*$totalS/100)); ?>">
                                 <input type="hidden" name="admin" value="<?php echo e(Auth::user()->nombre); ?>">
-                                <input type="hidden" name="id_desc" value="5">
-                                <input type="hidden" name="detalle" value="Pago de sueldo a <?php echo e($empleado->nombre); ?>">
+                                <input type="hidden" name="id_desc" value="2">
+                                <input type="hidden" name="detalle" value="Pago de comisiones a <?php echo e($empleado->nombre); ?>">
                                 <input type="hidden" name="caja_abierta" value="1">
                                 <button type="submit" class="btn btn-primary mb-2">Pagar</button>
                             </form>
@@ -135,11 +129,11 @@
                     </tr>
                     <tr class="collapse" id="collapseExample<?php echo e($empleado->id); ?>">
                         <td class="col-xs-10" colspan="7" >
-                            <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/sueldos/' . $tipo . '/'. $empleado->nombre)); ?>">
+                            <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/comisiones/'. $empleado->nombre)); ?>">
                                 <?php echo csrf_field(); ?>
 
                                 <div class="form-group">
-                                    <label>Historial de sueldos para <?php echo e($empleado->nombre); ?> desde</label>
+                                    <label>Historial de comisiones para <?php echo e($empleado->nombre); ?> desde</label>
                                     <input type="hidden" name="profesor" value="<?php echo e($empleado->nombre); ?>">
                                     <input required type="date" class="form-control" name="desde">
                                 </div>
