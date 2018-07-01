@@ -41,7 +41,7 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">$ por Serv</th>
                     <th scope="col">$ por Prod</th>
-                    <th scope="col">Sueldo</th>
+                    <th scope="col">Sueldo a pagar</th>
                     <th scope="col">Pagos</th>
                 @else
                     <th scope="col">Detalle</th>

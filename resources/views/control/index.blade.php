@@ -74,7 +74,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="/admin/control/movimientos">
                             <span class="oi oi-clock"></span>
                             Movimientos
                         </a>

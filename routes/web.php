@@ -113,10 +113,12 @@ Route::group(['middleware' => 'is_admin'], function () {
     Route::post('/admin/control/ingresos/servicios/historial', 'ControlController@historial_ordenes');
     //---DESCUENTO en ORDEN---//
     Route::post('/admin/control/productos/descuento/{id_order}', 'ControlController@descuento_orden');
+    
     Route::post('/admin/control/servicios/descuento/{id_order}', 'ControlController@descuento_orden');
     //-----------FIN----------//
     //---CERRAR ORDEN---//
     Route::post('/admin/control/productos/cerrar/{id_order}', 'ControlController@cerrar_orden');
+    
     Route::post('/admin/control/servicios/cerrar/{id_order}', 'ControlController@cerrar_orden');
     //-----------FIN----------//
     Route::get('/admin/control/ingresos/productos/{id_order}', 'ControlController@subordenes')->name('control.ingresos.productos.agregar');
@@ -142,6 +144,12 @@ Route::group(['middleware' => 'is_admin'], function () {
     Route::post('/admin/control/comisiones/historial', 'ControlController@historial_comisiones_all');
 
     Route::post('/admin/control/comisiones/{nombre}', 'ControlController@historial_comisiones_one');
+
+    // Control.Movimientos
+
+    Route::get('/admin/control/movimientos/', 'ControlController@movimientos')->name('control.movimientos');
+
+    Route::post('/admin/control/movimientos/historial', 'ControlController@historial_movimientos');
 
     // <-- Usuarios -->
         

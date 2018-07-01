@@ -1,7 +1,7 @@
 <?php $__env->startSection('content3'); ?>
     
     <div class="d-flex justify-content-between align-items-end">
-        <?php if($titulo == "Sueldos de " . $tipo): ?>
+        <?php if($titulo == "Movimientos del turno"): ?>
             <h1 class="mt-2 mb-3"><?php echo e($titulo); ?></h1>
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Historial
@@ -36,7 +36,7 @@
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
-                <?php if($titulo == "Sueldos de " . $tipo): ?>
+                <?php if($titulo == "Movimientos del turno"): ?>
                     <th scope="col">Nombre</th>
                     <th scope="col">$ por Serv</th>
                     <th scope="col">$ por Prod</th>
@@ -51,7 +51,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php if($titulo == "Sueldos de " . $tipo): ?>
+            <?php if($titulo == "Movimientos del turno"): ?>
                 <?php $__currentLoopData = $empleados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $empleado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
                         <td style="vertical-align: middle;">

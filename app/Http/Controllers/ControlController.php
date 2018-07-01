@@ -445,4 +445,35 @@ class ControlController extends Controller
                 break;
         }
     }
+
+    public function movimientos()
+    {
+        $tipo = "empleados";  
+        $id_uType = 2;  
+        $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
+        $ordenes_serv = \DB::table('orders')->where('id_type', 2)->select('id_empleado','monto','desc')->get();
+        $ordenes_prod = \DB::table('orders')->where('id_type', 1)->select('id_empleado','monto','desc')->get();
+        //dd($ordenes_serv);
+        $titulo = "Movimientos del turno";
+        
+        return view('control.movimientos.index', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
+    }
+
+    public function historial_movimientos(Request $request)
+    {
+        $tipo = "empleados"; 
+        $id_desc = 5;
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $controls = \DB::table('controls')
+                    ->where('id_desc', '=', $id_desc)
+                    ->whereBetween('created_at', [$desde, $hasta])
+                    ->get();
+        
+        $desde = date('d/m/y', strtotime($desde));
+        $hasta = date('d/m/y', strtotime($hasta));
+        $titulo = "Sueldos de " . $tipo . " desde " . $desde . " hasta " . $hasta;
+        
+        return view('control.sueldos.index', compact('controls', 'titulo', 'tipo'));
+    }
 }
