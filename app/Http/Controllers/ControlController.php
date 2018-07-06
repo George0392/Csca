@@ -10,13 +10,14 @@ use App\OrderService;
 use App\OrderProduct;
 use App\Service;
 use App\Product;
+use Carbon;
 
 class ControlController extends Controller
 {
     public function inicio()
     {
-        $controls = Control::where('id_desc', '=', 1)
-                    ->where('caja_abierta', '=', 1)
+        $controls = Control::where('id_desc', 1)
+                    ->where('caja_abierta', 1)
                     ->get();
         $titulo = "Listado de caja inicial";
         
@@ -28,6 +29,10 @@ class ControlController extends Controller
         \DB::table('controls')
             ->where('caja_abierta', 1)
             ->update(['caja_abierta' => 0]);
+        
+            \DB::table('orders')
+            ->where('deHoy', 1)
+            ->update(['deHoy' => 0]);
 
         return redirect()->route('control.caja.inicio');
     }
@@ -120,12 +125,9 @@ class ControlController extends Controller
         $tipo = "empleados";  
         $id_uType = 2;  
         $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
-        $ordenes_serv = \DB::table('orders')->where('id_type', 2)->select('id_empleado','monto','desc')->get();
-        $ordenes_prod = \DB::table('orders')->where('id_type', 1)->select('id_empleado','monto','desc')->get();
-        //dd($ordenes_serv);
         $titulo = "Sueldos de " . $tipo;
         
-        return view('control.sueldos.index', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
+        return view('control.sueldos.index', compact('empleados', 'titulo', 'tipo'));
     }
 
     public function historial_sueldos_all(Request $request)
@@ -167,14 +169,17 @@ class ControlController extends Controller
 
     public function comisiones()
     {
-        $tipo = "empleados";  
-        $id_uType = 2;  
+        $id_uType = 2; 
         $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
-        $ordenes_serv = \DB::table('orders')->where('id_type', 2)->where('created_at', '>=', date('Y-m-10').' 07:00:00')
-        ->select('id_empleado','monto','desc')->get();
-        $ordenes_prod = \DB::table('orders')->where('id_type', 1)->where('created_at', '>=', date('Y-m-10').' 07:00:00')
-        ->select('id_empleado','monto','desc')->get();
-        //dd($ordenes_serv);
+        
+        $mP = Carbon::now()->month-1;
+        $desde = Carbon::createFromDate(null, $mP, 10)->setTime(06, 00, 00);
+        $hasta = Carbon::createFromDate(null, null, 10)->setTime(06, 00, 00);
+        
+        $ordenes_serv = \DB::table('orders')->where('id_type', 2)->whereBetween('created_at', [$desde, $hasta])->select('id_empleado','monto','descuento')->get();
+        $ordenes_prod = \DB::table('orders')->where('id_type', 1)->whereBetween('created_at', [$desde, $hasta])->select('id_empleado','monto','descuento')->get();
+        
+        $tipo = "empleados";
         $titulo = "Comisiones de " . $tipo;
         
         return view('control.comisiones.index', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
@@ -271,8 +276,8 @@ class ControlController extends Controller
             'id_cliente' => $request['id_cliente'],
             'id_type' => $request['id_type'],
             'monto' => $request['monto'],
-            'desc' => $request['monto'],
-            'completada' => $request['monto'],
+            'descuento' => $request['descuento'],
+            'completada' => $request['completada'],
             'deHoy' => $request['deHoy']
         ]);
         
@@ -369,12 +374,12 @@ class ControlController extends Controller
 
     public function descuento_orden(Request $request, $id_order)
     {
-        $desc = $request->desc;
+        $descuento = $request->descuento;
         $order = Order::find($id_order);
         $monto = $order->monto;
-        $desc = $monto * $desc /100;
+        $descuento = $monto * $descuento /100;
         
-        \DB::table('orders')->where('id', $id_order)->update(['desc' => $desc]);
+        \DB::table('orders')->where('id', $id_order)->update(['descuento' => $descuento]);
         
         if (\Request::is('*/productos/*')) 
         { 
@@ -448,15 +453,39 @@ class ControlController extends Controller
 
     public function movimientos()
     {
-        $tipo = "empleados";  
-        $id_uType = 2;  
-        $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
-        $ordenes_serv = \DB::table('orders')->where('id_type', 2)->select('id_empleado','monto','desc')->get();
-        $ordenes_prod = \DB::table('orders')->where('id_type', 1)->select('id_empleado','monto','desc')->get();
-        //dd($ordenes_serv);
+        $caja_inicial = Control::where('id_desc', 1)
+                        ->where('caja_abierta', 1)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        //dd($caja_inicial);
+        $ingXprod = Order::where('deHoy', 1)
+                        ->where('id_type', 1)
+                        ->value(\DB::raw("sum(monto - descuento)")) + 0;
+        $ingXserv = Order::where('deHoy', 1)
+                        ->where('id_type', 2)
+                        ->value(\DB::raw("sum(monto - descuento)")) + 0;
+        $gastXlimp = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 3)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $gastXserv = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 4)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $gastXmerc = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 7)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $retiros = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 6)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $sueldos = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 5)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $comisiones = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 2)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $total = $caja_inicial + $ingXprod + $ingXserv - $gastXlimp - $gastXserv - $gastXmerc - $retiros - $sueldos - $comisiones;
+        
         $titulo = "Movimientos del turno";
         
-        return view('control.movimientos.index', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
+        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod', 'ingXserv', 'gastXlimp', 'gastXserv', 'gastXmerc', 'retiros', 'sueldos', 'comisiones', 'total'));
     }
 
     public function historial_movimientos(Request $request)

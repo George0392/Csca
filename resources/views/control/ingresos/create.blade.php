@@ -11,17 +11,17 @@
                 <label class="btn btn-success">TOTAL ${{ $order->monto }}</label>
             </div>
             <div style="margin-top: 3px; margin-left: 5px;">    
-                @if($order->desc == 0)
+                @if($order->descuento == 0)
                     @if($order->completada == 0)
                     <form method="POST" action="/admin/control/{{$tipo}}/descuento/{{ $id_order }}">
                         {!!csrf_field()!!}
-                        <input class="btn btn-default" type="number" min="0" max="25" name="desc" placeholder="DESC %" style="width: 105px;">
+                        <input class="btn btn-default" type="number" min="0" max="25" name="descuento" placeholder="DESC %" style="width: 105px;">
                     </form>
                     @else
-                        <label class="btn btn-default">DESC ${{ $order->desc }}</label>
+                        <label class="btn btn-default">DESC ${{ $order->descuento }}</label>
                     @endif
                 @else
-                    <label class="btn btn-danger">DESC ${{ $order->desc }}</label>
+                    <label class="btn btn-danger">DESC ${{ $order->descuento }}</label>
                 @endif
             </div>
             <div style="margin-top: 3px; margin-left: 5px;">    

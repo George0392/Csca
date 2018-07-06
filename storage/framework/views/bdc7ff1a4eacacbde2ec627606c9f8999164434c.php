@@ -84,7 +84,7 @@
                             <?php $totalS=0 ?>
                             <?php $__currentLoopData = $ordenes_serv; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_serv): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php if($orden_serv->id_empleado == $empleado->id): ?>
-                                    <?php $totalS = $totalS + $orden_serv->monto - $orden_serv->desc ?>
+                                    <?php $totalS = $totalS + $orden_serv->monto - $orden_serv->descuento ?>
                                 <?php endif; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalS); ?></label>
@@ -98,7 +98,7 @@
                             <?php $totalP=0 ?>
                             <?php $__currentLoopData = $ordenes_prod; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_prod): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php if($orden_prod->id_empleado == $empleado->id): ?>
-                                    <?php $totalP = $totalP + $orden_prod->monto - $orden_prod->desc ?>
+                                    <?php $totalP = $totalP + $orden_prod->monto - $orden_prod->descuento ?>
                                 <?php endif; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalP); ?></label>

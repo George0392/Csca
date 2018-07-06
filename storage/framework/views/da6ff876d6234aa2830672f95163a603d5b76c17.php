@@ -9,18 +9,18 @@
                 <label class="btn btn-success">TOTAL $<?php echo e($order->monto); ?></label>
             </div>
             <div style="margin-top: 3px; margin-left: 5px;">    
-                <?php if($order->desc == 0): ?>
+                <?php if($order->descuento == 0): ?>
                     <?php if($order->completada == 0): ?>
                     <form method="POST" action="/admin/control/<?php echo e($tipo); ?>/descuento/<?php echo e($id_order); ?>">
                         <?php echo csrf_field(); ?>
 
-                        <input class="btn btn-default" type="number" min="0" max="25" name="desc" placeholder="DESC %" style="width: 105px;">
+                        <input class="btn btn-default" type="number" min="0" max="25" name="descuento" placeholder="DESC %" style="width: 105px;">
                     </form>
                     <?php else: ?>
-                        <label class="btn btn-default">DESC $<?php echo e($order->desc); ?></label>
+                        <label class="btn btn-default">DESC $<?php echo e($order->descuento); ?></label>
                     <?php endif; ?>
                 <?php else: ?>
-                    <label class="btn btn-danger">DESC $<?php echo e($order->desc); ?></label>
+                    <label class="btn btn-danger">DESC $<?php echo e($order->descuento); ?></label>
                 <?php endif; ?>
             </div>
             <div style="margin-top: 3px; margin-left: 5px;">    

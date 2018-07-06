@@ -39,8 +39,6 @@
             <tr>
                 @if($titulo == "Sueldos de " . $tipo)
                     <th scope="col">Nombre</th>
-                    <th scope="col">$ por Serv</th>
-                    <th scope="col">$ por Prod</th>
                     <th scope="col">Sueldo a pagar</th>
                     <th scope="col">Pagos</th>
                 @else
@@ -57,26 +55,6 @@
                     <tr>
                         <td style="vertical-align: middle;">
                             {{ $empleado->nombre }}
-                        </td>
-                        <td>
-                            <?php $totalS=0 ?>
-                            @foreach ($ordenes_serv as $orden_serv)
-                                @if ($orden_serv->id_empleado == $empleado->id)
-                                    <?php $totalS=$totalS+$orden_serv->monto ?>
-                                @endif
-                            @endforeach
-                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalS}}</label>
-                            <input type="hidden" class="totalS" value="{{ $totalS }}">
-                        </td>
-                        <td>
-                            <?php $totalP=0 ?>
-                            @foreach ($ordenes_prod as $orden_prod)
-                                @if ($orden_prod->id_empleado == $empleado->id)
-                                    <?php $totalP=$totalP+$orden_prod->monto ?>
-                                @endif
-                            @endforeach
-                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalP}}</label>
-                            <input type="hidden" class="totalP" value="{{ $totalP }}">
                         </td>
                         <td>
                             <form class="form-inline" name="myForm" method="POST" action="{{ url('admin/control/') }}">

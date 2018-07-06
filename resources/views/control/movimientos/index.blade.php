@@ -1,5 +1,37 @@
 @extends('control.index')
-
+    <style>
+        .verde{
+            background-color: #00cf01;
+            color: white;
+        }
+        .roja{
+            background-color: #ce0000;
+            color: white;
+        }
+        .verdeOscuro{
+            background-color: #007701;
+            color:gray;
+        }
+        .rojaOscuro{
+            background-color: #770000;
+            color:gray;
+        }
+        .azul{
+            background-color: #005cce;
+            color: white;
+        }
+        .azulOscuro{
+            background-color: #003575;
+            color: gray;
+        }
+        .fila{
+            font-size: large;
+        }
+        .table > tbody > tr.fila > td{
+            padding: 7px;
+            padding-left: 15px;
+        }
+    </style>
 @section('content3')
     
     <div class="d-flex justify-content-between align-items-end">
@@ -34,97 +66,98 @@
         </div>
     </div>
 
-    <table class="table">
-        <thead class="thead-dark"></thead>
-            <tr>
-                @if($titulo == "Movimientos del turno")
-                    <th scope="col">Nombre</th>
-                    <th scope="col">$ por Serv</th>
-                    <th scope="col">$ por Prod</th>
-                    <th scope="col">Sueldo a pagar</th>
-                    <th scope="col">Pagos</th>
-                @else
-                    <th scope="col">Detalle</th>
-                    <th scope="col">Monto</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Hora</th>
-                @endif
-            </tr>
-        </thead>
+    <table class="table table-bordered" style="border: 5px;border-style: inset;">
         <tbody>
-            @if($titulo == "Movimientos del turno")
-                @foreach ($empleados as $empleado)
-                    <tr>
-                        <td style="vertical-align: middle;">
-                            {{ $empleado->nombre }}
-                        </td>
-                        <td>
-                            <?php $totalS=0 ?>
-                            @foreach ($ordenes_serv as $orden_serv)
-                                @if ($orden_serv->id_empleado == $empleado->id)
-                                    <?php $totalS=$totalS+$orden_serv->monto ?>
-                                @endif
-                            @endforeach
-                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalS}}</label>
-                            <input type="hidden" class="totalS" value="{{ $totalS }}">
-                        </td>
-                        <td>
-                            <?php $totalP=0 ?>
-                            @foreach ($ordenes_prod as $orden_prod)
-                                @if ($orden_prod->id_empleado == $empleado->id)
-                                    <?php $totalP=$totalP+$orden_prod->monto ?>
-                                @endif
-                            @endforeach
-                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalP}}</label>
-                            <input type="hidden" class="totalP" value="{{ $totalP }}">
-                        </td>
-                        <td>
-                            <form class="form-inline" name="myForm" method="POST" action="{{ url('admin/control/') }}">
-                                {!!csrf_field()!!}
-                                
-                                <input id="Sueldo" style="width: 65px;" required class="form-control sueldo" name="monto" placeholder="$">
-                                <input type="hidden" name="admin" value="{{ Auth::user()->nombre }}">
-                                <input type="hidden" name="id_desc" value="5">
-                                <input type="hidden" name="detalle" value="Pago de sueldo a {{ $empleado->nombre }}">
-                                <input type="hidden" name="caja_abierta" value="1">
-                                <button type="submit" class="btn btn-primary mb-2">Pagar</button>
-                            </form>
-                        </td>
-                        <td>
-                            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample{{ $empleado->id }}" aria-expanded="false" aria-controls="collapseExample">
-                                <span class="oi oi-clock"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr class="collapse" id="collapseExample{{ $empleado->id }}">
-                        <td class="col-xs-10" colspan="7" >
-                            <form class="form-inline" method="POST" action="{{ url('/admin/control/sueldos/'. $empleado->nombre) }}">
-                                {!!csrf_field()!!}
-                                <div class="form-group">
-                                    <label>Historial de sueldos para {{ $empleado->nombre }} desde</label>
-                                    <input type="hidden" name="profesor" value="{{ $empleado->nombre }}">
-                                    <input required type="date" class="form-control" name="desde">
-                                </div>
-                                <div class="form-group">
-                                    <label>hasta</label>
-                                    <input required type="date" class="form-control" name="hasta" value="{{ date("Y-m-d") }}">
-                                </div>
-                                                
-                                <button type="submit" class="btn btn-success">Buscar</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            @else
-                @foreach ($controls as $control)
-                <tr>
-                    <td>{{ $control->detalle }}</td>
-                    <td><b>$ </b>{{ $control->monto }}</td>
-                    <td>{{ date('d/m/y', strtotime($control->created_at)) }}</td>
-                    <td>{{ date('H:i', strtotime($control->created_at)) }}</td>
-                </tr>
-                @endforeach
-            @endif
+            <tr
+                @if($caja_inicial == 0) 
+                    class="fila verdeOscuro"
+                @else
+                    class="fila verde"
+                @endif>
+                <td>Inicio Caja</td>
+                <td>$ {{ $caja_inicial }}</td>
+            </tr>
+            <tr
+                @if($ingXprod == 0) 
+                    class="fila verdeOscuro"
+                @else
+                    class="fila verde"
+                @endif >
+                <td>Ingresos x Productos</td>
+                <td>$ {{ $ingXprod }}</td>
+            </tr>
+            <tr
+                @if($ingXserv == 0) 
+                    class="fila verdeOscuro"
+                @else
+                    class="fila verde"
+                @endif>
+                <td>Ingresos x Servicios</td>
+                <td>$ {{ $ingXserv }}</td>
+            </tr>
+            <tr
+                @if($gastXlimp == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Gastos x Limpieza</td>
+                <td>$ {{ $gastXlimp }}</td>
+            </tr>
+            <tr
+                @if($gastXserv == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Gastos x Servicios</td>
+                <td>$ {{ $gastXserv }}</td>
+            </tr>
+            <tr
+                @if($gastXmerc == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Gastos x Mercaderías</td>
+                <td>$ {{ $gastXmerc }}</td>
+            </tr>
+            <tr
+                @if($retiros == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Retiros</td>
+                <td>$ {{ $retiros }}</td>
+            </tr>
+            <tr
+                @if($sueldos == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Sueldos</td>
+                <td>$ {{ $sueldos }}</td>
+            </tr>
+            <tr
+                @if($comisiones == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Comisiones</td>
+                <td>$ {{ $comisiones }}</td>
+            </tr>
+            <tr
+                @if($total == 0) 
+                    class="fila azulOscuro"
+                @else
+                    class="fila azul"
+                @endif>
+                <td>Total</td>
+                <td>$ {{ $total }}</td>
+            </tr>
         </tbody>
     </table>
 @endsection

@@ -38,8 +38,6 @@
             <tr>
                 <?php if($titulo == "Sueldos de " . $tipo): ?>
                     <th scope="col">Nombre</th>
-                    <th scope="col">$ por Serv</th>
-                    <th scope="col">$ por Prod</th>
                     <th scope="col">Sueldo a pagar</th>
                     <th scope="col">Pagos</th>
                 <?php else: ?>
@@ -57,26 +55,6 @@
                         <td style="vertical-align: middle;">
                             <?php echo e($empleado->nombre); ?>
 
-                        </td>
-                        <td>
-                            <?php $totalS=0 ?>
-                            <?php $__currentLoopData = $ordenes_serv; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_serv): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if($orden_serv->id_empleado == $empleado->id): ?>
-                                    <?php $totalS=$totalS+$orden_serv->monto ?>
-                                <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalS); ?></label>
-                            <input type="hidden" class="totalS" value="<?php echo e($totalS); ?>">
-                        </td>
-                        <td>
-                            <?php $totalP=0 ?>
-                            <?php $__currentLoopData = $ordenes_prod; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_prod): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if($orden_prod->id_empleado == $empleado->id): ?>
-                                    <?php $totalP=$totalP+$orden_prod->monto ?>
-                                <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalP); ?></label>
-                            <input type="hidden" class="totalP" value="<?php echo e($totalP); ?>">
                         </td>
                         <td>
                             <form class="form-inline" name="myForm" method="POST" action="<?php echo e(url('admin/control/')); ?>">

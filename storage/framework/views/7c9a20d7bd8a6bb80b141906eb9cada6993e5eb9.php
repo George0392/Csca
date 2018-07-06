@@ -47,7 +47,7 @@
                         <input type="hidden" class="form-control" name="deHoy" value=1>
                         <input type="hidden" class="form-control" name="completada" value=0>
                         <input type="hidden" class="form-control" name="monto" value=0>
-                        <input type="hidden" class="form-control" name="desc" value=0>
+                        <input type="hidden" class="form-control" name="descuento" value=0>
                         
                         <div class="form-group col-md-2" style="padding-left: 0px;">
                             <label>&nbsp;</label>
@@ -117,7 +117,7 @@
                             <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </td>
-                    <td><b>$</b> <?php echo e($order->monto - $order->desc); ?></td>
+                    <td><b>$</b> <?php echo e($order->monto - $order->descuento); ?></td>
                     <td><?php echo e(date('d/m/y', strtotime($order->created_at))); ?></td>
                     <td><?php echo e(date('H:i', strtotime($order->created_at))); ?></td>
                     <td><a href="/admin/control/ingresos/<?php echo e($tipo); ?>/<?php echo e($order->id); ?>" class="btn btn-success"><span class="oi oi-eye"></span></a></td>

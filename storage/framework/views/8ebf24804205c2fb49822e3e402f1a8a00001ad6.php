@@ -1,3 +1,36 @@
+    <style>
+        .verde{
+            background-color: #00cf01;
+            color: white;
+        }
+        .roja{
+            background-color: #ce0000;
+            color: white;
+        }
+        .verdeOscuro{
+            background-color: #007701;
+            color:gray;
+        }
+        .rojaOscuro{
+            background-color: #770000;
+            color:gray;
+        }
+        .azul{
+            background-color: #005cce;
+            color: white;
+        }
+        .azulOscuro{
+            background-color: #003575;
+            color: gray;
+        }
+        .fila{
+            font-size: large;
+        }
+        .table > tbody > tr.fila > td{
+            padding: 7px;
+            padding-left: 15px;
+        }
+    </style>
 <?php $__env->startSection('content3'); ?>
     
     <div class="d-flex justify-content-between align-items-end">
@@ -33,100 +66,98 @@
         </div>
     </div>
 
-    <table class="table">
-        <thead class="thead-dark"></thead>
-            <tr>
-                <?php if($titulo == "Movimientos del turno"): ?>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">$ por Serv</th>
-                    <th scope="col">$ por Prod</th>
-                    <th scope="col">Sueldo a pagar</th>
-                    <th scope="col">Pagos</th>
-                <?php else: ?>
-                    <th scope="col">Detalle</th>
-                    <th scope="col">Monto</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Hora</th>
-                <?php endif; ?>
-            </tr>
-        </thead>
+    <table class="table table-bordered" style="border: 5px;border-style: inset;">
         <tbody>
-            <?php if($titulo == "Movimientos del turno"): ?>
-                <?php $__currentLoopData = $empleados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $empleado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr>
-                        <td style="vertical-align: middle;">
-                            <?php echo e($empleado->nombre); ?>
-
-                        </td>
-                        <td>
-                            <?php $totalS=0 ?>
-                            <?php $__currentLoopData = $ordenes_serv; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_serv): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if($orden_serv->id_empleado == $empleado->id): ?>
-                                    <?php $totalS=$totalS+$orden_serv->monto ?>
-                                <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalS); ?></label>
-                            <input type="hidden" class="totalS" value="<?php echo e($totalS); ?>">
-                        </td>
-                        <td>
-                            <?php $totalP=0 ?>
-                            <?php $__currentLoopData = $ordenes_prod; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_prod): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if($orden_prod->id_empleado == $empleado->id): ?>
-                                    <?php $totalP=$totalP+$orden_prod->monto ?>
-                                <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalP); ?></label>
-                            <input type="hidden" class="totalP" value="<?php echo e($totalP); ?>">
-                        </td>
-                        <td>
-                            <form class="form-inline" name="myForm" method="POST" action="<?php echo e(url('admin/control/')); ?>">
-                                <?php echo csrf_field(); ?>
-
-                                
-                                <input id="Sueldo" style="width: 65px;" required class="form-control sueldo" name="monto" placeholder="$">
-                                <input type="hidden" name="admin" value="<?php echo e(Auth::user()->nombre); ?>">
-                                <input type="hidden" name="id_desc" value="5">
-                                <input type="hidden" name="detalle" value="Pago de sueldo a <?php echo e($empleado->nombre); ?>">
-                                <input type="hidden" name="caja_abierta" value="1">
-                                <button type="submit" class="btn btn-primary mb-2">Pagar</button>
-                            </form>
-                        </td>
-                        <td>
-                            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample<?php echo e($empleado->id); ?>" aria-expanded="false" aria-controls="collapseExample">
-                                <span class="oi oi-clock"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr class="collapse" id="collapseExample<?php echo e($empleado->id); ?>">
-                        <td class="col-xs-10" colspan="7" >
-                            <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/sueldos/'. $empleado->nombre)); ?>">
-                                <?php echo csrf_field(); ?>
-
-                                <div class="form-group">
-                                    <label>Historial de sueldos para <?php echo e($empleado->nombre); ?> desde</label>
-                                    <input type="hidden" name="profesor" value="<?php echo e($empleado->nombre); ?>">
-                                    <input required type="date" class="form-control" name="desde">
-                                </div>
-                                <div class="form-group">
-                                    <label>hasta</label>
-                                    <input required type="date" class="form-control" name="hasta" value="<?php echo e(date("Y-m-d")); ?>">
-                                </div>
-                                                
-                                <button type="submit" class="btn btn-success">Buscar</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            <?php else: ?>
-                <?php $__currentLoopData = $controls; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $control): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <tr>
-                    <td><?php echo e($control->detalle); ?></td>
-                    <td><b>$ </b><?php echo e($control->monto); ?></td>
-                    <td><?php echo e(date('d/m/y', strtotime($control->created_at))); ?></td>
-                    <td><?php echo e(date('H:i', strtotime($control->created_at))); ?></td>
-                </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            <?php endif; ?>
+            <tr
+                <?php if($caja_inicial == 0): ?> 
+                    class="fila verdeOscuro"
+                <?php else: ?>
+                    class="fila verde"
+                <?php endif; ?>>
+                <td>Inicio Caja</td>
+                <td>$ <?php echo e($caja_inicial); ?></td>
+            </tr>
+            <tr
+                <?php if($ingXprod == 0): ?> 
+                    class="fila verdeOscuro"
+                <?php else: ?>
+                    class="fila verde"
+                <?php endif; ?> >
+                <td>Ingresos x Productos</td>
+                <td>$ <?php echo e($ingXprod); ?></td>
+            </tr>
+            <tr
+                <?php if($ingXserv == 0): ?> 
+                    class="fila verdeOscuro"
+                <?php else: ?>
+                    class="fila verde"
+                <?php endif; ?>>
+                <td>Ingresos x Servicios</td>
+                <td>$ <?php echo e($ingXserv); ?></td>
+            </tr>
+            <tr
+                <?php if($gastXlimp == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Gastos x Limpieza</td>
+                <td>$ <?php echo e($gastXlimp); ?></td>
+            </tr>
+            <tr
+                <?php if($gastXserv == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Gastos x Servicios</td>
+                <td>$ <?php echo e($gastXserv); ?></td>
+            </tr>
+            <tr
+                <?php if($gastXmerc == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Gastos x Mercaderías</td>
+                <td>$ <?php echo e($gastXmerc); ?></td>
+            </tr>
+            <tr
+                <?php if($retiros == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Retiros</td>
+                <td>$ <?php echo e($retiros); ?></td>
+            </tr>
+            <tr
+                <?php if($sueldos == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Sueldos</td>
+                <td>$ <?php echo e($sueldos); ?></td>
+            </tr>
+            <tr
+                <?php if($comisiones == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Comisiones</td>
+                <td>$ <?php echo e($comisiones); ?></td>
+            </tr>
+            <tr
+                <?php if($total == 0): ?> 
+                    class="fila azulOscuro"
+                <?php else: ?>
+                    class="fila azul"
+                <?php endif; ?>>
+                <td>Total</td>
+                <td>$ <?php echo e($total); ?></td>
+            </tr>
         </tbody>
     </table>
 <?php $__env->stopSection(); ?>

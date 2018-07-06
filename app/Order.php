@@ -11,7 +11,7 @@ class Order extends Model
         'id_cliente',
         'id_type',
         'monto',
-        'desc',
+        'descuento',
         'completada',
         'deHoy',
     ];

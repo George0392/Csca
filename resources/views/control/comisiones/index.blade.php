@@ -84,7 +84,7 @@
                             <?php $totalS=0 ?>
                             @foreach ($ordenes_serv as $orden_serv)
                                 @if ($orden_serv->id_empleado == $empleado->id)
-                                    <?php $totalS = $totalS + $orden_serv->monto - $orden_serv->desc ?>
+                                    <?php $totalS = $totalS + $orden_serv->monto - $orden_serv->descuento ?>
                                 @endif
                             @endforeach
                             <label class="form-control" style="width: 70px;text-align: center;">{{$totalS}}</label>
@@ -98,7 +98,7 @@
                             <?php $totalP=0 ?>
                             @foreach ($ordenes_prod as $orden_prod)
                                 @if ($orden_prod->id_empleado == $empleado->id)
-                                    <?php $totalP = $totalP + $orden_prod->monto - $orden_prod->desc ?>
+                                    <?php $totalP = $totalP + $orden_prod->monto - $orden_prod->descuento ?>
                                 @endif
                             @endforeach
                             <label class="form-control" style="width: 70px;text-align: center;">{{$totalP}}</label>
