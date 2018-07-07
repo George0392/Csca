@@ -68,17 +68,19 @@
     .navbar-default{
         background-image: url(/cisca.png);
         background-position: center;
+        background-position-y: 0px;
         background-repeat: no-repeat;
-        background-size: contain;
+        background-size: 160px;
     }
 
     .footer > .container {
         padding-right: 15px;
         padding-left: 15px;
         background-image: url(/logo.png);
-        background-size: contain;
+        background-size: 180px;
         background-repeat: no-repeat;
         background-position: right;
+        background-position-y: 0px;
     }
     /* Para las imagenes de Productos. */
     .zoom {
@@ -129,7 +131,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         <?php if(auth()->guard()->guest()): ?>
-                            <li><a href="<?php echo e(route('login')); ?>">Login</a></li>
+                            
                             
                         <?php else: ?>
                             <li class="dropdown">
@@ -166,7 +168,7 @@
     <script src="<?php echo e(asset('js/app.js')); ?>"></script>
         <footer class="footer">
             <div class="container">
-                <span class="text-muted">Por <b>JABlack Software</b> 2018 - Copyright © Todos los derechos reservados
+                <span class="text-muted">Por <b>JABlack Software</b> | Copyright © 2018
                 </span>
             </div>
         </footer>

@@ -56,7 +56,7 @@
                     </div>
                     {{-------------------  Productos  -------------------}}
                     @else
-                    <div class="form-group col-md-3" style="padding-left: 0px;">
+                    <div class="form-group col-md-4" style="padding-left: 0px;">
                         <label>Producto</label>
                         <select class="form-control" name="id_producto" value="{{ old('id_producto') }}">
                             @foreach($productos as $producto)
@@ -98,11 +98,11 @@
         <thead class="thead-dark"></thead>
             <tr>
                 @if($id_type == 2)  
-                <th scope="col">Servicio</th>
-                <th scope="col">Detalle</th>
+                    <th scope="col">Servicio</th>
+                    <th scope="col">Detalle</th>
                 @else
-                <th scope="col">Producto</th>
-                <th scope="col">Cant.</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Cant.</th>
                 @endif
                 <th scope="col">Monto</th>
                 <th scope="col">Fecha</th>
@@ -136,7 +136,7 @@
                     
                     <td><b>$</b> {{ $order->monto }}</td>
                     <td>{{ date('d/m/y', strtotime($order->created_at)) }}</td>
-                    <td>{{ date('H:i', strtotime($order->created_at)) }}</td>
+                    <td>{{ date('H:i', strtotime($order->created_at)) }} <b>hs</b></td>
                 </tr>
             @endforeach
         </tbody>

@@ -65,7 +65,7 @@
                 <th scope="row">{{ $control->id }}</th>
                 <td>{{ $control->admin }}</td>
                 <td><b>$</b> {{ $control->monto }}</td>
-                <td>{{ date('d-m-Y', strtotime($control->created_at)) }}</td>
+                <td>{{ date('d/m/Y', strtotime($control->created_at)) }}</td>
                 <td>{{ date('H:i', strtotime($control->created_at)) }} <b>hs</b></td>
             </tr>
             @endforeach

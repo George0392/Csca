@@ -235,7 +235,7 @@ class ControlController extends Controller
             $id_type = 2;
         }
         $orders = \DB::table('orders')->where('id_type', $id_type)->where('deHoy', 1)->get();
-        $empleados = \DB::table('users')->select('id', 'nombre')->where('id_uType', 2)->orWhere('id_uType', 1)->orderBy('nombre')->get();
+        $empleados = \DB::table('users')->select('id', 'nombre')->where([['id_uType',"!=", 3], ['id',"!=", 1],])->orderBy('nombre')->get();
         $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
         $titulo = "Ingresos por " . $tipo . " del día";
         
@@ -397,11 +397,11 @@ class ControlController extends Controller
         
         if (\Request::is('*/productos/*')) 
         { 
-            return redirect()->route('control.ingresos.productos.agregar', compact('id_order'));
+            return redirect()->route('control.ingresos.productos');
         }
         else if(\Request::is('*/servicios/*'))
         {
-            return redirect()->route('control.ingresos.servicios.agregar', compact('id_order'));
+            return redirect()->route('control.ingresos.servicios');
         }
     }
 
@@ -490,19 +490,43 @@ class ControlController extends Controller
 
     public function historial_movimientos(Request $request)
     {
-        $tipo = "empleados"; 
-        $id_desc = 5;
-        $desde = $request->desde;
-        $hasta = $request->hasta;
-        $controls = \DB::table('controls')
-                    ->where('id_desc', '=', $id_desc)
-                    ->whereBetween('created_at', [$desde, $hasta])
-                    ->get();
+        $desde = date('Y/m/d 06:00:00', strtotime($request->desde));
+        $hasta = date('Y/m/d 06:00:00', strtotime($request->hasta));
+        //dd($desde);
+        $caja_inicial = Control::where('id_desc', 1)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        //dd($caja_inicial);
+        $ingXprod = Order::where('id_type', 1)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto - descuento)")) + 0;
+        $ingXserv = Order::where('id_type', 2)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto - descuento)")) + 0;
+        $gastXlimp = Control::where('id_desc', 3)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $gastXserv = Control::where('id_desc', 4)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $gastXmerc = Control::where('id_desc', 7)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $retiros = Control::where('id_desc', 6)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $sueldos = Control::where('id_desc', 5)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $comisiones = Control::where('id_desc', 2)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $total = $caja_inicial + $ingXprod + $ingXserv - $gastXlimp - $gastXserv - $gastXmerc - $retiros - $sueldos - $comisiones;
         
-        $desde = date('d/m/y', strtotime($desde));
-        $hasta = date('d/m/y', strtotime($hasta));
-        $titulo = "Sueldos de " . $tipo . " desde " . $desde . " hasta " . $hasta;
+        $desde = date('d/m/y', strtotime($request->desde));
+        $hasta = date('d/m/y', strtotime($request->hasta));
+        $titulo = "Movimientos desde " . $desde . " hasta " . $hasta;
         
-        return view('control.sueldos.index', compact('controls', 'titulo', 'tipo'));
+        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod', 'ingXserv', 'gastXlimp', 'gastXserv', 'gastXmerc', 'retiros', 'sueldos', 'comisiones', 'total'));
     }
 }

@@ -34,26 +34,25 @@
 <?php $__env->startSection('content3'); ?>
     
     <div class="d-flex justify-content-between align-items-end">
+        <h1 class="mt-2 mb-3"><?php echo e($titulo); ?></h1>
         <?php if($titulo == "Movimientos del turno"): ?>
-            <h1 class="mt-2 mb-3"><?php echo e($titulo); ?></h1>
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Historial
             </button>
         <?php else: ?>
-            <h2 class="mt-2 mb-3"><?php echo e($titulo); ?></h2>
-            <a href="<?php echo e(url('/admin/control/sueldos/')); ?>" class="btn btn-primary">Volver</a>
+            <a href="<?php echo e(url('/admin/control/movimientos/')); ?>" class="btn btn-primary">Volver</a>
         <?php endif; ?> 
     </div>
     <p></p>
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
             <p>
-                <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/sueldos/historial')); ?>">
+                <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/movimientos/historial')); ?>">
                     <?php echo csrf_field(); ?>
 
                     <div class="form-group">
                         <label> Desde </label>
-                        <input required type="date" class="form-control" name="desde">
+                        <input required type="date" class="form-control" name="desde" value="<?php echo e(date("Y-m-d", strtotime("yesterday"))); ?>">
                     </div>
                     <div class="form-group">
                         <label> Hasta </label>

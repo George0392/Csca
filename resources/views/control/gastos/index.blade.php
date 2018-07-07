@@ -72,7 +72,7 @@
                     <td>{{ $control->detalle }}</td>
                     <td><b>$</b> {{ $control->monto }}</td>
                     <td>{{ date('d/m/y', strtotime($control->created_at)) }}</td>
-                    <td>{{ date('H:i', strtotime($control->created_at)) }}</td>
+                    <td>{{ date('H:i', strtotime($control->created_at)) }} <b>hs</b></td>
                 </tr>
             @endforeach
         </tbody>

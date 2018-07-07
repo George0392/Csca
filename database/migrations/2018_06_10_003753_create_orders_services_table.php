@@ -14,6 +14,7 @@ class CreateOrdersServicesTable extends Migration
     public function up()
     {
         Schema::create('orders_services', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('id_order');
             $table->integer('id_servicio');

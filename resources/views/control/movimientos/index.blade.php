@@ -35,25 +35,24 @@
 @section('content3')
     
     <div class="d-flex justify-content-between align-items-end">
+        <h1 class="mt-2 mb-3">{{ $titulo }}</h1>
         @if($titulo == "Movimientos del turno")
-            <h1 class="mt-2 mb-3">{{ $titulo }}</h1>
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Historial
             </button>
         @else
-            <h2 class="mt-2 mb-3">{{ $titulo }}</h2>
-            <a href="{{ url('/admin/control/sueldos/') }}" class="btn btn-primary">Volver</a>
+            <a href="{{ url('/admin/control/movimientos/') }}" class="btn btn-primary">Volver</a>
         @endif 
     </div>
     <p></p>
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
             <p>
-                <form class="form-inline" method="POST" action="{{ url('/admin/control/sueldos/historial') }}">
+                <form class="form-inline" method="POST" action="{{ url('/admin/control/movimientos/historial') }}">
                     {!!csrf_field()!!}
                     <div class="form-group">
                         <label> Desde </label>
-                        <input required type="date" class="form-control" name="desde">
+                        <input required type="date" class="form-control" name="desde" value="{{ date("Y-m-d", strtotime("yesterday")) }}">
                     </div>
                     <div class="form-group">
                         <label> Hasta </label>

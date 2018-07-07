@@ -14,6 +14,7 @@ class CreateOrdersTypeTable extends Migration
     public function up()
     {
         Schema::create('orders_type', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('nombre');
             $table->timestamps();

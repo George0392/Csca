@@ -7,9 +7,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <ul class="nav nav-pills nav-fill">
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link active" href="/admin">Inicio</a>
-                            </li>
+                            </li> --}}
                             
                             <li class="nav-item">
                                 <a class="nav-link" href="/admin/clientes">Clientes</a>
@@ -32,7 +32,7 @@
                             </li>
                             
                             <li class="nav-item">
-                                <a class="nav-link" href="/admin/control">Control de Caja</a>
+                                <a class="nav-link" href="/admin/control">Control</a>
                             </li>
                         </ul>
                     </div>

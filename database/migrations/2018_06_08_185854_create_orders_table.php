@@ -14,12 +14,13 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('id_empleado');
             $table->integer('id_cliente');
             $table->integer('id_type');
-            $table->unsignedSmallInteger('monto');
-            $table->unsignedSmallInteger('desc');
+            $table->integer('monto');
+            $table->integer('descuento');
             $table->boolean('completada');
             $table->boolean('deHoy');
             $table->timestamps();

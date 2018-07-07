@@ -119,7 +119,7 @@
                     </td>
                     <td><b>$</b> <?php echo e($order->monto - $order->descuento); ?></td>
                     <td><?php echo e(date('d/m/y', strtotime($order->created_at))); ?></td>
-                    <td><?php echo e(date('H:i', strtotime($order->created_at))); ?></td>
+                    <td><?php echo e(date('H:i', strtotime($order->created_at))); ?> <b>hs</b></td>
                     <td><a href="/admin/control/ingresos/<?php echo e($tipo); ?>/<?php echo e($order->id); ?>" class="btn btn-success"><span class="oi oi-eye"></span></a></td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

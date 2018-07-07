@@ -72,7 +72,7 @@
                     <td><?php echo e($control->detalle); ?></td>
                     <td><b>$</b> <?php echo e($control->monto); ?></td>
                     <td><?php echo e(date('d/m/y', strtotime($control->created_at))); ?></td>
-                    <td><?php echo e(date('H:i', strtotime($control->created_at))); ?></td>
+                    <td><?php echo e(date('H:i', strtotime($control->created_at))); ?> <b>hs</b></td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>

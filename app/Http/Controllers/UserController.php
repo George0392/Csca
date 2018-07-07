@@ -16,9 +16,9 @@ class UserController extends Controller
      */
     public function index($type)
     {
-        $userType = UserType::where('nombre', $type)->first();
-        
-        $users = User::all()->where('id_uType', $userType->id);
+        $id_uType = UserType::where('nombre', $type)->first()->id;
+        //dd($id_uType);
+        $users = User::all()->where('id', '!=', 1)->where('id_uType', $id_uType);
         
         return view('users.index', compact('users', 'type'));
     }

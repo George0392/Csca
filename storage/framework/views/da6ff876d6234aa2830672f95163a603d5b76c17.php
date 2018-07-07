@@ -56,7 +56,7 @@
                     </div>
                     
                     <?php else: ?>
-                    <div class="form-group col-md-3" style="padding-left: 0px;">
+                    <div class="form-group col-md-4" style="padding-left: 0px;">
                         <label>Producto</label>
                         <select class="form-control" name="id_producto" value="<?php echo e(old('id_producto')); ?>">
                             <?php $__currentLoopData = $productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -99,11 +99,11 @@
         <thead class="thead-dark"></thead>
             <tr>
                 <?php if($id_type == 2): ?>  
-                <th scope="col">Servicio</th>
-                <th scope="col">Detalle</th>
+                    <th scope="col">Servicio</th>
+                    <th scope="col">Detalle</th>
                 <?php else: ?>
-                <th scope="col">Producto</th>
-                <th scope="col">Cant.</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Cant.</th>
                 <?php endif; ?>
                 <th scope="col">Monto</th>
                 <th scope="col">Fecha</th>
@@ -139,7 +139,7 @@
                     
                     <td><b>$</b> <?php echo e($order->monto); ?></td>
                     <td><?php echo e(date('d/m/y', strtotime($order->created_at))); ?></td>
-                    <td><?php echo e(date('H:i', strtotime($order->created_at))); ?></td>
+                    <td><?php echo e(date('H:i', strtotime($order->created_at))); ?> <b>hs</b></td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
