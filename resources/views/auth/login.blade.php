@@ -14,7 +14,7 @@
                         <h1 class="h2" style="margin-top: 10px;">Entrar</h1>
                         
                         <label for="login" class="sr-only">Email address</label>
-                        <input type="login" id="login" class="form-control" placeholder="Introduce tu E-Mail o Nombre de Usuario" required autofocus name="login" value="{{ old('login') }}">
+                        <input type="login" id="login" class="form-control" placeholder="Introduce tu E-Mail" required autofocus name="login" value="{{ old('login') }}">
                         @if ($errors->has('login'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('login') }}</strong>
