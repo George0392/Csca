@@ -30,7 +30,9 @@
                             <label>Atendió</label>
                             <select class="form-control" name="id_empleado" value="{{ old('id_empleado') }}">
                                 @foreach($empleados as $empleado)
+                                    @if($empleado->activo == 1)
                                     <option value="{{$empleado->id}}">{{$empleado->nombre}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>

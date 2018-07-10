@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use App\Control;
 use App\User;
 use App\Order;
@@ -16,12 +17,14 @@ class ControlController extends Controller
 {
     public function inicio()
     {
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        
         $controls = Control::where('id_desc', 1)
                     ->where('caja_abierta', 1)
                     ->get();
         $titulo = "Listado de caja inicial";
         
-        return view('control.caja.inicio', compact('controls', 'titulo'));
+        return view('control.caja.inicio', compact('controls', 'titulo', 'caja_abierta'));
     }
 
     public function cierre()
@@ -39,13 +42,21 @@ class ControlController extends Controller
 
     public function retiros()
     {
-        $controls = \DB::table('controls')
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        if($caja_abierta)
+        {
+            $controls = \DB::table('controls')
                     ->where('caja_abierta', 1)
                     ->where('id_desc', '=', 6)
                     ->get();
 
-        $titulo = "Retiros del día";
-        return view('control.caja.retiros', compact('controls', 'titulo'));
+            $titulo = "Retiros del día";
+            return view('control.caja.retiros', compact('controls', 'titulo'));
+        }
+        else 
+        {
+            return view('control.cajaCerrada');
+        }
     }
 
     public function historial_retiros(Request $request)
@@ -66,28 +77,36 @@ class ControlController extends Controller
 
     public function gastos()
     {
-        if (\Request::is('*/limpieza')) 
-        { 
-            $nombre = "limpieza"; $id_desc = 3;  
-        }
-        else if(\Request::is('*/servicios'))
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        if($caja_abierta)
         {
-            $nombre = "servicios"; $id_desc = 4;
+            if (\Request::is('*/limpieza')) 
+            { 
+                $nombre = "limpieza"; $id_desc = 3;  
+            }
+            else if(\Request::is('*/servicios'))
+            {
+                $nombre = "servicios"; $id_desc = 4;
+            }
+            else if(\Request::is('*/mercaderias'))
+            {
+                $nombre = "mercaderias"; $id_desc = 7;
+            }
+            else {}
+            
+            $controls = \DB::table('controls')
+                        ->where('caja_abierta', 1)
+                        ->where('id_desc', '=', $id_desc)
+                        ->get();
+                        
+            $titulo = "Gastos de " . $nombre . " del día";
+            
+            return view('control.gastos.index', compact('controls', 'titulo', 'nombre', 'id_desc'));
         }
-        else if(\Request::is('*/mercaderias'))
+        else 
         {
-            $nombre = "mercaderias"; $id_desc = 7;
+            return view('control.cajaCerrada');
         }
-        else {}
-          
-        $controls = \DB::table('controls')
-                    ->where('caja_abierta', 1)
-                    ->where('id_desc', '=', $id_desc)
-                    ->get();
-                    
-        $titulo = "Gastos de " . $nombre . " del día";
-        
-        return view('control.gastos.index', compact('controls', 'titulo', 'nombre', 'id_desc'));
     }
 
     public function historial_gastos(Request $request)
@@ -122,12 +141,20 @@ class ControlController extends Controller
 
     public function sueldos()
     {
-        $tipo = "empleados";  
-        $id_uType = 2;  
-        $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
-        $titulo = "Sueldos de " . $tipo;
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        if($caja_abierta)
+        {
+            $tipo = "empleados";  
+            $id_uType = 2;  
+            $empleados = \DB::table('users')->where([['id_uType', $id_uType],['activo', 1]])->select('id','nombre')->orderBy('nombre')->get();
+            $titulo = "Sueldos de " . $tipo;
         
-        return view('control.sueldos.index', compact('empleados', 'titulo', 'tipo'));
+            return view('control.sueldos.index', compact('empleados', 'titulo', 'tipo'));    
+        }
+        else 
+        {
+            return view('control.cajaCerrada');
+        }
     }
 
     public function historial_sueldos_all(Request $request)
@@ -169,20 +196,28 @@ class ControlController extends Controller
 
     public function comisiones()
     {
-        $id_uType = 2; 
-        $empleados = \DB::table('users')->where('id_uType', $id_uType)->select('id','nombre')->orderBy('nombre')->get();
-        
-        $mP = Carbon::now()->month-1;
-        $desde = Carbon::createFromDate(null, $mP, 10)->setTime(06, 00, 00);
-        $hasta = Carbon::createFromDate(null, null, 10)->setTime(06, 00, 00);
-        
-        $ordenes_serv = \DB::table('orders')->where('id_type', 2)->whereBetween('created_at', [$desde, $hasta])->select('id_empleado','monto','descuento')->get();
-        $ordenes_prod = \DB::table('orders')->where('id_type', 1)->whereBetween('created_at', [$desde, $hasta])->select('id_empleado','monto','descuento')->get();
-        
-        $tipo = "empleados";
-        $titulo = "Comisiones de " . $tipo;
-        
-        return view('control.comisiones.index', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        if($caja_abierta)
+        {
+            $id_uType = 2; 
+            $empleados = \DB::table('users')->where([['id_uType', $id_uType],['activo', 1]])->select('id','nombre')->orderBy('nombre')->get();
+            
+            $mP = Carbon::now()->month-1;
+            $desde = Carbon::createFromDate(null, $mP, 10)->setTime(06, 00, 00);
+            $hasta = Carbon::createFromDate(null, null, 10)->setTime(06, 00, 00);
+            
+            $ordenes_serv = \DB::table('orders')->where('id_type', 2)->whereBetween('created_at', [$desde, $hasta])->select('id_empleado','monto','descuento')->get();
+            $ordenes_prod = \DB::table('orders')->where('id_type', 1)->whereBetween('created_at', [$desde, $hasta])->select('id_empleado','monto','descuento')->get();
+            
+            $tipo = "empleados";
+            $titulo = "Comisiones de " . $tipo;
+            
+            return view('control.comisiones.index', compact('empleados', 'titulo', 'tipo', 'ordenes_serv', 'ordenes_prod'));
+        }
+        else 
+        {
+            return view('control.cajaCerrada');
+        }
     }
 
     public function historial_comisiones_all(Request $request)
@@ -224,22 +259,30 @@ class ControlController extends Controller
 
     public function ordenes()
     {
-        if (\Request::is('*/productos')) 
-        { 
-            $tipo = "productos";
-            $id_type = 1;
-        }
-        else if(\Request::is('*/servicios'))
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        if($caja_abierta)
         {
-            $tipo = "servicios";
-            $id_type = 2;
+            if (\Request::is('*/productos')) 
+            { 
+                $tipo = "productos";
+                $id_type = 1;
+            }
+            else if(\Request::is('*/servicios'))
+            {
+                $tipo = "servicios";
+                $id_type = 2;
+            }
+            $orders = \DB::table('orders')->where('id_type', $id_type)->where('deHoy', 1)->get();
+            $empleados = \DB::table('users')->select('id', 'nombre', 'activo')->where([['id_uType',"!=", 3], ['id',"!=", 1],])->orderBy('nombre')->get();
+            $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
+            $titulo = "Ingresos por " . $tipo . " del día";
+            
+            return view('control.ingresos.index', compact('titulo', 'tipo', 'empleados', 'clientes', 'id_type', 'orders'));
         }
-        $orders = \DB::table('orders')->where('id_type', $id_type)->where('deHoy', 1)->get();
-        $empleados = \DB::table('users')->select('id', 'nombre')->where([['id_uType',"!=", 3], ['id',"!=", 1],])->orderBy('nombre')->get();
-        $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
-        $titulo = "Ingresos por " . $tipo . " del día";
-        
-        return view('control.ingresos.index', compact('titulo', 'tipo', 'empleados', 'clientes', 'id_type', 'orders'));
+        else 
+        {
+            return view('control.cajaCerrada');
+        }
     }
 
     public function historial_ordenes(Request $request)
@@ -259,7 +302,8 @@ class ControlController extends Controller
                     ->where('id_type', '=', $id_type)
                     ->whereBetween('created_at', [$desde, $hasta])
                     ->get();
-        $empleados = \DB::table('users')->select('id', 'nombre')->where('id_uType', 2)->orderBy('nombre')->get();
+        //dd($orders);
+        $empleados = \DB::table('users')->select('id', 'nombre', 'activo')->where('id_uType', "!=", 3)->orderBy('nombre')->get();
         $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
         
         $desde = date('d/m/y', strtotime($desde));

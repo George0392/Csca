@@ -29,7 +29,9 @@
                             <label>Atendió</label>
                             <select class="form-control" name="id_empleado" value="<?php echo e(old('id_empleado')); ?>">
                                 <?php $__currentLoopData = $empleados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $empleado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($empleado->activo == 1): ?>
                                     <option value="<?php echo e($empleado->id); ?>"><?php echo e($empleado->nombre); ?></option>
+                                    <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>

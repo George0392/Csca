@@ -10,16 +10,14 @@
     
     <table class="table">
         <thead class="thead-dark"></thead>
-          <tr></tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Acciones</th>
-          </tr>
+            <tr></tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Editar</th>
+            </tr>
         </thead>
         <tbody>
             <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
-                    <th scope="row"><?php echo e($category->id); ?></th>
                     <td><?php echo e($category->nombre); ?></td>
                     <td>
                         <form action="<?php echo e(route('categories.delete', $category)); ?>" method="POST">
@@ -29,7 +27,7 @@
 
                             
                             <a href="<?php echo e(route('categories.edit', $category)); ?>" class="btn btn-warning"><span class="oi oi-pencil"></span></a>
-                            <button class="btn btn-danger" type="submit"><span class="oi oi-trash"></span></button>
+                            
                         </form>
                     </td>
                 </tr>

@@ -36,23 +36,21 @@
     
     <table class="table">
         <thead class="thead-dark"></thead>
-          <tr></tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Categoría</th>
-            <th scope="col">Código barra</th>
-            <th scope="col">Pedido</th>
-            <th scope="col">Quedan</th>
-            <th scope="col">Costo</th>
-            <th scope="col">Monto</th>
-            <th scope="col">Foto</th>
-            <th scope="col">Acciones</th>
-          </tr>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Código barra</th>
+                <th scope="col">Pedido</th>
+                <th scope="col">Quedan</th>
+                <th scope="col">Costo</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Foto</th>
+                <th scope="col">Editar</th>
+            </tr>
         </thead>
         <tbody>
             @foreach ($products as $product)
                 <tr>
-                    <th scope="row">{{ $product->id }}</th>
                     <td>{{ $product->nombre }}</td>
                     <td>
                         @foreach ($categories as $category)
@@ -79,7 +77,7 @@
                             {{ method_field('DELETE') }}
                             {{--  <a href="{{ route('products.show', $product) }}" class="btn btn-success"><span class="oi oi-eye"></span></a>  --}}
                             <a href="{{ route('products.edit', $product) }}" class="btn btn-warning"><span class="oi oi-pencil"></span></a>
-                            <button class="btn btn-danger" type="submit"><span class="oi oi-trash"></span></button>
+                            {{--  <button class="btn btn-danger" type="submit"><span class="oi oi-trash"></span></button>  --}}
                         </form>
                     </td>
                 </tr>

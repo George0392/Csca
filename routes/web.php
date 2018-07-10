@@ -152,6 +152,10 @@ Route::group(['middleware' => 'is_admin'], function () {
         
     Route::get('/admin/{type}s', 'UserController@index')->name('users.index');
 
+    Route::get('/admin/{type}s/papelera', 'UserController@papelera');
+
+    Route::delete('/admin/{type}s/{user}/resurrect', 'UserController@resurrect')->name('users.resurrect');
+
     Route::get('/admin/{type}s/nuevo', 'UserController@create')->name('users.create');
 
     Route::post('/admin/{type}s', 'UserController@store');
@@ -163,5 +167,5 @@ Route::group(['middleware' => 'is_admin'], function () {
     Route::put('/admin/{type}s/{user}', 'UserController@update')->name('users.update');
 
     Route::delete('/admin/{type}s/{user}', 'UserController@delete')->name('users.delete');
-
+    
 });

@@ -36,23 +36,21 @@
     
     <table class="table">
         <thead class="thead-dark"></thead>
-          <tr></tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Categoría</th>
-            <th scope="col">Código barra</th>
-            <th scope="col">Pedido</th>
-            <th scope="col">Quedan</th>
-            <th scope="col">Costo</th>
-            <th scope="col">Monto</th>
-            <th scope="col">Foto</th>
-            <th scope="col">Acciones</th>
-          </tr>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Código barra</th>
+                <th scope="col">Pedido</th>
+                <th scope="col">Quedan</th>
+                <th scope="col">Costo</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Foto</th>
+                <th scope="col">Editar</th>
+            </tr>
         </thead>
         <tbody>
             <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
-                    <th scope="row"><?php echo e($product->id); ?></th>
                     <td><?php echo e($product->nombre); ?></td>
                     <td>
                         <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -82,7 +80,7 @@
 
                             
                             <a href="<?php echo e(route('products.edit', $product)); ?>" class="btn btn-warning"><span class="oi oi-pencil"></span></a>
-                            <button class="btn btn-danger" type="submit"><span class="oi oi-trash"></span></button>
+                            
                         </form>
                     </td>
                 </tr>

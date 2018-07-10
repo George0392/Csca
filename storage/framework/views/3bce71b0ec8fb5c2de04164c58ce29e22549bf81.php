@@ -9,17 +9,15 @@
     
     <table class="table">
         <thead class="thead-dark"></thead>
-          <tr></tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Monto</th>
-            <th scope="col">Acciones</th>
-          </tr>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Editar</th>
+            </tr>
         </thead>
         <tbody>
             <?php $__currentLoopData = $services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
-                    <th scope="row"><?php echo e($service->id); ?></th>
                     <td><?php echo e($service->nombre); ?></td>
                     <td><b>$</b> <?php echo e($service->monto); ?></td>
                     <td>
@@ -30,7 +28,7 @@
 
                             
                             <a href="<?php echo e(route('services.edit', $service)); ?>" class="btn btn-warning"><span class="oi oi-pencil"></span></a>
-                            <button class="btn btn-danger" type="submit"><span class="oi oi-trash"></span></button>
+                            
                         </form>
                     </td>
                 </tr>

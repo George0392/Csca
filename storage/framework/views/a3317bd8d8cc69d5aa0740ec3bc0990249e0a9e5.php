@@ -14,11 +14,16 @@
                     <input type="hidden" class="form-control" name="caja_abierta" value="1">
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">Cargar</button>
-                
+                <?php if($caja_abierta): ?>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
                     Cerrar
                 </button>
+                <?php else: ?>
+                <button disabled type="button" class="btn btn-danger">
+                    Cerrar
+                </button>
+                <?php endif; ?>
                 
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" style="padding-top: 150px;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

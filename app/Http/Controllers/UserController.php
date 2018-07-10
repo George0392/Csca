@@ -17,10 +17,9 @@ class UserController extends Controller
     public function index($type)
     {
         $id_uType = UserType::where('nombre', $type)->first()->id;
-        //dd($id_uType);
-        $users = User::all()->where('id', '!=', 1)->where('id_uType', $id_uType);
-        
-        return view('users.index', compact('users', 'type'));
+        $users = User::all()->where('id', '!=', 1)->where('activo', 1)->where('id_uType', $id_uType);
+        $activos = true;
+        return view('users.index', compact('users', 'type', 'activos'));
     }
 
     /**
@@ -115,7 +114,22 @@ class UserController extends Controller
 
     public function delete($type, User $user)
     {
-        $user->delete();
+        $user->update(['activo' => 0]);
         return redirect()->route('users.index', compact('type'));
+    }
+
+    public function resurrect($type, User $user)
+    {
+        $user->update(['activo' => 1]);
+        return redirect()->route('users.index', compact('type'));
+    }
+
+    public function papelera($type)
+    {
+        $id_uType = UserType::where('nombre', $type)->first()->id;
+        $users = User::all()->where('id', '!=', 1)->where('activo', 0)->where('id_uType', $id_uType);
+        $activos = false;
+        //dd($users);
+        return view('users.index', compact('users', 'type', 'activos'));
     }
 }

@@ -21,7 +21,8 @@ class User extends Authenticatable
         'password', 
         'direccion', 
         'nacimiento', 
-        'id_uType', 
+        'id_uType',
+        'activo', 
     ];
 
     /**
