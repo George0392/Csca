@@ -202,9 +202,20 @@ class ControlController extends Controller
             $id_uType = 2; 
             $empleados = \DB::table('users')->where([['id_uType', $id_uType],['activo', 1]])->select('id','nombre')->orderBy('nombre')->get();
             
-            $mP = Carbon::now()->month-1;
-            $desde = Carbon::createFromDate(null, $mP, 10)->setTime(06, 00, 00);
-            $hasta = Carbon::createFromDate(null, null, 10)->setTime(06, 00, 00);
+            $mP = Carbon::now()->month - 1;
+            $mS = Carbon::now()->month + 1;
+            $day = Carbon::now()->day;
+            
+            if($day > 10) 
+            {
+                $desde = Carbon::createFromDate(null, null, 10)->setTime(06, 00, 00);
+                $hasta = Carbon::createFromDate(null, $mS, 10)->setTime(06, 00, 00);
+            }
+            else 
+            {
+                $desde = Carbon::createFromDate(null, $mP, 10)->setTime(06, 00, 00);
+                $hasta = Carbon::createFromDate(null, null, 10)->setTime(06, 00, 00);
+            }
             
             $ordenes_serv = \DB::table('orders')->where('id_type', 2)->whereBetween('created_at', [$desde, $hasta])->select('id_empleado','monto','descuento')->get();
             $ordenes_prod = \DB::table('orders')->where('id_type', 1)->whereBetween('created_at', [$desde, $hasta])->select('id_empleado','monto','descuento')->get();

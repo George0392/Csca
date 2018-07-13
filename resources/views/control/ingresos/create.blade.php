@@ -52,7 +52,7 @@
                                 
                     <div class="form-group col-md-6" style="padding-left: 0px;">
                         <label>Detalle</label>
-                        <input required type="text" class="form-control" name="detalle" value="{{ old('detalle') }}">
+                        <input required type="text" maxlength="100" class="form-control" name="detalle" value="{{ old('detalle') }}">
                     </div>
                     {{-------------------  Productos  -------------------}}
                     @else

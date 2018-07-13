@@ -16,7 +16,7 @@
         <div class="form-row">
             <div class="form-group col-md-2">
                 <label>Nombre</label>
-                <input type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" >
+                <input maxlength="55" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" >
             </div>
         </div>
 
