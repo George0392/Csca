@@ -11,6 +11,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         DB::table('users')->truncate();
         
         DB::table('users')->insert([
@@ -22,5 +24,7 @@ class UserSeeder extends Seeder
             'nacimiento' => '2000-01-01',
             'id_uType' => '1',
         ]);
+        
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

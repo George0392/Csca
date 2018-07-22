@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrdersServicesTable extends Migration
+class CreateUserTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateOrdersServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders_services', function (Blueprint $table) {
+        Schema::create('user_types', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('id_order');
-            $table->integer('id_servicio');
-            $table->text('detalle');
-            $table->unsignedSmallInteger('monto');
+            $table->string('nombre', 25);
             $table->timestamps();
         });
     }
@@ -31,6 +28,8 @@ class CreateOrdersServicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders_services');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Schema::dropIfExists('user_types');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

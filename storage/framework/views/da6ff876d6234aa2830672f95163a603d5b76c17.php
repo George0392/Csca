@@ -23,6 +23,9 @@
                     <label class="btn btn-danger">DESC $<?php echo e($order->descuento); ?></label>
                 <?php endif; ?>
             </div>
+            <div style="margin-top: 3px; margin-left: 5px;">
+                <label class="btn btn-warning">MONTO $<?php echo e($order->monto - $order->descuento); ?></label>
+            </div>
             <div style="margin-top: 3px; margin-left: 5px;">    
                 <?php if($order->completada == 1): ?>
                 <a href="/admin/control/ingresos/<?php echo e($tipo); ?>" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
@@ -30,8 +33,27 @@
             </div>
         <?php endif; ?>
     </div>
-    <h4 class="mt-2 mb-3"><?php echo e($subtitulo); ?></h4>
+    <p>
+        <h4 class="mt-2 mb-3"><?php echo e($subtitulo); ?></h4>
+    </p>
+    <div style="display: flex; margin-top: 0px;">
+        <h4 style="margin-top: 10px; color:slategray" class="mt-2 mb-3"><?php echo e($pie); ?></h4>
+        <div style="margin-top: 2px; margin-left: auto;">
+            <?php if($order->completada != 1): ?>
+                <form method="POST" action="/admin/control/<?php echo e($tipo); ?>/cerrar/<?php echo e($id_order); ?>">
+                <?php echo csrf_field(); ?>
+
+                    <?php if($order->id_forma_pago == 3): ?>
+                    <input required class="btn btn-default" type="number" min="0" name="pago_efec" placeholder="Efectivo" style="width: 105px;">
+                    <input required class="btn btn-default" type="number" min="0" name="pago_tarj" placeholder="Tarjeta" style="width: 105px;">
+                    <?php endif; ?>
+                    <input type="hidden" class="form-control" name="completada" value="1">
+                    <button type="submit" class="btn btn-danger" style="width: 105px;">Cerrar</button>
+                </form>
+            <?php endif; ?>
+        </div>
         
+    </div>
     <?php if($subtitulo != "La orden todavía no existe"): ?>
         <div class="card card-body">
             <p>
@@ -56,7 +78,7 @@
                     </div>
                     
                     <?php else: ?>
-                    <div class="form-group col-md-4" style="padding-left: 0px;">
+                    <div class="form-group col-md-5" style="padding-left: 0px;">
                         <label>Producto</label>
                         <select class="form-control" name="id_producto" value="<?php echo e(old('id_producto')); ?>">
                             <?php $__currentLoopData = $productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -79,15 +101,6 @@
                     </div>
                 </form>
                 
-                <form method="POST" action="/admin/control/<?php echo e($tipo); ?>/cerrar/<?php echo e($id_order); ?>">
-                    <?php echo csrf_field(); ?>
-
-                    <input type="hidden" class="form-control" name="completada" value="1">
-                    <div class="form-group col-md-2" style="padding-left: 0px;">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-danger form-control">Cerrar</button>
-                    </div>
-                </form>
                 <?php endif; ?>
             </p>
         </div>
@@ -144,5 +157,6 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
     </table>
+    
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('control.index', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -11,6 +11,7 @@ use App\OrderService;
 use App\OrderProduct;
 use App\Service;
 use App\Product;
+use \App\FormaPago;
 use Carbon;
 
 class ControlController extends Controller
@@ -286,9 +287,11 @@ class ControlController extends Controller
             $orders = \DB::table('orders')->where('id_type', $id_type)->where('deHoy', 1)->get();
             $empleados = \DB::table('users')->select('id', 'nombre', 'activo')->where([['id_uType',"!=", 3], ['id',"!=", 1],])->orderBy('nombre')->get();
             $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
+            $formasPago = \DB::table('formas_pago')->select('id', 'nombre')->get();
+            //dd($formasPago);
             $titulo = "Ingresos por " . $tipo . " del día";
             
-            return view('control.ingresos.index', compact('titulo', 'tipo', 'empleados', 'clientes', 'id_type', 'orders'));
+            return view('control.ingresos.index', compact('titulo', 'tipo', 'empleados', 'clientes', 'formasPago', 'id_type', 'orders'));
         }
         else 
         {
@@ -316,12 +319,13 @@ class ControlController extends Controller
         //dd($orders);
         $empleados = \DB::table('users')->select('id', 'nombre', 'activo')->where('id_uType', "!=", 3)->orderBy('nombre')->get();
         $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
-        
+        $formasPago = \DB::table('formas_pago')->select('id', 'nombre')->get();
+            
         $desde = date('d/m/y', strtotime($desde));
         $hasta = date('d/m/y', strtotime($hasta));
         $titulo = "Ingresos por " . $tipo . " desde " . $desde . " hasta " . $hasta;
         
-        return view('control.ingresos.index', compact('orders', 'id_type', 'titulo', 'tipo', 'empleados', 'clientes'));
+        return view('control.ingresos.index', compact('titulo', 'tipo', 'empleados', 'clientes', 'formasPago', 'id_type', 'orders'));
     }
 
     public function store_orden(Request $request)
@@ -330,7 +334,10 @@ class ControlController extends Controller
             'id_empleado' => $request['id_empleado'],
             'id_cliente' => $request['id_cliente'],
             'id_type' => $request['id_type'],
+            'id_forma_pago' => $request['id_forma_pago'],
             'monto' => $request['monto'],
+            'pago_efec' => $request['pago_efec'],
+            'pago_tarj' => $request['pago_tarj'],
             'descuento' => $request['descuento'],
             'completada' => $request['completada'],
             'deHoy' => $request['deHoy']
@@ -374,17 +381,28 @@ class ControlController extends Controller
         $order = Order::find($id_order);
         if ($order!=null) 
         {
-            $empleado = User::find($order->id_empleado);
-            $cliente = User::find($order->id_cliente);
-            $subtitulo = "Cliente: " . $cliente->nombre . " | Atendió: " . $empleado->nombre;
+            $empleado = User::find($order->id_empleado)->nombre;
+            $cliente = User::find($order->id_cliente)->nombre;
+            $formaPago = FormaPago::find($order->id_forma_pago)->nombre;
+            $subtitulo = "Cliente: " . $cliente . " | Atendió: " . $empleado;
+            
+            if ($order->completada == 0 || $order->id_forma_pago != 3) 
+            {
+                $pie = "Forma de pago: " . $formaPago;
+            }
+            else 
+            {
+                $pie = "Forma de pago: " . $formaPago . " ( $" . $order->pago_efec . " / $" . $order->pago_tarj . " )";
+            }
         }
-        else {
+        else 
+        {
             $subtitulo = "La orden todavía no existe";
         }
         
         $titulo = "Orden #" . $id_order;
         
-        return view('control.ingresos.create', compact('titulo', 'subtitulo', 'tipo', 'id_type', 'id_order', 'order', 'servicios', 'productos', 'orders_indiv'));
+        return view('control.ingresos.create', compact('titulo', 'subtitulo', 'pie', 'tipo', 'id_type', 'id_order', 'order', 'servicios', 'productos', 'orders_indiv'));
     }
 
     public function store_suborden(Request $request, $id_order)
@@ -446,8 +464,20 @@ class ControlController extends Controller
         }
     }
 
-    public function cerrar_orden($id_order)
+    public function cerrar_orden(Request $request, $id_order)
     {
+        $order = Order::find($id_order);
+        $pagado = $order->monto - $order->descuento;
+        if ($order->id_forma_pago == 1) {
+            \DB::table('orders')->where('id', $id_order)->update(['pago_efec' => $pagado]);
+        }
+        elseif ($order->id_forma_pago == 2) {
+            \DB::table('orders')->where('id', $id_order)->update(['pago_tarj' => $pagado]);
+        }
+        else {
+            \DB::table('orders')->where('id', $id_order)->update(['pago_efec' => $request->pago_efec]);
+            \DB::table('orders')->where('id', $id_order)->update(['pago_tarj' => $request->pago_tarj]);
+        }
         \DB::table('orders')->where('id', $id_order)->update(['completada' => 1]);
         
         if (\Request::is('*/productos/*')) 
@@ -512,12 +542,18 @@ class ControlController extends Controller
                         ->where('caja_abierta', 1)
                         ->value(\DB::raw("sum(monto)")) + 0;
         //dd($caja_inicial);
-        $ingXprod = Order::where('deHoy', 1)
+        $ingXprod_efec = Order::where('deHoy', 1)
                         ->where('id_type', 1)
-                        ->value(\DB::raw("sum(monto - descuento)")) + 0;
-        $ingXserv = Order::where('deHoy', 1)
+                        ->value(\DB::raw("sum(pago_efec)")) + 0;
+        $ingXprod_tarj = Order::where('deHoy', 1)
+                        ->where('id_type', 1)
+                        ->value(\DB::raw("sum(pago_tarj)")) + 0;
+        $ingXserv_efec = Order::where('deHoy', 1)
                         ->where('id_type', 2)
-                        ->value(\DB::raw("sum(monto - descuento)")) + 0;
+                        ->value(\DB::raw("sum(pago_efec)")) + 0;
+        $ingXserv_tarj = Order::where('deHoy', 1)
+                        ->where('id_type', 2)
+                        ->value(\DB::raw("sum(pago_tarj)")) + 0;
         $gastXlimp = Control::where('caja_abierta', 1)
                         ->where('id_desc', 3)
                         ->value(\DB::raw("sum(monto)")) + 0;
@@ -536,11 +572,12 @@ class ControlController extends Controller
         $comisiones = Control::where('caja_abierta', 1)
                         ->where('id_desc', 2)
                         ->value(\DB::raw("sum(monto)")) + 0;
-        $total = $caja_inicial + $ingXprod + $ingXserv - $gastXlimp - $gastXserv - $gastXmerc - $retiros - $sueldos - $comisiones;
+        $total_efec = $caja_inicial + $ingXprod_efec + $ingXserv_efec - $gastXlimp - $gastXserv - $gastXmerc - $retiros - $sueldos - $comisiones;
+        $total_tarj = $ingXprod_tarj + $ingXserv_tarj;
         
         $titulo = "Movimientos del turno";
         
-        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod', 'ingXserv', 'gastXlimp', 'gastXserv', 'gastXmerc', 'retiros', 'sueldos', 'comisiones', 'total'));
+        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod_efec', 'ingXserv_efec', 'ingXprod_tarj', 'ingXserv_tarj', 'gastXlimp', 'gastXserv', 'gastXmerc', 'retiros', 'sueldos', 'comisiones', 'total_efec', 'total_tarj'));
     }
 
     public function historial_movimientos(Request $request)
@@ -552,12 +589,18 @@ class ControlController extends Controller
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(monto)")) + 0;
         //dd($caja_inicial);
-        $ingXprod = Order::where('id_type', 1)
+        $ingXprod_efec = Order::where('id_type', 1)
                         ->whereBetween('created_at', [$desde, $hasta])
-                        ->value(\DB::raw("sum(monto - descuento)")) + 0;
-        $ingXserv = Order::where('id_type', 2)
+                        ->value(\DB::raw("sum(pago_efec)")) + 0;
+        $ingXprod_tarj = Order::where('id_type', 1)
                         ->whereBetween('created_at', [$desde, $hasta])
-                        ->value(\DB::raw("sum(monto - descuento)")) + 0;
+                        ->value(\DB::raw("sum(pago_tarj)")) + 0;
+        $ingXserv_efec = Order::where('id_type', 2)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(pago_efec)")) + 0;
+        $ingXserv_tarj = Order::where('id_type', 2)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(pago_tarj)")) + 0;
         $gastXlimp = Control::where('id_desc', 3)
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(monto)")) + 0;
@@ -576,12 +619,14 @@ class ControlController extends Controller
         $comisiones = Control::where('id_desc', 2)
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(monto)")) + 0;
-        $total = $caja_inicial + $ingXprod + $ingXserv - $gastXlimp - $gastXserv - $gastXmerc - $retiros - $sueldos - $comisiones;
         
+        $total_efec = $caja_inicial + $ingXprod_efec + $ingXserv_efec - $gastXlimp - $gastXserv - $gastXmerc - $retiros - $sueldos - $comisiones;
+        $total_tarj = $ingXprod_tarj + $ingXserv_tarj;
+                        
         $desde = date('d/m/y', strtotime($request->desde));
         $hasta = date('d/m/y', strtotime($request->hasta));
         $titulo = "Movimientos desde " . $desde . " hasta " . $hasta;
         
-        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod', 'ingXserv', 'gastXlimp', 'gastXserv', 'gastXmerc', 'retiros', 'sueldos', 'comisiones', 'total'));
+        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod_efec', 'ingXserv_efec', 'ingXprod_tarj', 'ingXserv_tarj', 'gastXlimp', 'gastXserv', 'gastXmerc', 'retiros', 'sueldos', 'comisiones', 'total_efec', 'total_tarj'));
     }
 }

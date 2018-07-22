@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->string('direccion', 50);
             $table->date('nacimiento');
-            $table->unsignedTinyInteger('id_uType');
+            $table->integer('id_uType')->unsigned();
             $table->boolean('activo')->default(true);
             $table->rememberToken();
             $table->timestamps();

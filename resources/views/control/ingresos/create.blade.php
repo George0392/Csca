@@ -24,6 +24,9 @@
                     <label class="btn btn-danger">DESC ${{ $order->descuento }}</label>
                 @endif
             </div>
+            <div style="margin-top: 3px; margin-left: 5px;">
+                <label class="btn btn-warning">MONTO ${{ $order->monto - $order->descuento }}</label>
+            </div>
             <div style="margin-top: 3px; margin-left: 5px;">    
                 @if($order->completada == 1)
                 <a href="/admin/control/ingresos/{{$tipo}}" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
@@ -31,8 +34,26 @@
             </div>
         @endif
     </div>
-    <h4 class="mt-2 mb-3">{{ $subtitulo }}</h4>
-        
+    <p>
+        <h4 class="mt-2 mb-3">{{ $subtitulo }}</h4>
+    </p>
+    <div style="display: flex; margin-top: 0px;">
+        <h4 style="margin-top: 10px; color:slategray" class="mt-2 mb-3">{{ $pie }}</h4>
+        <div style="margin-top: 2px; margin-left: auto;">
+            @if($order->completada != 1)
+                <form method="POST" action="/admin/control/{{$tipo}}/cerrar/{{ $id_order }}">
+                {!!csrf_field()!!}
+                    @if($order->id_forma_pago == 3)
+                    <input required class="btn btn-default" type="number" min="0" name="pago_efec" placeholder="Efectivo" style="width: 105px;">
+                    <input required class="btn btn-default" type="number" min="0" name="pago_tarj" placeholder="Tarjeta" style="width: 105px;">
+                    @endif
+                    <input type="hidden" class="form-control" name="completada" value="1">
+                    <button type="submit" class="btn btn-danger" style="width: 105px;">Cerrar</button>
+                </form>
+            @endif
+        </div>
+        {{-------------------  Cerrar  -------------------}}
+    </div>
     @if($subtitulo != "La orden todavía no existe")
         <div class="card card-body">
             <p>
@@ -56,7 +77,7 @@
                     </div>
                     {{-------------------  Productos  -------------------}}
                     @else
-                    <div class="form-group col-md-4" style="padding-left: 0px;">
+                    <div class="form-group col-md-5" style="padding-left: 0px;">
                         <label>Producto</label>
                         <select class="form-control" name="id_producto" value="{{ old('id_producto') }}">
                             @foreach($productos as $producto)
@@ -78,15 +99,7 @@
                         <button type="submit" class="btn btn-success form-control">Agregar</button>
                     </div>
                 </form>
-                {{-------------------  Cerrar  -------------------}}
-                <form method="POST" action="/admin/control/{{$tipo}}/cerrar/{{ $id_order }}">
-                    {!!csrf_field()!!}
-                    <input type="hidden" class="form-control" name="completada" value="1">
-                    <div class="form-group col-md-2" style="padding-left: 0px;">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-danger form-control">Cerrar</button>
-                    </div>
-                </form>
+                
                 @endif
             </p>
         </div>
@@ -141,4 +154,5 @@
             @endforeach
         </tbody>
     </table>
+    
 @endsection

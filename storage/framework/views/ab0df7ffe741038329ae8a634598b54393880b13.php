@@ -22,7 +22,7 @@
         <div class="form-row">
             <div class="form-group col-md-2">
                 <label>Nombre</label>
-                <input type="text" class="form-control" name="nombre" value="<?php echo e(old('nombre', $product->nombre)); ?>" >
+                <input maxlength="55" type="text" class="form-control" name="nombre" value="<?php echo e(old('nombre', $product->nombre)); ?>" >
             </div>
 
             <div class="form-group col-md-2">

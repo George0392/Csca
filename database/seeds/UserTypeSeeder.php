@@ -11,6 +11,8 @@ class UserTypeSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         DB::table('user_types')->truncate();
         
         DB::table('user_types')->insert([
@@ -24,5 +26,7 @@ class UserTypeSeeder extends Seeder
         DB::table('user_types')->insert([
             'nombre' => 'cliente',
         ]);
+        
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

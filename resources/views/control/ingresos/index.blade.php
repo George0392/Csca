@@ -19,7 +19,7 @@
                 Historial
             </button>
         @endif
-        
+        @if($titulo == "Ingresos por " . $tipo . " del día")
         <div class="collapse indent" id="collapseExample">
             <div class="card card-body">
                 <p>
@@ -44,12 +44,23 @@
                                     <option value="{{$cliente->id}}">{{$cliente->nombre}}</option>
                                 @endforeach
                             </select>
+                        </div>        
+                        
+                        <div class="form-group col-md-2" style="padding-left: 0px;">
+                            <label>Forma de pago</label>
+                            <select class="form-control" name="id_forma_pago" value="{{ old('id_forma_pago') }}">
+                                @foreach($formasPago as $formaPago)
+                                    <option value="{{$formaPago->id}}">{{$formaPago->nombre}}</option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <input type="hidden" class="form-control" name="id_type" value="{{ $id_type }}">
                         <input type="hidden" class="form-control" name="deHoy" value=1>
                         <input type="hidden" class="form-control" name="completada" value=0>
                         <input type="hidden" class="form-control" name="monto" value=0>
+                        <input type="hidden" class="form-control" name="pago_efec" value=0>
+                        <input type="hidden" class="form-control" name="pago_tarj" value=0>
                         <input type="hidden" class="form-control" name="descuento" value=0>
                         
                         <div class="form-group col-md-2" style="padding-left: 0px;">
@@ -60,7 +71,7 @@
                 </p>
             </div>
         </div>
-            
+        @endif    
         <div class="collapse indent" id="collapseExample2">
             <div class="card card-body">
                 <p>
@@ -91,6 +102,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Cliente</th>
                 <th scope="col">Atendió</th>
+                <th scope="col">Pago con</th>
                 <th scope="col">Monto</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>
@@ -113,6 +125,14 @@
                         @foreach($empleados as $empleado)
                             @if($empleado->id == $order->id_empleado)
                                 {{$empleado->nombre}}
+                                @break
+                            @endif
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($formasPago as $formaPago)
+                            @if($formaPago->id == $order->id_forma_pago)
+                                {{$formaPago->nombre}}
                                 @break
                             @endif
                         @endforeach

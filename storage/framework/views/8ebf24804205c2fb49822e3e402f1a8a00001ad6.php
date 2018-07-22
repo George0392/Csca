@@ -15,6 +15,10 @@
             background-color: #770000;
             color:gray;
         }
+        .celeste{
+            background-color: #2196f3;
+            color: white;
+        }
         .azul{
             background-color: #005cce;
             color: white;
@@ -77,22 +81,22 @@
                 <td>$ <?php echo e($caja_inicial); ?></td>
             </tr>
             <tr
-                <?php if($ingXprod == 0): ?> 
+                <?php if($ingXprod_efec + $ingXprod_tarj == 0): ?> 
                     class="fila verdeOscuro"
                 <?php else: ?>
                     class="fila verde"
                 <?php endif; ?> >
                 <td>Ingresos x Productos</td>
-                <td>$ <?php echo e($ingXprod); ?></td>
+                <td>$ <?php echo e($ingXprod_efec + $ingXprod_tarj); ?></td>
             </tr>
             <tr
-                <?php if($ingXserv == 0): ?> 
+                <?php if($ingXserv_efec + $ingXserv_tarj == 0): ?> 
                     class="fila verdeOscuro"
                 <?php else: ?>
                     class="fila verde"
                 <?php endif; ?>>
                 <td>Ingresos x Servicios</td>
-                <td>$ <?php echo e($ingXserv); ?></td>
+                <td>$ <?php echo e($ingXserv_efec + $ingXserv_tarj); ?></td>
             </tr>
             <tr
                 <?php if($gastXlimp == 0): ?> 
@@ -149,13 +153,31 @@
                 <td>$ <?php echo e($comisiones); ?></td>
             </tr>
             <tr
-                <?php if($total == 0): ?> 
+                <?php if($total_efec == 0): ?> 
+                    class="fila azulOscuro"
+                <?php else: ?>
+                    class="fila celeste"
+                <?php endif; ?>>
+                <td>Total en Efectivo</td>
+                <td>$ <?php echo e($total_efec); ?></td>
+            </tr>
+            <tr
+                <?php if($total_tarj == 0): ?> 
+                    class="fila azulOscuro"
+                <?php else: ?>
+                    class="fila celeste"
+                <?php endif; ?>>
+                <td>Total en Tarjeta</td>
+                <td>$ <?php echo e($total_tarj); ?></td>
+            </tr>
+            <tr
+                <?php if($total_efec + $total_tarj == 0): ?> 
                     class="fila azulOscuro"
                 <?php else: ?>
                     class="fila azul"
                 <?php endif; ?>>
-                <td>Total</td>
-                <td>$ <?php echo e($total); ?></td>
+                <td>TOTAL</td>
+                <td>$ <?php echo e($total_efec + $total_tarj); ?></td>
             </tr>
         </tbody>
     </table>

@@ -11,6 +11,8 @@ class OrderTypeSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         DB::table('orders_type')->truncate();
         
         DB::table('orders_type')->insert([
@@ -20,5 +22,7 @@ class OrderTypeSeeder extends Seeder
         DB::table('orders_type')->insert([
             'nombre' => 'servicios',
         ]);
+        
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

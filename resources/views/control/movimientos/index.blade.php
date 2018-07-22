@@ -16,6 +16,10 @@
             background-color: #770000;
             color:gray;
         }
+        .celeste{
+            background-color: #2196f3;
+            color: white;
+        }
         .azul{
             background-color: #005cce;
             color: white;
@@ -77,22 +81,22 @@
                 <td>$ {{ $caja_inicial }}</td>
             </tr>
             <tr
-                @if($ingXprod == 0) 
+                @if($ingXprod_efec + $ingXprod_tarj == 0) 
                     class="fila verdeOscuro"
                 @else
                     class="fila verde"
                 @endif >
                 <td>Ingresos x Productos</td>
-                <td>$ {{ $ingXprod }}</td>
+                <td>$ {{ $ingXprod_efec + $ingXprod_tarj }}</td>
             </tr>
             <tr
-                @if($ingXserv == 0) 
+                @if($ingXserv_efec + $ingXserv_tarj == 0) 
                     class="fila verdeOscuro"
                 @else
                     class="fila verde"
                 @endif>
                 <td>Ingresos x Servicios</td>
-                <td>$ {{ $ingXserv }}</td>
+                <td>$ {{ $ingXserv_efec + $ingXserv_tarj }}</td>
             </tr>
             <tr
                 @if($gastXlimp == 0) 
@@ -149,13 +153,31 @@
                 <td>$ {{ $comisiones }}</td>
             </tr>
             <tr
-                @if($total == 0) 
+                @if($total_efec == 0) 
+                    class="fila azulOscuro"
+                @else
+                    class="fila celeste"
+                @endif>
+                <td>Total en Efectivo</td>
+                <td>$ {{ $total_efec }}</td>
+            </tr>
+            <tr
+                @if($total_tarj == 0) 
+                    class="fila azulOscuro"
+                @else
+                    class="fila celeste"
+                @endif>
+                <td>Total en Tarjeta</td>
+                <td>$ {{ $total_tarj }}</td>
+            </tr>
+            <tr
+                @if($total_efec + $total_tarj == 0) 
                     class="fila azulOscuro"
                 @else
                     class="fila azul"
                 @endif>
-                <td>Total</td>
-                <td>$ {{ $total }}</td>
+                <td>TOTAL</td>
+                <td>$ {{ $total_efec + $total_tarj }}</td>
             </tr>
         </tbody>
     </table>

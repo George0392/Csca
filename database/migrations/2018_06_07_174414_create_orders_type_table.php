@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrdersTable extends Migration
+class CreateOrdersTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,10 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('orders_type', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('id_empleado');
-            $table->integer('id_cliente');
-            $table->integer('id_type');
-            $table->integer('monto');
-            $table->integer('descuento');
-            $table->boolean('completada');
-            $table->boolean('deHoy');
+            $table->string('nombre');
             $table->timestamps();
         });
     }
@@ -34,6 +28,8 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Schema::dropIfExists('orders_type');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
