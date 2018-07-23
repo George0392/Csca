@@ -92,7 +92,8 @@ class UserController extends Controller
 
     public function update($type, User $user)
     {
-        //dd($user);
+        $oldPass = User::find($user->id)->password;
+        
         $data = request()->validate([
             'nombre' => 'required',
             'telefono' => 'required',
@@ -103,12 +104,12 @@ class UserController extends Controller
             'id_uType' => 'required',
         ]);
         
-        $data['password'] = bcrypt($data['password']);
-        //dd($data);
+        if ($oldPass != $data['password']) {
+            $data['password'] = bcrypt($data['password']);
+        }
+        
         $user->update($data);
         
-        $users = User::all()->where('id_uType', $data['id_uType']);
-
         return redirect()->route('users.index', compact('type'));
     }
 
