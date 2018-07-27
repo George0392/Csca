@@ -16,9 +16,9 @@ class UserSeeder extends Seeder
         DB::table('users')->truncate();
         
         DB::table('users')->insert([
-            'nombre' => 'JABlack',
-            'telefono' => '1',
-            'email' => 'JAB@lack.com',
+            'nombre' => 'JABlack Soft',
+            'telefono' => '3854452788',
+            'email' => 'JABlack@soft.com',
             'password' => bcrypt(123),
             'direccion' => '',
             'nacimiento' => '2000-01-01',

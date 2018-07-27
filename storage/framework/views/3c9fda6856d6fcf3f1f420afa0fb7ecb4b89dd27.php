@@ -168,7 +168,7 @@
     <script src="<?php echo e(asset('js/app.js')); ?>"></script>
         <footer class="footer">
             <div class="container">
-                <span class="text-muted">Por <b>JABlack Software</b> | Copyright © 2018
+                <span class="text-muted">Por <b>JABlack Soft</b> | Copyright © 2018
                 </span>
             </div>
         </footer>
