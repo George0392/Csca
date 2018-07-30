@@ -40,7 +40,9 @@
                             <label>Cliente</label>
                             <select class="form-control" name="id_cliente" value="<?php echo e(old('id_cliente')); ?>">
                                 <?php $__currentLoopData = $clientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cliente): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($cliente->activo == 1): ?>  
                                     <option value="<?php echo e($cliente->id); ?>"><?php echo e($cliente->nombre); ?></option>
+                                    <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>        

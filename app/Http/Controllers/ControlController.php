@@ -286,9 +286,8 @@ class ControlController extends Controller
             }
             $orders = \DB::table('orders')->where('id_type', $id_type)->where('deHoy', 1)->get();
             $empleados = \DB::table('users')->select('id', 'nombre', 'activo')->where([['id_uType',"!=", 3], ['id',"!=", 1],])->orderBy('nombre')->get();
-            $clientes = \DB::table('users')->select('id', 'nombre')->where('id_uType', 3)->orderBy('nombre')->get();
+            $clientes = \DB::table('users')->select('id', 'nombre', 'activo')->where('id_uType', 3)->orderBy('nombre')->get();
             $formasPago = \DB::table('formas_pago')->select('id', 'nombre')->get();
-            //dd($formasPago);
             $titulo = "Ingresos por " . $tipo . " del día";
             
             return view('control.ingresos.index', compact('titulo', 'tipo', 'empleados', 'clientes', 'formasPago', 'id_type', 'orders'));

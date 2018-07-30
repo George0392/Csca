@@ -41,7 +41,9 @@
                             <label>Cliente</label>
                             <select class="form-control" name="id_cliente" value="{{ old('id_cliente') }}">
                                 @foreach($clientes as $cliente)
+                                    @if($cliente->activo == 1)  
                                     <option value="{{$cliente->id}}">{{$cliente->nombre}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>        
