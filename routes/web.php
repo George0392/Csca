@@ -167,5 +167,9 @@ Route::group(['middleware' => 'is_admin'], function () {
     Route::put('/admin/{type}s/{user}', 'UserController@update')->name('users.update');
 
     Route::delete('/admin/{type}s/{user}', 'UserController@delete')->name('users.delete');
+
+    Route::get('/admin/clientes/{nombre}/historial', 'UserController@record')->name('users.record');
+
+    Route::post('/admin/clientes/{nombre}/historial', 'UserController@historial_record');
     
 });

@@ -29,7 +29,11 @@
             </div>
             <div style="margin-top: 3px; margin-left: 5px;">    
                 @if($order->completada == 1)
-                <a href="/admin/control/ingresos/{{$tipo}}" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
+                    @if(str_contains(URL::previous(), 'clientes'))
+                    <a href="{{ URL::previous() }}" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
+                    @else
+                    <a href="/admin/control/ingresos/{{$tipo}}" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
+                    @endif
                 @endif
             </div>
         @endif

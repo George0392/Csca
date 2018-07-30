@@ -28,7 +28,11 @@
             </div>
             <div style="margin-top: 3px; margin-left: 5px;">    
                 <?php if($order->completada == 1): ?>
-                <a href="/admin/control/ingresos/<?php echo e($tipo); ?>" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
+                    <?php if(str_contains(URL::previous(), 'clientes')): ?>
+                    <a href="<?php echo e(URL::previous()); ?>" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
+                    <?php else: ?>
+                    <a href="/admin/control/ingresos/<?php echo e($tipo); ?>" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         <?php endif; ?>

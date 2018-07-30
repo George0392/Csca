@@ -47,6 +47,9 @@
                             <a href="{{ route('users.show', [$type, $nombre = $user->nombre]) }}" class="btn btn-success"><span class="oi oi-eye"></span></a>
                             <a href="{{ route('users.edit', [$type, $nombre = $user->nombre]) }}" class="btn btn-warning"><span class="oi oi-pencil"></span></a>
                             <button class="btn btn-danger" type="submit"><span class="oi oi-trash"></span></button>
+                            @if($user->id_uType == 3)
+                            <a href="{{ route('users.record', [$nombre = $user->nombre]) }}" class="btn btn-info"><span class="oi oi-clock"></span></a>
+                            @endif
                         </form>
                         @else
                         <form action="{{ route('users.resurrect', [$type, $user]) }}" method="POST">
