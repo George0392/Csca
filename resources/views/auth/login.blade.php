@@ -13,13 +13,19 @@
                         
                         <h1 class="h2" style="margin-top: 10px;">Entrar</h1>
                         
-                        <label for="login" class="sr-only">Email address</label>
-                        <input type="login" id="login" class="form-control" placeholder="Introduce tu E-Mail" required autofocus name="login" value="{{ old('login') }}">
-                        @if ($errors->has('login'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('login') }}</strong>
-                            </span>
+                        @if ($errors->any())
+                            <div class="alert alert-danger alert-dismissible" style="padding-right: 15px;" role="alert">
+                                @foreach ($errors->all() as $error)
+                                    {{ $error }}
+                                @endforeach
+                                <button type="button" style="top: 145px; right: 40px;position: absolute;" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         @endif
+
+                        <label for="login" class="sr-only">Email address</label>
+                        <input id="email" type="text" class="form-control" name="email" value="{{ old('email') }}" placeholder="Introduce tu E-Mail o Nº de teléfono" required autofocus>
                         
                         <p></p>
                         

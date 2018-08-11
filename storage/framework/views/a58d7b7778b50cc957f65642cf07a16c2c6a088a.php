@@ -12,13 +12,20 @@
                         
                         <h1 class="h2" style="margin-top: 10px;">Entrar</h1>
                         
-                        <label for="login" class="sr-only">Email address</label>
-                        <input type="login" id="login" class="form-control" placeholder="Introduce tu E-Mail" required autofocus name="login" value="<?php echo e(old('login')); ?>">
-                        <?php if($errors->has('login')): ?>
-                            <span class="help-block">
-                                <strong><?php echo e($errors->first('login')); ?></strong>
-                            </span>
+                        <?php if($errors->any()): ?>
+                            <div class="alert alert-danger alert-dismissible" style="padding-right: 15px;" role="alert">
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php echo e($error); ?>
+
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <button type="button" style="top: 145px; right: 40px;position: absolute;" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         <?php endif; ?>
+
+                        <label for="login" class="sr-only">Email address</label>
+                        <input id="email" type="text" class="form-control" name="email" value="<?php echo e(old('email')); ?>" placeholder="Introduce tu E-Mail o Nº de teléfono" required autofocus>
                         
                         <p></p>
                         

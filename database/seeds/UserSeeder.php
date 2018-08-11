@@ -18,9 +18,9 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'nombre' => 'JABlack Soft',
             'telefono' => '3854452788',
-            'email' => 'JABlack@soft.com',
+            'email' => 'info@jablacksoft.com',
             'password' => bcrypt(123),
-            'direccion' => '',
+            'direccion' => 'Sin dirección 321',
             'nacimiento' => '2000-01-01',
             'id_uType' => '1',
         ]);
