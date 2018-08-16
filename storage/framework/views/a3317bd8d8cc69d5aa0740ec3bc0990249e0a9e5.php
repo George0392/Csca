@@ -5,12 +5,12 @@
             <?php if($caja_abierta): ?>
                 <h1 style="color: #009000;"><?php echo e($titulo); ?>
 
-                    <img src="..\..\..\Circle unlock.png" width="36px" height="36px" style="margin-bottom: 5px;">
+                    <img src="..\..\..\Circle-unlock.png" width="36px" height="36px" style="margin-bottom: 5px;">
                 </h1>
             <?php else: ?>
                 <h1 style="color: #900000;"><?php echo e($titulo); ?>
 
-                    <img src="..\..\..\Circle lock.png" width="36px" height="36px" style="margin-bottom: 5px;">
+                    <img src="..\..\..\Circle-lock.png" width="36px" height="36px" style="margin-bottom: 5px;">
                 </h1>
             <?php endif; ?>
         <p>
