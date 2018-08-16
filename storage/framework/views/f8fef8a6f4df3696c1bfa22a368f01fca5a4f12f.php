@@ -50,7 +50,7 @@
                             <?php if($user->id_uType == 3): ?>
                             <a href="<?php echo e(route('users.record', [$nombre = $user->nombre])); ?>" class="btn btn-info"><span class="oi oi-clock"></span></a>
                             <?php endif; ?>
-                        </form>
+                            </form>
                         <?php else: ?>
                         <form action="<?php echo e(route('users.resurrect', [$type, $user])); ?>" method="POST">
                             <?php echo e(csrf_field()); ?>

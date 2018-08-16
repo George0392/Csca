@@ -57,6 +57,9 @@
             <th scope="col">Monto</th>
             <th scope="col">Fecha</th>
             <th scope="col">Hora</th>
+            <?php if($titulo == "Retiros del día"): ?>
+                <th scope="col">Borrar</th>
+            <?php endif; ?>
           </tr>
         </thead>
         <tbody>
@@ -67,6 +70,19 @@
                 <td><b>$</b> <?php echo e($control->monto); ?></td>
                 <td><?php echo e(date('d/m/Y', strtotime($control->created_at))); ?></td>
                 <td><?php echo e(date('H:i', strtotime($control->created_at))); ?> <b>hs</b></td>
+                <?php if($titulo == "Retiros del día"): ?>
+                    <td>
+                        <form action="<?php echo e(route('control.delete', [$id = $control->id])); ?>" method="POST">
+                            <?php echo e(csrf_field()); ?>
+
+                            <?php echo e(method_field('DELETE')); ?>
+
+                            <button class="btn btn-danger" type="submit">
+                                <span class="oi oi-trash"></span>
+                            </button>
+                        </form>
+                    </td>
+                <?php endif; ?>
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>

@@ -78,8 +78,15 @@ class OrderProductController extends Controller
      * @param  \App\OrderProduct  $orderProduct
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrderProduct $orderProduct)
+    public function delete($id)
     {
-        //
+        $subOrder = OrderProduct::find($id);
+        
+        \DB::table('orders')->where('id', $subOrder->id_order)->decrement('monto', $subOrder->monto * $subOrder->cantidad);
+        \DB::table('orders')->where('id', $subOrder->id_order)->update(['descuento' => 0]);
+        \DB::table('products')->where('id', $subOrder->id_producto)->increment('quedan', $subOrder->cantidad);
+        OrderProduct::destroy($id);
+        
+        return redirect()->back();
     }
 }

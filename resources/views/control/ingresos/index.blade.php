@@ -109,6 +109,9 @@
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>
                 <th scope="col">Ver</th>
+                @if($titulo == "Ingresos por " . $tipo . " del día")
+                <th scope="col">Borrar</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -143,6 +146,17 @@
                     <td>{{ date('d/m/y', strtotime($order->created_at)) }}</td>
                     <td>{{ date('H:i', strtotime($order->created_at)) }} <b>hs</b></td>
                     <td><a href="/admin/control/ingresos/{{$tipo}}/{{ $order->id }}" class="btn btn-success"><span class="oi oi-eye"></span></a></td>
+                    @if($titulo == "Ingresos por " . $tipo . " del día")
+                        <td>
+                            <form action="{{ route('order.delete', [$id = $order->id]) }}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button class="btn btn-danger" type="submit">
+                                    <span class="oi oi-trash"></span>
+                                </button>
+                            </form>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

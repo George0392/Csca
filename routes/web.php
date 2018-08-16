@@ -21,8 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/admin', 'AdminController@admin')->middleware('is_admin')->name('admin');
 
-Route::group(['middleware' => 'is_admin'], function () {
-    
+Route::group(['middleware' => 'is_admin'], function () 
+{
     // <-- Servicios -->
         
     Route::get('/admin/servicios', 'ServiceController@index')->name('services.index');
@@ -76,6 +76,8 @@ Route::group(['middleware' => 'is_admin'], function () {
     Route::get('/admin/control/caja/cierre/', 'ControlController@cierre')->name('control.caja.cierre');
 
     Route::post('/admin/control/', 'ControlController@store');
+    
+    Route::delete('/admin/control/{id}', 'ControlController@delete')->name('control.delete');
 
     Route::get('/admin/control/caja/retiros', 'ControlController@retiros')->name('control.caja.retiros');
 
@@ -125,6 +127,12 @@ Route::group(['middleware' => 'is_admin'], function () {
     Route::post('/admin/control/ingresos/productos/{id_order}', 'ControlController@store_suborden');
 
     Route::post('/admin/control/ingresos/servicios/{id_order}', 'ControlController@store_suborden');
+
+    Route::delete('/admin/order/{id}', 'OrderController@delete')->name('order.delete');
+
+    Route::delete('/admin/control/ingresos/productos/{id}', 'OrderProductController@delete');
+
+    Route::delete('/admin/control/ingresos/servicios/{id}', 'OrderServiceController@delete');
 
     // Control.Sueldos
 

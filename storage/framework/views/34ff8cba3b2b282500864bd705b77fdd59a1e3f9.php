@@ -1,6 +1,6 @@
 <?php $__env->startSection('title', 'Editar <?php echo e($type); ?>'); ?>
 <?php $__env->startSection('content2'); ?>
-    <h1 class="mt-5form-group col-md-12">Editar <?php echo e($type); ?></h1>
+    <h1 class="mt-5 form-group col-md-12">Editar <?php echo e($type); ?></h1>
     
     <?php if($errors->any()): ?>
         <div class="alert alert-danger">

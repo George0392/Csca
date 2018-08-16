@@ -1,28 +1,40 @@
 <?php $__env->startSection('content3'); ?>
     
     <div class="d-flex justify-content-between align-items-end">
-        <h1 class="mt-2 mb-3"><?php echo e($titulo); ?></h1>
+        
+            <?php if($caja_abierta): ?>
+                <h1 style="color: #009000;"><?php echo e($titulo); ?>
+
+                    <img src="..\..\..\Circle unlock.png" width="36px" height="36px" style="margin-bottom: 5px;">
+                </h1>
+            <?php else: ?>
+                <h1 style="color: #900000;"><?php echo e($titulo); ?>
+
+                    <img src="..\..\..\Circle lock.png" width="36px" height="36px" style="margin-bottom: 5px;">
+                </h1>
+            <?php endif; ?>
         <p>
             <form class="form-inline" method="POST" action="<?php echo e(url('admin/control/')); ?>">
                 <?php echo csrf_field(); ?>
 
                 <div class="form-group mx-sm-3 mb-2">
                     <input type="hidden" class="form-control" name="admin" value="<?php echo e(Auth::user()->nombre); ?>">
-                    <input type="number" min="0" required class="form-control" name="monto" placeholder="Cargar caja inicial">
+                    <input 
+                    <?php if($caja_abierta): ?>
+                    disabled 
+                    <?php endif; ?>
+                    type="number" min="0" required class="form-control" name="monto" placeholder="Ingrese un monto">
                     <input type="hidden" class="form-control" name="id_desc" value="1">
                     <input type="hidden" class="form-control" name="detalle" value="Caja Inicial">
                     <input type="hidden" class="form-control" name="caja_abierta" value="1">
                 </div>
-                <button type="submit" class="btn btn-primary mb-2">Cargar</button>
                 <?php if($caja_abierta): ?>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-                    Cerrar
-                </button>
+                    <button disabled type="submit" class="btn btn-success mb-2">( Abierta )</button>
+                    
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Cerrar</button>
                 <?php else: ?>
-                <button disabled type="button" class="btn btn-danger">
-                    Cerrar
-                </button>
+                    <button disabled type="button" class="btn btn-danger">( Cerrada )</button>    
+                    <button type="submit" class="btn btn-success mb-2">Abrir</button>
                 <?php endif; ?>
                 
                 <!-- Modal -->
@@ -55,6 +67,7 @@
             <th scope="col">Monto</th>
             <th scope="col">Fecha</th>
             <th scope="col">Hora</th>
+            <th scope="col">Borrar</th>
           </tr>
         </thead>
         <tbody>
@@ -65,6 +78,17 @@
                 <td><b>$</b> <?php echo e($control->monto); ?></td>
                 <td><?php echo e($control->created_at->format('d/m/Y')); ?></td>
                 <td><?php echo e($control->created_at->format('H:i')); ?> <b>hs</b></td>
+                <td>
+                    <form action="<?php echo e(route('control.delete', [$id = $control->id])); ?>" method="POST">
+                        <?php echo e(csrf_field()); ?>
+
+                        <?php echo e(method_field('DELETE')); ?>
+
+                        <button class="btn btn-danger" type="submit">
+                            <span class="oi oi-trash"></span>
+                        </button>
+                    </form>
+                </td>
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>

@@ -2,7 +2,7 @@
 
 @section('title', 'Editar {{$type}}')
 @section('content2')
-    <h1 class="mt-5form-group col-md-12">Editar {{$type}}</h1>
+    <h1 class="mt-5 form-group col-md-12">Editar {{$type}}</h1>
     
     @if ($errors->any())
         <div class="alert alert-danger">

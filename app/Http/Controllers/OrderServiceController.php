@@ -78,8 +78,14 @@ class OrderServiceController extends Controller
      * @param  \App\OrderService  $orderService
      * @return \Illuminate\Http\Response
      */
-    public function destroy(OrderService $orderService)
+    public function delete($id)
     {
-        //
+        $subOrder = OrderService::find($id);
+        
+        \DB::table('orders')->where('id', $subOrder->id_order)->decrement('monto', $subOrder->monto);
+        \DB::table('orders')->where('id', $subOrder->id_order)->update(['descuento' => 0]);
+        OrderService::destroy($id);
+        
+        return redirect()->back();
     }
 }

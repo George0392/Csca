@@ -17,11 +17,11 @@ class CreateUsersTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('nombre', 50);
-            $table->string('telefono', 14)->unique();
-            $table->string('email', 50)->unique();
+            $table->bigInteger('telefono')->unsigned()->unique()->nullable();
+            $table->string('email', 50)->unique()->nullable();
             $table->string('password')->nullable();
-            $table->string('direccion', 50);
-            $table->date('nacimiento');
+            $table->string('direccion', 50)->nullable();
+            $table->date('nacimiento')->nullable();
             $table->integer('id_uType')->unsigned();
             $table->boolean('activo')->default(true);
             $table->rememberToken();

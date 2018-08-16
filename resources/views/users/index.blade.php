@@ -50,7 +50,7 @@
                             @if($user->id_uType == 3)
                             <a href="{{ route('users.record', [$nombre = $user->nombre]) }}" class="btn btn-info"><span class="oi oi-clock"></span></a>
                             @endif
-                        </form>
+                            </form>
                         @else
                         <form action="{{ route('users.resurrect', [$type, $user]) }}" method="POST">
                             {{ csrf_field() }}

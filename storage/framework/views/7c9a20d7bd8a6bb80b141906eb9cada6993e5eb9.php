@@ -109,6 +109,9 @@
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>
                 <th scope="col">Ver</th>
+                <?php if($titulo == "Ingresos por " . $tipo . " del día"): ?>
+                <th scope="col">Borrar</th>
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -146,6 +149,19 @@
                     <td><?php echo e(date('d/m/y', strtotime($order->created_at))); ?></td>
                     <td><?php echo e(date('H:i', strtotime($order->created_at))); ?> <b>hs</b></td>
                     <td><a href="/admin/control/ingresos/<?php echo e($tipo); ?>/<?php echo e($order->id); ?>" class="btn btn-success"><span class="oi oi-eye"></span></a></td>
+                    <?php if($titulo == "Ingresos por " . $tipo . " del día"): ?>
+                        <td>
+                            <form action="<?php echo e(route('order.delete', [$id = $order->id])); ?>" method="POST">
+                                <?php echo e(csrf_field()); ?>
+
+                                <?php echo e(method_field('DELETE')); ?>
+
+                                <button class="btn btn-danger" type="submit">
+                                    <span class="oi oi-trash"></span>
+                                </button>
+                            </form>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>

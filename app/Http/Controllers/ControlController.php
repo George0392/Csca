@@ -18,12 +18,12 @@ class ControlController extends Controller
 {
     public function inicio()
     {
-        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->where('id_desc', 1)->exists();
         
         $controls = Control::where('id_desc', 1)
                     ->where('caja_abierta', 1)
                     ->get();
-        $titulo = "Listado de caja inicial";
+        $titulo = "Caja inicial";
         
         return view('control.caja.inicio', compact('controls', 'titulo', 'caja_abierta'));
     }
@@ -533,6 +533,13 @@ class ControlController extends Controller
                 # code...
                 break;
         }
+    }
+
+    public function delete($id)
+    {
+        $control = Control::destroy($id);
+        //return redirect()->route('control.caja.inicio');
+        return redirect()->back();
     }
 
     public function movimientos()

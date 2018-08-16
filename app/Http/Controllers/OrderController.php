@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\OrderProduct;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -78,8 +79,28 @@ class OrderController extends Controller
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $order)
+    public function delete($id)
     {
-        //
+        $type = Order::find($id)->id_type;
+        
+        if($type == 1) 
+        {
+            $subOrdenes = \DB::table('orders_products')->where('id_order', $id)->get();
+            
+            foreach ($subOrdenes as $subOrden)
+            {
+                \DB::table('products')->where('id', $subOrden->id_producto)->increment('quedan', $subOrden->cantidad);
+                OrderProduct::destroy($subOrden->id);
+            }
+
+        } 
+        else if($type == 2)
+        {
+            \DB::table('orders_services')->where('id_order', $id)->delete();
+        }
+        
+        Order::destroy($id);
+        
+        return redirect()->back();
     }
 }

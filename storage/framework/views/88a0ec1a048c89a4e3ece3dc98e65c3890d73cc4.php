@@ -15,33 +15,33 @@
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label>Nombre</label>
-                <input require type="text" class="form-control" name="nombre" value="<?php echo e(old('nombre')); ?>" >
+                <input required type="text" class="form-control" name="nombre" value="<?php echo e(old('nombre')); ?>" >
             </div>
             
             <div class="form-group col-md-2">
                 <label>Teléfono</label>
-                <input require type="number" class="form-control" name="telefono" placeholder="Sin 0 ni 15" value="<?php echo e(old('telefono')); ?>" >
+                <input type="number" class="form-control" name="telefono" placeholder="Sin 0 ni 15" value="<?php echo e(old('telefono')); ?>" >
             </div>
             
             <div class="form-group col-md-3">
                 <label>Email</label>
-                <input require type="email" class="form-control" name="email" value="<?php echo e(old('email')); ?>" >
+                <input type="email" class="form-control" name="email" value="<?php echo e(old('email')); ?>" >
             </div>
             
             <div class="form-group col-md-2">
                 <label>Dirección</label>
-                <input require type="text" class="form-control" name="direccion" value="<?php echo e(old('direccion')); ?>" >
+                <input type="text" class="form-control" name="direccion" value="<?php echo e(old('direccion')); ?>" >
             </div>
 
             <div class="form-group col-md-2">
                 <label>Fecha de nac.</label>
-                <input require type="date" class="form-control" name="nacimiento" value="<?php echo e(old('nacimiento')); ?>" >
+                <input type="date" class="form-control" name="nacimiento" value="<?php echo e(old('nacimiento')); ?>" >
             </div>
             
             <?php if($userType->nombre == "encargado"): ?>
             <div class="form-group col-md-3">
                 <label>Password</label>
-                <input require type="password" class="form-control" name="password" value="<?php echo e(old('password')); ?>" >
+                <input required type="password" class="form-control" name="password" value="<?php echo e(old('password')); ?>" >
             </div>
             <?php endif; ?>
         </div>

@@ -16,33 +16,33 @@
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label>Nombre</label>
-                <input require type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" >
+                <input required type="text" class="form-control" name="nombre" value="{{ old('nombre') }}" >
             </div>
             
             <div class="form-group col-md-2">
                 <label>Teléfono</label>
-                <input require type="number" class="form-control" name="telefono" placeholder="Sin 0 ni 15" value="{{ old('telefono') }}" >
+                <input type="number" class="form-control" name="telefono" placeholder="Sin 0 ni 15" value="{{ old('telefono') }}" >
             </div>
             
             <div class="form-group col-md-3">
                 <label>Email</label>
-                <input require type="email" class="form-control" name="email" value="{{ old('email') }}" >
+                <input type="email" class="form-control" name="email" value="{{ old('email') }}" >
             </div>
             
             <div class="form-group col-md-2">
                 <label>Dirección</label>
-                <input require type="text" class="form-control" name="direccion" value="{{ old('direccion') }}" >
+                <input type="text" class="form-control" name="direccion" value="{{ old('direccion') }}" >
             </div>
 
             <div class="form-group col-md-2">
                 <label>Fecha de nac.</label>
-                <input require type="date" class="form-control" name="nacimiento" value="{{ old('nacimiento') }}" >
+                <input type="date" class="form-control" name="nacimiento" value="{{ old('nacimiento') }}" >
             </div>
             
             @if($userType->nombre == "encargado")
             <div class="form-group col-md-3">
                 <label>Password</label>
-                <input require type="password" class="form-control" name="password" value="{{ old('password') }}" >
+                <input required type="password" class="form-control" name="password" value="{{ old('password') }}" >
             </div>
             @endif
         </div>

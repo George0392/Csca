@@ -97,10 +97,10 @@ class UserController extends Controller
         
         $data = request()->validate([
             'nombre' => 'required',
-            'telefono' => 'required',
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'direccion' => 'required',
-            'nacimiento' => 'required',
+            'telefono' => 'nullable|integer',
+            'email' => 'nullable|email|unique:users,email,'.$user->id,
+            'direccion' => 'nullable',
+            'nacimiento' => 'nullable|date',
             'password' => 'required',
             'id_uType' => 'required',
         ]);

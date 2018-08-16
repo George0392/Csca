@@ -62,6 +62,9 @@
                 <th scope="col">Monto</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>
+                @if($titulo == "Gastos de " . $nombre . " del día")
+                    <th scope="col">Borrar</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -73,6 +76,17 @@
                     <td><b>$</b> {{ $control->monto }}</td>
                     <td>{{ date('d/m/y', strtotime($control->created_at)) }}</td>
                     <td>{{ date('H:i', strtotime($control->created_at)) }} <b>hs</b></td>
+                    @if($titulo == "Gastos de " . $nombre . " del día")
+                        <td>
+                            <form action="{{ route('control.delete', [$id = $control->id]) }}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button class="btn btn-danger" type="submit">
+                                    <span class="oi oi-trash"></span>
+                                </button>
+                            </form>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>
