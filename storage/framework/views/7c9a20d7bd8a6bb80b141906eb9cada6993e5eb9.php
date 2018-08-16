@@ -116,7 +116,11 @@
         </thead>
         <tbody>
             <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <tr>
+                <tr 
+                <?php if(!$order->completada): ?>
+                style="background-color: lightgray;"
+                <?php endif; ?>
+                >
                     <th scope="row"><?php echo e($order->id); ?></th>
                     <td>
                         <?php $__currentLoopData = $clientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cliente): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>

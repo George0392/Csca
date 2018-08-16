@@ -116,7 +116,11 @@
         </thead>
         <tbody>
             @foreach ($orders as $order)
-                <tr>
+                <tr 
+                @if (!$order->completada)
+                style="background-color: lightgray;"
+                @endif
+                >
                     <th scope="row">{{ $order->id }}</th>
                     <td>
                         @foreach($clientes as $cliente)
