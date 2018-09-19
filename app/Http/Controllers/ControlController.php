@@ -93,6 +93,14 @@ class ControlController extends Controller
             {
                 $nombre = "mercaderias"; $id_desc = 7;
             }
+            else if(\Request::is('*/comida'))
+            {
+                $nombre = "comida"; $id_desc = 9;
+            }
+            else if(\Request::is('*/contador'))
+            {
+                $nombre = "contador"; $id_desc = 10;
+            }
             else {}
             
             $controls = \DB::table('controls')
@@ -123,6 +131,14 @@ class ControlController extends Controller
         else if(\Request::is('*/mercaderias'))
         { 
             $nombre = "mercaderias"; $id_desc = 7; 
+        }
+        else if(\Request::is('*/comida'))
+        {
+            $nombre = "comida"; $id_desc = 9;
+        }
+        else if(\Request::is('*/contador'))
+        {
+            $nombre = "contador"; $id_desc = 10;
         }
         else {}
 
@@ -267,6 +283,77 @@ class ControlController extends Controller
         $titulo = "Comisiones de " . $nombre . " desde " . $desde . " hasta " . $hasta;
         
         return view('control.comisiones.index', compact('controls', 'titulo', 'nombre', 'tipo'));
+    }
+
+    public function adelantos()
+    {
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        if($caja_abierta)
+        {
+            $id_uType = 2; 
+            $empleados = \DB::table('users')->where([['id_uType', $id_uType],['activo', 1]])->select('id','nombre')->orderBy('nombre')->get();
+            
+            $mP = Carbon::now()->month - 1;
+            $mS = Carbon::now()->month + 1;
+            $day = Carbon::now()->day;
+            
+            if($day > 10) 
+            {
+                $desde = Carbon::createFromDate(null, null, 10)->setTime(06, 00, 00);
+                $hasta = Carbon::createFromDate(null, $mS, 10)->setTime(06, 00, 00);
+            }
+            else 
+            {
+                $desde = Carbon::createFromDate(null, $mP, 10)->setTime(06, 00, 00);
+                $hasta = Carbon::createFromDate(null, null, 10)->setTime(06, 00, 00);
+            }
+            
+            $tipo = "empleados";
+            $titulo = "Adelantos a " . $tipo;
+            
+            return view('control.adelantos.index', compact('empleados', 'titulo', 'tipo'));
+        }
+        else 
+        {
+            return view('control.cajaCerrada');
+        }
+    }
+
+    public function historial_adelantos_all(Request $request)
+    {
+        $tipo = "empleados"; 
+        $id_desc = 8;
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $controls = \DB::table('controls')
+                    ->where('id_desc', '=', $id_desc)
+                    ->whereBetween('created_at', [$desde, $hasta])
+                    ->get();
+        
+        $desde = date('d/m/y', strtotime($desde));
+        $hasta = date('d/m/y', strtotime($hasta));
+        $titulo = "Adelantos a " . $tipo . " desde " . $desde . " hasta " . $hasta;
+        
+        return view('control.adelantos.index', compact('controls', 'titulo', 'tipo'));
+    }
+
+    public function historial_adelantos_one(Request $request, $nombre)
+    {
+        $tipo = "empleados";
+        $id_desc = 8;
+        $desde = $request->desde;
+        $hasta = $request->hasta;
+        $controls = \DB::table('controls')
+                    ->where('id_desc', '=', $id_desc)
+                    ->where('detalle', 'like', '%'.$nombre.'%')
+                    ->whereBetween('created_at', [$desde, $hasta])
+                    ->get();
+        
+        $desde = date('d/m/y', strtotime($desde));
+        $hasta = date('d/m/y', strtotime($hasta));
+        $titulo = "Adelantos a " . $nombre . " desde " . $desde . " hasta " . $hasta;
+        
+        return view('control.adelantos.index', compact('controls', 'titulo', 'nombre', 'tipo'));
     }
 
     public function ordenes()
@@ -506,7 +593,7 @@ class ControlController extends Controller
                 break;
             
             case '2':
-                return redirect()->route('control.comisiones');
+                return redirect()->route('control.comisiones')->with('message', 'La comisión fue pagada correctamente.');
                 break;
             
             case '3':
@@ -518,7 +605,7 @@ class ControlController extends Controller
                 break;
             
             case '5':
-                return redirect()->route('control.sueldos');
+                return redirect()->route('control.sueldos')->with('message', 'El sueldo fue pagado correctamente.');
                 break;
             
             case '6':
@@ -527,6 +614,18 @@ class ControlController extends Controller
             
             case '7':
                 return redirect()->route('control.gastos.mercaderias');
+                break;
+
+            case '8':
+                return redirect()->route('control.adelantos')->with('message', 'El adelanto fue pagado correctamente.');
+                break;
+
+            case '9':
+                return redirect()->route('control.gastos.comida');
+                break;
+            
+            case '10':
+                return redirect()->route('control.gastos.contador');
                 break;
             
             default:
@@ -569,6 +668,12 @@ class ControlController extends Controller
         $gastXmerc = Control::where('caja_abierta', 1)
                         ->where('id_desc', 7)
                         ->value(\DB::raw("sum(monto)")) + 0;
+        $gastXcomi = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 9)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $gastXcont = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 10)
+                        ->value(\DB::raw("sum(monto)")) + 0;
         $retiros = Control::where('caja_abierta', 1)
                         ->where('id_desc', 6)
                         ->value(\DB::raw("sum(monto)")) + 0;
@@ -578,12 +683,16 @@ class ControlController extends Controller
         $comisiones = Control::where('caja_abierta', 1)
                         ->where('id_desc', 2)
                         ->value(\DB::raw("sum(monto)")) + 0;
-        $total_efec = $caja_inicial + $ingXprod_efec + $ingXserv_efec - $gastXlimp - $gastXserv - $gastXmerc - $retiros - $sueldos - $comisiones;
+        $adelantos = Control::where('caja_abierta', 1)
+                        ->where('id_desc', 8)
+                        ->value(\DB::raw("sum(monto)")) + 0;
+
+        $total_efec = $caja_inicial + $ingXprod_efec + $ingXserv_efec - $gastXlimp - $gastXserv - $gastXmerc - $gastXcomi - $gastXcont - $retiros - $sueldos - $comisiones - $adelantos;
         $total_tarj = $ingXprod_tarj + $ingXserv_tarj;
         
         $titulo = "Movimientos del turno";
         
-        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod_efec', 'ingXserv_efec', 'ingXprod_tarj', 'ingXserv_tarj', 'gastXlimp', 'gastXserv', 'gastXmerc', 'retiros', 'sueldos', 'comisiones', 'total_efec', 'total_tarj'));
+        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod_efec', 'ingXserv_efec', 'ingXprod_tarj', 'ingXserv_tarj', 'gastXlimp', 'gastXserv', 'gastXmerc', 'gastXcomi', 'gastXcont', 'retiros', 'sueldos', 'comisiones', 'adelantos', 'total_efec', 'total_tarj'));
     }
 
     public function historial_movimientos(Request $request)
@@ -616,6 +725,12 @@ class ControlController extends Controller
         $gastXmerc = Control::where('id_desc', 7)
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(monto)")) + 0;
+        $gastXcomi = Control::where('id_desc', 9)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
+        $gastXcont = Control::where('id_desc', 10)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
         $retiros = Control::where('id_desc', 6)
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(monto)")) + 0;
@@ -625,14 +740,17 @@ class ControlController extends Controller
         $comisiones = Control::where('id_desc', 2)
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(monto)")) + 0;
+        $adelantos = Control::where('id_desc', 8)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(monto)")) + 0;
         
-        $total_efec = $caja_inicial + $ingXprod_efec + $ingXserv_efec - $gastXlimp - $gastXserv - $gastXmerc - $retiros - $sueldos - $comisiones;
+        $total_efec = $caja_inicial + $ingXprod_efec + $ingXserv_efec - $gastXlimp - $gastXserv - $gastXmerc - $gastXcomi - $gastXcont - $retiros - $sueldos - $comisiones - $adelantos;
         $total_tarj = $ingXprod_tarj + $ingXserv_tarj;
                         
         $desde = date('d/m/y', strtotime($request->desde));
         $hasta = date('d/m/y', strtotime($request->hasta));
         $titulo = "Movimientos desde " . $desde . " hasta " . $hasta;
         
-        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod_efec', 'ingXserv_efec', 'ingXprod_tarj', 'ingXserv_tarj', 'gastXlimp', 'gastXserv', 'gastXmerc', 'retiros', 'sueldos', 'comisiones', 'total_efec', 'total_tarj'));
+        return view('control.movimientos.index', compact('titulo', 'caja_inicial', 'ingXprod_efec', 'ingXserv_efec', 'ingXprod_tarj', 'ingXserv_tarj', 'gastXlimp', 'gastXserv', 'gastXmerc', 'gastXcomi', 'gastXcont', 'retiros', 'sueldos', 'comisiones', 'adelantos', 'total_efec', 'total_tarj'));
     }
 }

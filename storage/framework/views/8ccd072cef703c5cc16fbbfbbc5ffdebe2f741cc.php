@@ -1,4 +1,16 @@
 <?php $__env->startSection('content2'); ?>
+    
+    <?php if(session()->has('message')): ?>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <strong>Operación Exitosa!</strong>
+            <?php echo e(session()->get('message')); ?>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endif; ?>
+    
     <h1 class="form-group col-md-12">Crear <?php echo e($type); ?></h1>
     
     <?php if($errors->any()): ?>

@@ -1,6 +1,17 @@
 @extends('admin')
 
 @section('content2')
+    
+    @if(session()->has('message'))
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <strong>Operación Exitosa!</strong>
+            {{ session()->get('message') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+    
     <h1 class="form-group col-md-12">Crear {{ $type }}</h1>
     
     @if ($errors->any())

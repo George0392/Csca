@@ -76,7 +76,7 @@ class ProductController extends Controller
             'archivo' => $filename
         ]);
         
-        return redirect()->route('products.create');
+        return redirect()->route('products.create')->with('message', 'El producto fue creado correctamente.');
     }
 
     /**

@@ -1,25 +1,5 @@
 <?php $__env->startSection('content3'); ?>
     
-    <script language="javascript">
-        function fAgrega()
-        {
-            [].forEach.call(document.querySelectorAll(".porcS"), function(element, index)
-            {
-                element.addEventListener("input", function()
-                {
-                    document.querySelectorAll(".sueldo")[index].value = parseInt(this.value) / 100 * parseInt(document.querySelectorAll(".totalS")[index].value) +  parseInt(document.querySelectorAll(".porcP")[index].value) * parseInt(document.querySelectorAll(".totalP")[index].value) / 100;
-                },  false);
-            });
-            [].forEach.call(document.querySelectorAll(".porcP"), function(element, index)
-            {
-                element.addEventListener("input", function()
-                {
-                    document.querySelectorAll(".sueldo")[index].value = parseInt(this.value) / 100 * parseInt(document.querySelectorAll(".totalP")[index].value) +  parseInt(document.querySelectorAll(".porcS")[index].value) * parseInt(document.querySelectorAll(".totalS")[index].value) / 100;
-                },  false);
-            });
-        }
-    </script>
-
     <?php if(session()->has('message')): ?>
         <div class="alert alert-success alert-dismissible" role="alert">
             <strong>Operación Exitosa!</strong>
@@ -32,21 +12,21 @@
     <?php endif; ?>
 
     <div class="d-flex justify-content-between align-items-end">
-        <?php if($titulo == "Comisiones de " . $tipo): ?>
+        <?php if($titulo == "Adelantos a " . $tipo): ?>
             <h1 class="mt-2 mb-3"><?php echo e($titulo); ?></h1>
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Historial
             </button>
         <?php else: ?>
             <h2 class="mt-2 mb-3"><?php echo e($titulo); ?></h2>
-            <a href="<?php echo e(url('/admin/control/comisiones/')); ?>" class="btn btn-primary">Volver</a>
+            <a href="<?php echo e(url('/admin/control/adelantos/')); ?>" class="btn btn-primary">Volver</a>
         <?php endif; ?> 
     </div>
     <p></p>
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
             <p>
-                <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/comisiones/historial')); ?>">
+                <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/adelantos/historial')); ?>">
                     <?php echo csrf_field(); ?>
 
                     <div class="form-group">
@@ -67,14 +47,10 @@
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
-                <?php if($titulo == "Comisiones de " . $tipo): ?>
+                <?php if($titulo == "Adelantos a " . $tipo): ?>
                     <th scope="col">Nombre</th>
-                    <th scope="col">$ por Serv</th>
-                    <th scope="col">% X Serv</th>
-                    <th scope="col">$ por Prod</th>
-                    <th scope="col">% X Prod</th>
-                    <th scope="col">Comisión</th>
-                    <th scope="col">Pagos</th>
+                    <th scope="col">Adelanto</th>
+                    <th scope="col">Historial</th>
                 <?php else: ?>
                     <th scope="col">Detalle</th>
                     <th scope="col">Monto</th>
@@ -84,7 +60,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php if($titulo == "Comisiones de " . $tipo): ?>
+            <?php if($titulo == "Adelantos a " . $tipo): ?>
                 <?php $__currentLoopData = $empleados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $empleado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
                         <td style="vertical-align: middle;">
@@ -92,42 +68,14 @@
 
                         </td>
                         <td>
-                            <?php $totalS=0 ?>
-                            <?php $__currentLoopData = $ordenes_serv; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_serv): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if($orden_serv->id_empleado == $empleado->id): ?>
-                                    <?php $totalS = $totalS + $orden_serv->monto - $orden_serv->descuento ?>
-                                <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalS); ?></label>
-                            <input type="hidden" class="totalS" value="<?php echo e($totalS); ?>">
-                        </td>
-                        <td>
-                            <?php $porcS=10 ?>
-                            <input required type="number" min="7" max="30" id="PorcS" class="form-control porcS" style="width: 60px;" placeholder="Porcentaje" value="<?php echo e($porcS); ?>" onchange="fAgrega();">
-                        </td>
-                        <td>
-                            <?php $totalP=0 ?>
-                            <?php $__currentLoopData = $ordenes_prod; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orden_prod): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php if($orden_prod->id_empleado == $empleado->id): ?>
-                                    <?php $totalP = $totalP + $orden_prod->monto - $orden_prod->descuento ?>
-                                <?php endif; ?>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <label class="form-control" style="width: 70px;text-align: center;"><?php echo e($totalP); ?></label>
-                            <input type="hidden" class="totalP" value="<?php echo e($totalP); ?>">
-                        </td>
-                        <td>
-                            <?php $porcP=10 ?>
-                            <input required type="number" min="7" max="30" id="PorcP" class="form-control porcP" style="width: 60px;" placeholder="Porcentaje" value="<?php echo e($porcP); ?>" onchange="fAgrega();">
-                        </td>
-                        <td>
                             <form class="form-inline" name="myForm" method="POST" action="<?php echo e(url('admin/control/')); ?>">
                                 <?php echo csrf_field(); ?>
 
                                 
-                                <input id="Sueldo" style="width: 65px;" required class="form-control sueldo" name="monto" placeholder="Sueldo" value="<?php echo e(($porcP*$totalP/100)+($porcS*$totalS/100)); ?>">
+                                <input id="Sueldo" style="width: 82px;" required class="form-control sueldo" name="monto" placeholder="Adelanto">
                                 <input type="hidden" name="admin" value="<?php echo e(Auth::user()->nombre); ?>">
-                                <input type="hidden" name="id_desc" value="2">
-                                <input type="hidden" name="detalle" value="Pago de comisiones a <?php echo e($empleado->nombre); ?>">
+                                <input type="hidden" name="id_desc" value="8">
+                                <input type="hidden" name="detalle" value="Adelanto a <?php echo e($empleado->nombre); ?>">
                                 <input type="hidden" name="caja_abierta" value="1">
                                 <button type="submit" class="btn btn-primary mb-2">Pagar</button>
                             </form>
@@ -140,11 +88,11 @@
                     </tr>
                     <tr class="collapse" id="collapseExample<?php echo e($empleado->id); ?>">
                         <td class="col-xs-10" colspan="7" >
-                            <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/comisiones/'. $empleado->nombre)); ?>">
+                            <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/adelantos/'. $empleado->nombre)); ?>">
                                 <?php echo csrf_field(); ?>
 
                                 <div class="form-group">
-                                    <label>Historial de comisiones para <?php echo e($empleado->nombre); ?> desde</label>
+                                    <label>Historial de adelantos a <?php echo e($empleado->nombre); ?> desde</label>
                                     <input type="hidden" name="profesor" value="<?php echo e($empleado->nombre); ?>">
                                     <input required type="date" class="form-control" name="desde">
                                 </div>

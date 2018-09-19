@@ -126,6 +126,24 @@
                 <td>$ <?php echo e($gastXmerc); ?></td>
             </tr>
             <tr
+                <?php if($gastXcomi == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Gastos x Comida</td>
+                <td>$ <?php echo e($gastXcomi); ?></td>
+            </tr>
+            <tr
+                <?php if($gastXcont == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Gastos x Contador</td>
+                <td>$ <?php echo e($gastXcont); ?></td>
+            </tr>
+            <tr
                 <?php if($retiros == 0): ?> 
                     class="fila rojaOscuro"
                 <?php else: ?>
@@ -133,6 +151,15 @@
                 <?php endif; ?>>
                 <td>Retiros</td>
                 <td>$ <?php echo e($retiros); ?></td>
+            </tr>
+            <tr
+                <?php if($adelantos == 0): ?> 
+                    class="fila rojaOscuro"
+                <?php else: ?>
+                    class="fila roja"
+                <?php endif; ?>>
+                <td>Adelantos</td>
+                <td>$ <?php echo e($adelantos); ?></td>
             </tr>
             <tr
                 <?php if($sueldos == 0): ?> 

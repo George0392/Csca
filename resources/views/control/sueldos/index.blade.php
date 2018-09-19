@@ -2,6 +2,16 @@
 
 @section('content3')
     
+    @if(session()->has('message'))
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <strong>Operación Exitosa!</strong>
+            {{ session()->get('message') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+    
     <div class="d-flex justify-content-between align-items-end">
         @if($titulo == "Sueldos de " . $tipo)
             <h1 class="mt-2 mb-3">{{ $titulo }}</h1>

@@ -1,5 +1,16 @@
 <?php $__env->startSection('content3'); ?>
     
+    <?php if(session()->has('message')): ?>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <strong>Operación Exitosa!</strong>
+            <?php echo e(session()->get('message')); ?>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endif; ?>
+    
     <div class="d-flex justify-content-between align-items-end">
         <?php if($titulo == "Sueldos de " . $tipo): ?>
             <h1 class="mt-2 mb-3"><?php echo e($titulo); ?></h1>

@@ -91,11 +91,19 @@ Route::group(['middleware' => 'is_admin'], function ()
 
     Route::get('/admin/control/gastos/mercaderias', 'ControlController@gastos')->name('control.gastos.mercaderias');
 
+    Route::get('/admin/control/gastos/comida', 'ControlController@gastos')->name('control.gastos.comida');
+
+    Route::get('/admin/control/gastos/contador', 'ControlController@gastos')->name('control.gastos.contador');
+
     Route::post('/admin/control/gastos/limpieza', 'ControlController@historial_gastos');
 
     Route::post('/admin/control/gastos/servicios', 'ControlController@historial_gastos');
 
     Route::post('/admin/control/gastos/mercaderias', 'ControlController@historial_gastos');
+
+    Route::post('/admin/control/gastos/comida', 'ControlController@historial_gastos');
+
+    Route::post('/admin/control/gastos/contador', 'ControlController@historial_gastos');
 
     // Control.Ingresos
 
@@ -149,6 +157,14 @@ Route::group(['middleware' => 'is_admin'], function ()
     Route::post('/admin/control/comisiones/historial', 'ControlController@historial_comisiones_all');
 
     Route::post('/admin/control/comisiones/{nombre}', 'ControlController@historial_comisiones_one');
+
+    // Control.Adelantos
+
+    Route::get('/admin/control/adelantos/', 'ControlController@adelantos')->name('control.adelantos');
+
+    Route::post('/admin/control/adelantos/historial', 'ControlController@historial_adelantos_all');
+
+    Route::post('/admin/control/adelantos/{nombre}', 'ControlController@historial_adelantos_one');
 
     // Control.Movimientos
 

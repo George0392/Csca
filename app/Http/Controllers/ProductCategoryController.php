@@ -42,7 +42,7 @@ class ProductCategoryController extends Controller
             'nombre' => $request['nombre'],
         ]);
         
-        return redirect()->route('categories.create');
+        return redirect()->route('categories.create')->with('message', 'La categoría fue creada correctamente.');
     }
 
     /**

@@ -42,7 +42,7 @@ class ServiceController extends Controller
             'monto' => $request['monto']
         ]);
         
-        return redirect()->route('services.create');
+        return redirect()->route('services.create')->with('message', 'El servicio fue creado correctamente.');
     }
 
     /**

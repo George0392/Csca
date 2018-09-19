@@ -2,26 +2,6 @@
 
 @section('content3')
     
-    <script language="javascript">
-        function fAgrega()
-        {
-            [].forEach.call(document.querySelectorAll(".porcS"), function(element, index)
-            {
-                element.addEventListener("input", function()
-                {
-                    document.querySelectorAll(".sueldo")[index].value = parseInt(this.value) / 100 * parseInt(document.querySelectorAll(".totalS")[index].value) +  parseInt(document.querySelectorAll(".porcP")[index].value) * parseInt(document.querySelectorAll(".totalP")[index].value) / 100;
-                },  false);
-            });
-            [].forEach.call(document.querySelectorAll(".porcP"), function(element, index)
-            {
-                element.addEventListener("input", function()
-                {
-                    document.querySelectorAll(".sueldo")[index].value = parseInt(this.value) / 100 * parseInt(document.querySelectorAll(".totalP")[index].value) +  parseInt(document.querySelectorAll(".porcS")[index].value) * parseInt(document.querySelectorAll(".totalS")[index].value) / 100;
-                },  false);
-            });
-        }
-    </script>
-
     @if(session()->has('message'))
         <div class="alert alert-success alert-dismissible" role="alert">
             <strong>Operación Exitosa!</strong>
@@ -33,21 +13,21 @@
     @endif
 
     <div class="d-flex justify-content-between align-items-end">
-        @if($titulo == "Comisiones de " . $tipo)
+        @if($titulo == "Adelantos a " . $tipo)
             <h1 class="mt-2 mb-3">{{ $titulo }}</h1>
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 Historial
             </button>
         @else
             <h2 class="mt-2 mb-3">{{ $titulo }}</h2>
-            <a href="{{ url('/admin/control/comisiones/') }}" class="btn btn-primary">Volver</a>
+            <a href="{{ url('/admin/control/adelantos/') }}" class="btn btn-primary">Volver</a>
         @endif 
     </div>
     <p></p>
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
             <p>
-                <form class="form-inline" method="POST" action="{{ url('/admin/control/comisiones/historial') }}">
+                <form class="form-inline" method="POST" action="{{ url('/admin/control/adelantos/historial') }}">
                     {!!csrf_field()!!}
                     <div class="form-group">
                         <label> Desde </label>
@@ -67,14 +47,10 @@
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
-                @if($titulo == "Comisiones de " . $tipo)
+                @if($titulo == "Adelantos a " . $tipo)
                     <th scope="col">Nombre</th>
-                    <th scope="col">$ por Serv</th>
-                    <th scope="col">% X Serv</th>
-                    <th scope="col">$ por Prod</th>
-                    <th scope="col">% X Prod</th>
-                    <th scope="col">Comisión</th>
-                    <th scope="col">Pagos</th>
+                    <th scope="col">Adelanto</th>
+                    <th scope="col">Historial</th>
                 @else
                     <th scope="col">Detalle</th>
                     <th scope="col">Monto</th>
@@ -84,48 +60,20 @@
             </tr>
         </thead>
         <tbody>
-            @if($titulo == "Comisiones de " . $tipo)
+            @if($titulo == "Adelantos a " . $tipo)
                 @foreach ($empleados as $empleado)
                     <tr>
                         <td style="vertical-align: middle;">
                             {{ $empleado->nombre }}
                         </td>
                         <td>
-                            <?php $totalS=0 ?>
-                            @foreach ($ordenes_serv as $orden_serv)
-                                @if ($orden_serv->id_empleado == $empleado->id)
-                                    <?php $totalS = $totalS + $orden_serv->monto - $orden_serv->descuento ?>
-                                @endif
-                            @endforeach
-                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalS}}</label>
-                            <input type="hidden" class="totalS" value="{{ $totalS }}">
-                        </td>
-                        <td>
-                            <?php $porcS=10 ?>
-                            <input required type="number" min="7" max="30" id="PorcS" class="form-control porcS" style="width: 60px;" placeholder="Porcentaje" value="{{ $porcS }}" onchange="fAgrega();">
-                        </td>
-                        <td>
-                            <?php $totalP=0 ?>
-                            @foreach ($ordenes_prod as $orden_prod)
-                                @if ($orden_prod->id_empleado == $empleado->id)
-                                    <?php $totalP = $totalP + $orden_prod->monto - $orden_prod->descuento ?>
-                                @endif
-                            @endforeach
-                            <label class="form-control" style="width: 70px;text-align: center;">{{$totalP}}</label>
-                            <input type="hidden" class="totalP" value="{{ $totalP }}">
-                        </td>
-                        <td>
-                            <?php $porcP=10 ?>
-                            <input required type="number" min="7" max="30" id="PorcP" class="form-control porcP" style="width: 60px;" placeholder="Porcentaje" value="{{ $porcP }}" onchange="fAgrega();">
-                        </td>
-                        <td>
                             <form class="form-inline" name="myForm" method="POST" action="{{ url('admin/control/') }}">
                                 {!!csrf_field()!!}
                                 
-                                <input id="Sueldo" style="width: 65px;" required class="form-control sueldo" name="monto" placeholder="Sueldo" value="{{ ($porcP*$totalP/100)+($porcS*$totalS/100) }}">
+                                <input id="Sueldo" style="width: 82px;" required class="form-control sueldo" name="monto" placeholder="Adelanto">
                                 <input type="hidden" name="admin" value="{{ Auth::user()->nombre }}">
-                                <input type="hidden" name="id_desc" value="2">
-                                <input type="hidden" name="detalle" value="Pago de comisiones a {{ $empleado->nombre }}">
+                                <input type="hidden" name="id_desc" value="8">
+                                <input type="hidden" name="detalle" value="Adelanto a {{ $empleado->nombre }}">
                                 <input type="hidden" name="caja_abierta" value="1">
                                 <button type="submit" class="btn btn-primary mb-2">Pagar</button>
                             </form>
@@ -138,10 +86,10 @@
                     </tr>
                     <tr class="collapse" id="collapseExample{{ $empleado->id }}">
                         <td class="col-xs-10" colspan="7" >
-                            <form class="form-inline" method="POST" action="{{ url('/admin/control/comisiones/'. $empleado->nombre) }}">
+                            <form class="form-inline" method="POST" action="{{ url('/admin/control/adelantos/'. $empleado->nombre) }}">
                                 {!!csrf_field()!!}
                                 <div class="form-group">
-                                    <label>Historial de comisiones para {{ $empleado->nombre }} desde</label>
+                                    <label>Historial de adelantos a {{ $empleado->nombre }} desde</label>
                                     <input type="hidden" name="profesor" value="{{ $empleado->nombre }}">
                                     <input required type="date" class="form-control" name="desde">
                                 </div>

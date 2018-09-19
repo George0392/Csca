@@ -126,6 +126,24 @@
                 <td>$ {{ $gastXmerc }}</td>
             </tr>
             <tr
+                @if($gastXcomi == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Gastos x Comida</td>
+                <td>$ {{ $gastXcomi }}</td>
+            </tr>
+            <tr
+                @if($gastXcont == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Gastos x Contador</td>
+                <td>$ {{ $gastXcont }}</td>
+            </tr>
+            <tr
                 @if($retiros == 0) 
                     class="fila rojaOscuro"
                 @else
@@ -133,6 +151,15 @@
                 @endif>
                 <td>Retiros</td>
                 <td>$ {{ $retiros }}</td>
+            </tr>
+            <tr
+                @if($adelantos == 0) 
+                    class="fila rojaOscuro"
+                @else
+                    class="fila roja"
+                @endif>
+                <td>Adelantos</td>
+                <td>$ {{ $adelantos }}</td>
             </tr>
             <tr
                 @if($sueldos == 0) 

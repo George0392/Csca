@@ -31,16 +31,24 @@
                         
                         <ul class="nav nav-second-level">
                             <li>
+                                <a href="/admin/control/gastos/comida">Comida</a>
+                            </li>    
+                            
+                            <li>
+                                <a href="/admin/control/gastos/contador">Contador</a>
+                            </li>
+
+                            <li>
                                 <a href="/admin/control/gastos/limpieza">Limpieza</a>
                             </li>
-                                
-                            <li>
-                                <a href="/admin/control/gastos/servicios">Servicios</a>
-                            </li>    
                             
                             <li>
                                 <a href="/admin/control/gastos/mercaderias">Mercaderias</a>
                             </li>
+
+                            <li>
+                                <a href="/admin/control/gastos/servicios">Servicios</a>
+                            </li>    
                         </ul>
                     </li>
                     <li>
@@ -69,6 +77,12 @@
                         <a href="/admin/control/comisiones">
                             <span class="oi oi-dollar"></span>
                             Comisiones
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/control/adelantos">
+                            <span class="oi oi-dollar"></span>
+                            Adelantos
                         </a>
                     </li>
                     <li>
