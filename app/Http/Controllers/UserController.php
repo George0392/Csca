@@ -1,12 +1,13 @@
 <?php
 //fer
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Request;
+use App\Http\Requests;
 use App\User;
 use App\UserType;
 use Carbon;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\UserFormRequest;
+use DB;
 
 class UserController extends Controller
 {
@@ -32,7 +33,7 @@ class UserController extends Controller
     {
         //$type_id = \DB::table('user_types')->where('nombre', $type)->value('id');
         $userType = UserType::where('nombre', $type)->first();
-        
+
         return view('users.create', compact('type','userType'));
     }
 
@@ -42,8 +43,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserFormRequest $request)
     {
+
         User::create([
             'nombre' => $request['nombre'],
             'telefono' => $request['telefono'],
@@ -53,7 +55,7 @@ class UserController extends Controller
             'id_uType' => $request['id_uType'],
             'password' => bcrypt($request['password'])
         ]);
-        
+
         $id_uType = $request->id_uType;
         $userType = UserType::find($id_uType);
         $type = $userType->nombre;
@@ -71,7 +73,7 @@ class UserController extends Controller
     {
         $user = User::where('nombre', $nombre)->first();
         //dd($type);
-        if ($user == null) 
+        if ($user == null)
         {
             return view('errors.404');
         }
@@ -94,23 +96,23 @@ class UserController extends Controller
     public function update($type, User $user)
     {
         $oldPass = User::find($user->id)->password;
-        
+
         $data = request()->validate([
             'nombre' => 'required',
-            'telefono' => 'nullable|integer',
+            'telefono' => 'required',
             'email' => 'nullable|email|unique:users,email,'.$user->id,
             'direccion' => 'nullable',
             'nacimiento' => 'nullable|date',
             'password' => 'required',
             'id_uType' => 'required',
         ]);
-        
+
         if ($oldPass != $data['password']) {
             $data['password'] = bcrypt($data['password']);
         }
-        
+
         $user->update($data);
-        
+
         return redirect()->route('users.index', compact('type'));
     }
 
@@ -141,14 +143,14 @@ class UserController extends Controller
         $desde = Carbon::today()->subMonths(6);
         $hasta = Carbon::today()->addDays(1);
         //dd($hasta);
-        if ($user != null && \Request::is('*/clientes/*')) 
+        if ($user != null && \Request::is('*/clientes/*'))
         {
             $orders = \DB::table('orders')->where('id_cliente', $user->id)->whereBetween('created_at', [$desde, $hasta])->get();
             $empleados = \DB::table('users')->select('id', 'nombre', 'activo')->where([['id_uType',"!=", 3], ['id',"!=", 1],])->orderBy('nombre')->get();
             $orderTypes = \DB::table('orders_type')->select('id', 'nombre')->get();
             $formasPago = \DB::table('formas_pago')->select('id', 'nombre')->get();
             $titulo = "Historial para " . $nombre . ' (Últimos 6 meses)';
-                
+
             return view('users.record', compact('nombre', 'orderTypes', 'titulo', 'empleados', 'formasPago', 'orders'));
         }
     }
@@ -157,7 +159,7 @@ class UserController extends Controller
     {
         $desde = $request->desde;
         $hasta = $request->hasta;
-        
+
         $user = User::where('nombre', $nombre)->first();
         $orders = \DB::table('orders')
                     ->where('id_cliente', $user->id)
@@ -166,11 +168,11 @@ class UserController extends Controller
         $empleados = \DB::table('users')->select('id', 'nombre', 'activo')->where([['id_uType',"!=", 3], ['id',"!=", 1],])->orderBy('nombre')->get();
         $orderTypes = \DB::table('orders_type')->select('id', 'nombre')->get();
         $formasPago = \DB::table('formas_pago')->select('id', 'nombre')->get();
-                    
+
         $desde = date('d/m/y', strtotime($desde));
         $hasta = date('d/m/y', strtotime($hasta));
         $titulo = "Historial para " . $nombre . " desde " . $desde . " hasta " . $hasta;
-        
+
         return view('users.record', compact('nombre', 'orderTypes', 'titulo', 'empleados', 'formasPago', 'orders'));
     }
 }
