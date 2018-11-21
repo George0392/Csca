@@ -1,7 +1,7 @@
 @extends('admin')
 
 @section('content2')
-    
+
     <div class="d-flex justify-content-between align-items-end">
         @if($activos == true)
         <h1 class="mt-2 mb-3">Listado de {{ $type }}s</h1>
@@ -17,9 +17,9 @@
             @endif
         </p>
     </div>
-    
+
     <table class="table">
-        
+
         <thead class="thead-dark"></thead>
             <tr>
                 <th scope="col">Nombre</th>
@@ -28,13 +28,13 @@
                 <th scope="col">Acciones</th>
             </tr>
         </thead>
-        
+
         <tbody>
             @foreach ($users as $user)
                 @if($activos == false)
                 <tr style="background-color: #ff8e8e;">
                 @else
-                <tr>
+                <tr class="text-uppercase" >
                 @endif
                     <td>{{ $user->nombre }}</td>
                     <td>{{ $user->telefono }}</td>

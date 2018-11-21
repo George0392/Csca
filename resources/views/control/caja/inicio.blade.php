@@ -1,9 +1,9 @@
 @extends('control.index')
 
 @section('content3')
-    
+
     <div class="d-flex justify-content-between align-items-end">
-        
+
             @if($caja_abierta)
                 <h1 style="color: #009000;">{{ $titulo }}
                     <img src="..\..\..\Circle-unlock.png" width="36px" height="36px" style="margin-bottom: 5px;">
@@ -18,9 +18,9 @@
                 {!!csrf_field()!!}
                 <div class="form-group mx-sm-3 mb-2">
                     <input type="hidden" class="form-control" name="admin" value="{{ Auth::user()->nombre }}">
-                    <input 
+                    <input
                     @if($caja_abierta)
-                    disabled 
+                    disabled
                     @endif
                     type="number" min="0" required class="form-control" name="monto" placeholder="Ingrese un monto">
                     <input type="hidden" class="form-control" name="id_desc" value="1">
@@ -32,10 +32,10 @@
                     {{-- Button trigger modal --}}
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Cerrar</button>
                 @else
-                    <button disabled type="button" class="btn btn-danger">( Cerrada )</button>    
+                    <button disabled type="button" class="btn btn-danger">( Cerrada )</button>
                     <button type="submit" class="btn btn-success mb-2">Abrir</button>
                 @endif
-                
+
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" style="padding-top: 150px;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm" role="document">
@@ -57,7 +57,7 @@
             </form>
         </p>
     </div>
-    
+
     <table class="table">
         <thead class="thead-dark"></thead>
           <tr></tr>
@@ -71,12 +71,12 @@
         </thead>
         <tbody>
             @foreach ($controls as $control)
-            <tr>
+            <tr class="text-uppercase" >
                 <th scope="row">{{ $control->id }}</th>
                 <td>{{ $control->admin }}</td>
                 <td><b>$</b> {{ $control->monto }}</td>
                 <td>{{ $control->created_at->format('d/m/Y') }}</td>
-                <td>{{ $control->created_at->format('H:i') }} <b>hs</b></td>
+                <td>{{ $control->created_at->format('H:i') }} <b class="text-lowercase">hs</b></td>
                 <td>
                     <form action="{{ route('control.delete', [$id = $control->id]) }}" method="POST">
                         {{ csrf_field() }}

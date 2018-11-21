@@ -1,5 +1,5 @@
 <?php $__env->startSection('content2'); ?>
-    
+
     <div class="d-flex justify-content-between align-items-end">
         <?php if($activos == true): ?>
         <h1 class="mt-2 mb-3">Listado de <?php echo e($type); ?>s</h1>
@@ -15,9 +15,9 @@
             <?php endif; ?>
         </p>
     </div>
-    
+
     <table class="table">
-        
+
         <thead class="thead-dark"></thead>
             <tr>
                 <th scope="col">Nombre</th>
@@ -26,13 +26,13 @@
                 <th scope="col">Acciones</th>
             </tr>
         </thead>
-        
+
         <tbody>
             <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php if($activos == false): ?>
                 <tr style="background-color: #ff8e8e;">
                 <?php else: ?>
-                <tr>
+                <tr class="text-uppercase" >
                 <?php endif; ?>
                     <td><?php echo e($user->nombre); ?></td>
                     <td><?php echo e($user->telefono); ?></td>

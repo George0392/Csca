@@ -1,10 +1,10 @@
 @extends('admin')
 
 @section('content2')
-    
+
     <div class="d-flex justify-content-between align-items-end">
-        
-        @if($titulo == "Historial para " . $nombre . " (Últimos 6 meses)")
+
+        @if($titulo == "Historial para " . $nombre .  " (Últimos 6 meses)")
             <h1 class="mt-2 mb-3">{{ $titulo }}</h1>
         @else
             <h2 class="mt-2 mb-3">{{ $titulo }}</h2>
@@ -20,15 +20,15 @@
                         {!!csrf_field()!!}
                         <div class="form-group">
                             <label> Desde </label>
-                            <input required type="date" class="form-control" name="desde" value="{{ date("Y-m-d") }}">
+                            <input required type="date" class="text-uppercase form-control" name="desde" value="{{ date("Y-m-d") }}">
                         </div>
                         <div class="form-group">
                             <label> Hasta </label>
-                            <input required type="date" class="form-control" name="hasta" value="{{ date("Y-m-d") }}">
+                            <input required type="date" class="text-uppercase form-control" name="hasta" value="{{ date("Y-m-d") }}">
                         </div>
-                                    
+
                         <button type="submit" class="btn btn-success">Buscar</button>
-                        
+
                     </form>
                 </p>
             </div>
@@ -36,10 +36,10 @@
     </div>
 
     <p></p>
-    
+
     <table class="table">
         <thead class="thead-dark"></thead>
-            <tr></tr>
+            <tr>
                 <th scope="col">Atendió</th>
                 <th scope="col">Orden</th>
                 <th scope="col">Tipo</th>
@@ -52,7 +52,7 @@
         </thead>
         <tbody>
             @foreach ($orders as $order)
-                <tr>
+                <tr class="text-uppercase" >
                     <td>
                         @foreach($empleados as $empleado)
                             @if($empleado->id == $order->id_empleado)

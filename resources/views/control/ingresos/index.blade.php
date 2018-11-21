@@ -1,9 +1,9 @@
 @extends('control.index')
 
 @section('content3')
-    
+
     <div class="d-flex justify-content-between align-items-end">
-        
+
         @if($titulo == "Ingresos por " . $tipo . " del día")
             <h1 class="mt-2 mb-3">{{ $titulo }}</h1>
             <button class="btn btn-primary" data-toggle="collapse" data-target="#collapseExample">
@@ -25,10 +25,10 @@
                 <p>
                     <form method="POST" action="/admin/control/ingresos/{{$tipo}}">
                         {!!csrf_field()!!}
-                        
+
                         <div class="form-group col-md-3" style="padding-left: 0px;">
                             <label>Atendió</label>
-                            <select class="form-control" name="id_empleado" value="{{ old('id_empleado') }}">
+                            <select class="form-control text-uppercase text-uppercase" name="id_empleado" value="{{ old('id_empleado') }}">
                                 @foreach($empleados as $empleado)
                                     @if($empleado->activo == 1)
                                     <option value="{{$empleado->id}}">{{$empleado->nombre}}</option>
@@ -36,35 +36,35 @@
                                 @endforeach
                             </select>
                         </div>
-                                
+
                         <div class="form-group col-md-3" style="padding-left: 0px;">
                             <label>Cliente</label>
-                            <select class="form-control" name="id_cliente" value="{{ old('id_cliente') }}">
+                            <select class="form-control text-uppercase" name="id_cliente" value="{{ old('id_cliente') }}">
                                 @foreach($clientes as $cliente)
-                                    @if($cliente->activo == 1)  
+                                    @if($cliente->activo == 1)
                                     <option value="{{$cliente->id}}">{{$cliente->nombre}}</option>
                                     @endif
                                 @endforeach
                             </select>
-                        </div>        
-                        
+                        </div>
+
                         <div class="form-group col-md-2" style="padding-left: 0px;">
                             <label>Forma de pago</label>
-                            <select class="form-control" name="id_forma_pago" value="{{ old('id_forma_pago') }}">
+                            <select class="form-control text-uppercase" name="id_forma_pago" value="{{ old('id_forma_pago') }}">
                                 @foreach($formasPago as $formaPago)
                                     <option value="{{$formaPago->id}}">{{$formaPago->nombre}}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <input type="hidden" class="form-control" name="id_type" value="{{ $id_type }}">
-                        <input type="hidden" class="form-control" name="deHoy" value=1>
-                        <input type="hidden" class="form-control" name="completada" value=0>
-                        <input type="hidden" class="form-control" name="monto" value=0>
-                        <input type="hidden" class="form-control" name="pago_efec" value=0>
-                        <input type="hidden" class="form-control" name="pago_tarj" value=0>
-                        <input type="hidden" class="form-control" name="descuento" value=0>
-                        
+                        <input type="hidden" class="form-control text-uppercase" name="id_type" value="{{ $id_type }}">
+                        <input type="hidden" class="form-control text-uppercase" name="deHoy" value=1>
+                        <input type="hidden" class="form-control text-uppercase" name="completada" value=0>
+                        <input type="hidden" class="form-control text-uppercase" name="monto" value=0>
+                        <input type="hidden" class="form-control text-uppercase" name="pago_efec" value=0>
+                        <input type="hidden" class="form-control text-uppercase" name="pago_tarj" value=0>
+                        <input type="hidden" class="form-control text-uppercase" name="descuento" value=0>
+
                         <div class="form-group col-md-2" style="padding-left: 0px;">
                             <label>&nbsp;</label>
                             <button type="submit" class="btn btn-success form-control">Agregar</button>
@@ -73,7 +73,7 @@
                 </p>
             </div>
         </div>
-        @endif    
+        @endif
         <div class="collapse indent" id="collapseExample2">
             <div class="card card-body">
                 <p>
@@ -81,15 +81,15 @@
                         {!!csrf_field()!!}
                         <div class="form-group">
                             <label> Desde </label>
-                            <input required type="date" class="form-control" name="desde">
+                            <input required type="date" class="form-control text-uppercase" name="desde">
                         </div>
                         <div class="form-group">
                             <label> Hasta </label>
-                            <input required type="date" class="form-control" name="hasta" value="{{ date("Y-m-d") }}">
+                            <input required type="date" class="form-control text-uppercase" name="hasta" value="{{ date("Y-m-d") }}">
                         </div>
-                                    
+
                         <button type="submit" class="btn btn-success">Buscar</button>
-                        
+
                     </form>
                 </p>
             </div>
@@ -97,7 +97,7 @@
     </div>
 
     <p></p>
-    
+
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr></tr>
@@ -116,7 +116,7 @@
         </thead>
         <tbody>
             @foreach ($orders as $order)
-                <tr 
+                <tr class="text-uppercase"
                 @if (!$order->completada)
                 style="background-color: lightgray;"
                 @endif

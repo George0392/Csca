@@ -1,7 +1,7 @@
 @extends('control.index')
 
 @section('content3')
-    
+
     @if(session()->has('message'))
         <div class="alert alert-success alert-dismissible" role="alert">
             <strong>Operación Exitosa!</strong>
@@ -21,7 +21,7 @@
         @else
             <h2 class="mt-2 mb-3">{{ $titulo }}</h2>
             <a href="{{ url('/admin/control/adelantos/') }}" class="btn btn-primary">Volver</a>
-        @endif 
+        @endif
     </div>
     <p></p>
     <div class="collapse" id="collapseExample">
@@ -37,7 +37,7 @@
                         <label> Hasta </label>
                         <input required type="date" class="form-control" name="hasta" value="{{ date("Y-m-d") }}">
                     </div>
-                            
+
                     <button type="submit" class="btn btn-success">Buscar</button>
                 </form>
             </p>
@@ -46,7 +46,7 @@
 
     <table class="table">
         <thead class="thead-dark"></thead>
-            <tr>
+            <tr class="text-uppercase" >
                 @if($titulo == "Adelantos a " . $tipo)
                     <th scope="col">Nombre</th>
                     <th scope="col">Adelanto</th>
@@ -62,14 +62,14 @@
         <tbody>
             @if($titulo == "Adelantos a " . $tipo)
                 @foreach ($empleados as $empleado)
-                    <tr>
+                    <tr class="text-uppercase" >
                         <td style="vertical-align: middle;">
                             {{ $empleado->nombre }}
                         </td>
                         <td>
                             <form class="form-inline" name="myForm" method="POST" action="{{ url('admin/control/') }}">
                                 {!!csrf_field()!!}
-                                
+
                                 <input id="Sueldo" style="width: 82px;" required class="form-control sueldo" name="monto" placeholder="Adelanto">
                                 <input type="hidden" name="admin" value="{{ Auth::user()->nombre }}">
                                 <input type="hidden" name="id_desc" value="8">
@@ -89,7 +89,7 @@
                             <form class="form-inline" method="POST" action="{{ url('/admin/control/adelantos/'. $empleado->nombre) }}">
                                 {!!csrf_field()!!}
                                 <div class="form-group">
-                                    <label>Historial de adelantos a {{ $empleado->nombre }} desde</label>
+                                    <label>Historial de adelantos a <span class="text-uppercase">{{ $empleado->nombre }}</span> desde</label>
                                     <input type="hidden" name="profesor" value="{{ $empleado->nombre }}">
                                     <input required type="date" class="form-control" name="desde">
                                 </div>
@@ -97,7 +97,7 @@
                                     <label>hasta</label>
                                     <input required type="date" class="form-control" name="hasta" value="{{ date("Y-m-d") }}">
                                 </div>
-                                                
+
                                 <button type="submit" class="btn btn-success">Buscar</button>
                             </form>
                         </td>

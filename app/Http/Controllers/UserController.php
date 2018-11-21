@@ -149,7 +149,7 @@ class UserController extends Controller
             $empleados = \DB::table('users')->select('id', 'nombre', 'activo')->where([['id_uType',"!=", 3], ['id',"!=", 1],])->orderBy('nombre')->get();
             $orderTypes = \DB::table('orders_type')->select('id', 'nombre')->get();
             $formasPago = \DB::table('formas_pago')->select('id', 'nombre')->get();
-            $titulo = "Historial para " . $nombre . ' (Últimos 6 meses)';
+            $titulo = "Historial para " . strtoupper($nombre) . ' (Últimos 6 meses)';
 
             return view('users.record', compact('nombre', 'orderTypes', 'titulo', 'empleados', 'formasPago', 'orders'));
         }
@@ -171,7 +171,7 @@ class UserController extends Controller
 
         $desde = date('d/m/y', strtotime($desde));
         $hasta = date('d/m/y', strtotime($hasta));
-        $titulo = "Historial para " . $nombre . " desde " . $desde . " hasta " . $hasta;
+        $titulo = "Historial para " . strtoupper($nombre) . " desde " . $desde . " hasta " . $hasta;
 
         return view('users.record', compact('nombre', 'orderTypes', 'titulo', 'empleados', 'formasPago', 'orders'));
     }

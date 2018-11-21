@@ -1,7 +1,7 @@
 @extends('control.index')
 
 @section('content3')
-    
+
     <div style="display: flex;">
         <div>
             <h1 style="margin-top: auto;">{{ $titulo }}</h1>
@@ -10,7 +10,7 @@
             <div style="margin-left: auto; margin-top: 3px;">
                 <label class="btn btn-success">TOTAL ${{ $order->monto }}</label>
             </div>
-            <div style="margin-top: 3px; margin-left: 5px;">    
+            <div style="margin-top: 3px; margin-left: 5px;">
                 @if($order->descuento == 0)
                     @if($order->completada == 0)
                     <form method="POST" action="/admin/control/{{$tipo}}/descuento/{{ $id_order }}">
@@ -27,7 +27,7 @@
             <div style="margin-top: 3px; margin-left: 5px;">
                 <label class="btn btn-warning">MONTO ${{ $order->monto - $order->descuento }}</label>
             </div>
-            <div style="margin-top: 3px; margin-left: 5px;">    
+            <div style="margin-top: 3px; margin-left: 5px;">
                 @if($order->completada == 1)
                     @if(str_contains(URL::previous(), 'clientes'))
                     <a href="{{ URL::previous() }}" class="btn btn-primary"><span class="oi oi-arrow-left"></span> <b>VOLVER</b></a>
@@ -38,11 +38,11 @@
             </div>
         @endif
     </div>
-    
+
     <p>
         <h4 class="mt-2 mb-3">{{ $subtitulo }}</h4>
     </p>
-    
+
     @if($subtitulo != "La orden todavía no existe")
         <div style="display: flex; margin-top: 0px;">
             <h4 style="margin-top: 10px;color: darkviolet;" class="mt-2 mb-3">{{ $pie }}</h4>
@@ -59,40 +59,40 @@
                     </form>
                 @endif
             </div>
-            {{-------------------  Cerrar  -------------------}}
+            {{-- -------------------  Cerrar  ------------------ --}}
         </div>
-    
+
         <div class="card card-body">
             <p>
                 @if($order->completada != "1")
                     <form method="POST" action="/admin/control/ingresos/{{ $tipo }}/{{ $id_order }}">
                         {!!csrf_field()!!}
-                        {{-------------------  Servicios  -------------------}}
-                        @if($id_type == 2)    
+                        {{-- -------------------  Servicios  --------------------}}
+                        @if($id_type == 2)
                             <div class="form-group col-md-3" style="padding-left: 0px;">
                                 <label>Servicio</label>
-                                <select class="form-control" name="id_servicio" value="{{ old('id_servicio') }}">
+                                <select class="form-control text-uppercase" name="id_servicio" value="{{ old('id_servicio') }}">
                                     @foreach($servicios as $servicio)
                                         <option value="{{$servicio->id}}">{{$servicio->nombre}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                                        
+
                             <div class="form-group col-md-6" style="padding-left: 0px;">
                                 <label>Detalle</label>
-                                <input required type="text" maxlength="100" class="form-control" name="detalle" value="{{ old('detalle') }}">
+                                <input required type="text" maxlength="100" class="form-control text-uppercase" name="detalle" value="{{ old('detalle') }}">
                             </div>
-                            {{-------------------  Productos  -------------------}}
+                            {{--   Productos   --}}
                         @else
                             <div class="form-group col-md-5" style="padding-left: 0px;">
                                 <label>Producto</label>
-                                <select class="form-control" name="id_producto" value="{{ old('id_producto') }}">
+                                <select class="form-control text-uppercase " name="id_producto" value="{{ old('id_producto') }}">
                                     @foreach($productos as $producto)
                                         <option value="{{$producto->id}}">{{$producto->nombre}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                                        
+
                             <div class="form-group col-md-2" style="padding-left: 0px;">
                                 <label>Cant</label>
                                 <input required type="number" min="0" class="form-control" name="cantidad" value="{{ old('cantidad') }}">
@@ -100,7 +100,7 @@
                         @endif
                         <input type="hidden" class="form-control" name="id_type" value="{{ $id_type }}">
                         <input type="hidden" class="form-control" name="id_order" value="{{ $id_order }}">
-                        {{-------------------  Agregar  -------------------}}    
+                        {{---------------------  Agregar  --------------------}}
                         <div class="form-group col-md-2" style="padding-left: 0px;">
                             <label>&nbsp;</label>
                             <button type="submit" class="btn btn-success form-control">Agregar</button>
@@ -109,13 +109,13 @@
                 @endif
             </p>
         </div>
-        
+
         <p></p>
-    
+
         <table class="table">
             <thead class="thead-dark">
                 <tr>
-                    @if($id_type == 2)  
+                    @if($id_type == 2)
                         <th scope="col">Servicio</th>
                         <th scope="col">Detalle</th>
                     @else
@@ -132,7 +132,7 @@
             </thead>
             <tbody>
                 @foreach ($orders_indiv as $orderind)
-                    <tr>
+                    <tr class="text-uppercase" >
                         @if($id_type == 2)
                             <td scope="row">
                                 @foreach($servicios as $servicio)

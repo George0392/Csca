@@ -1,14 +1,14 @@
 @extends('admin')
 
 @section('content2')
-    
+
     <div class="d-flex justify-content-between align-items-end">
         <h1 class="mt-2 mb-3">Listado de {{ $type }}s</h1>
         <p>
             <a href="{{route('services.create')}}" class="btn btn-primary">Nuevo {{ $type }}</a>
         </p>
     </div>
-    
+
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             @foreach ($services as $service)
-                <tr>
+                <tr class="text-uppercase">
                     <td>{{ $service->nombre }}</td>
                     <td><b>$</b> {{ $service->monto }}</td>
                     <td>

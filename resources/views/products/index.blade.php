@@ -1,6 +1,6 @@
 @extends('admin')
 @section('content2')
-        
+
     <div class="d-flex justify-content-between align-items-end">
         <h1 class="mt-2 mb-3">Listado de {{ $type }}s</h1>
         <p>
@@ -15,17 +15,17 @@
         <div class="card card-body">
             <p>
                 <form class="form-inline" method="POST" action="/admin/productos/filtro">
-                    
+
                     {!!csrf_field()!!}
-                    
+
                     <div class="form-group">
-                        <select class="form-control" name="id_categoria" value="{{ old('id_categoria') }}">
+                        <select class="text-uppercase form-control" name="id_categoria" value="{{ old('id_categoria') }}">
                             @foreach($categories as $category)
-                                <option value="{{$category->id}}">{{$category->nombre}}</option>
+                                <option   value="{{$category->id}}">{{$category->nombre}}</option>
                             @endforeach
                         </select>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-success"><span class="oi oi-check"></span></button>
                     <a href="{{ route('products.index') }}" class="btn btn-danger"><span class="oi oi-x"></span><b> Borrar filtro</b></a>
 
@@ -33,7 +33,7 @@
             </p>
         </div>
     </div>
-    
+
     <table class="table">
         <thead class="thead-dark"></thead>
             <tr>
@@ -50,7 +50,7 @@
         </thead>
         <tbody>
             @foreach ($products as $product)
-                <tr>
+                <tr class="text-uppercase" >
                     <td>{{ $product->nombre }}</td>
                     <td>
                         @foreach ($categories as $category)
@@ -64,8 +64,8 @@
                         echo DNS1D::getBarcodeHTML("$product->codigo", "EAN13", 1, 35);
                         ?>
                     </td>
-                    <td>{{ $product->pedido }} <b>uds.</b></td>
-                    <td>{{ $product->quedan }} <b>uds.</b></td>
+                    <td>{{ $product->pedido }} <b class="text-lowercase">uds.</b></td>
+                    <td>{{ $product->quedan }} <b class="text-lowercase">uds.</b></td>
                     <td><b>$</b> {{ $product->costo }}</td>
                     <td><b>$</b> {{ $product->monto }}</td>
                     <td>

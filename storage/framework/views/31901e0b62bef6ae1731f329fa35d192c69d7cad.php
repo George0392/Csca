@@ -1,40 +1,40 @@
-@extends('admin')
+<?php $__env->startSection('content2'); ?>
 
-@section('content2')
-
-    @if(session()->has('message'))
+    <?php if(session()->has('message')): ?>
         <div class="alert alert-success alert-dismissible" role="alert">
             <strong>Operación Exitosa!</strong>
-            {{ session()->get('message') }}
+            <?php echo e(session()->get('message')); ?>
+
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-    @endif
+    <?php endif; ?>
 
     <h1 class="form-group col-md-12">Crear Servicio</h1>
 
-    @if ($errors->any())
+    <?php if($errors->any()): ?>
         <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
+            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li><?php echo e($error); ?></li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </ul>
-    @endif
+    <?php endif; ?>
 
-    <form method="POST" action="{{ url('admin/servicios') }}">
-        {!!csrf_field()!!}
+    <form method="POST" action="<?php echo e(url('admin/servicios')); ?>">
+        <?php echo csrf_field(); ?>
+
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="inputEmail4">Nombre</label>
-                <input type="text" class="form-control text-uppercase" name="nombre" value="{{ old('nombre') }}" >
+                <input type="text" class="form-control text-uppercase" name="nombre" value="<?php echo e(old('nombre')); ?>" >
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="inputEmail4">Monto</label>
-                <input type="number" class="form-control" name="monto" value="{{ old('monto') }}" >
+                <input type="number" class="form-control" name="monto" value="<?php echo e(old('monto')); ?>" >
             </div>
         </div>
 
@@ -51,4 +51,5 @@
         </div>
     </form>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

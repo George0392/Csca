@@ -1,17 +1,16 @@
-@extends('control.index')
-
-@section('content3')
+<?php $__env->startSection('content3'); ?>
 
     <div class="d-flex justify-content-between align-items-end">
 
-        <h1 class="mt-2 mb-3">{{ $titulo }}</h1>
+        <h1 class="mt-2 mb-3"><?php echo e($titulo); ?></h1>
         <p>
-            <form class="form-inline" method="POST" action="{{ url('admin/control/') }}">
-                {!!csrf_field()!!}
+            <form class="form-inline" method="POST" action="<?php echo e(url('admin/control/')); ?>">
+                <?php echo csrf_field(); ?>
 
-                @if($titulo == "Retiros del día")
+
+                <?php if($titulo == "Retiros del día"): ?>
                 <div class="form-group mx-sm-3 mb-2">
-                    <input type="hidden" class="form-control" name="admin" value="{{ Auth::user()->nombre }}">
+                    <input type="hidden" class="form-control" name="admin" value="<?php echo e(Auth::user()->nombre); ?>">
                     <input type="number" required class="form-control" name="monto" placeholder="Cargar retiro">
                     <input type="hidden" class="form-control" name="id_desc" value="6">
                     <input type="hidden" class="form-control" name="detalle" value="Retiro">
@@ -19,9 +18,9 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Cargar</button>
-                @else
-                <a href="{{route('control.caja.retiros')}}" class="btn btn-primary">Volver a retiros de hoy</a>
-                @endif
+                <?php else: ?>
+                <a href="<?php echo e(route('control.caja.retiros')); ?>" class="btn btn-primary">Volver a retiros de hoy</a>
+                <?php endif; ?>
                 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                     Historial
                 </button>
@@ -30,15 +29,16 @@
             <div class="collapse" id="collapseExample">
                 <div class="card card-body">
                     <p>
-                        <form class="form-inline" method="POST" action="{{ url('/admin/control/caja/retiros/') }}">
-                            {!!csrf_field()!!}
+                        <form class="form-inline" method="POST" action="<?php echo e(url('/admin/control/caja/retiros/')); ?>">
+                            <?php echo csrf_field(); ?>
+
                             <div class="form-group">
                                 <label> Desde </label>
                                 <input required type="date" class="form-control" name="desde">
                             </div>
                             <div class="form-group">
                                 <label> Hasta </label>
-                                <input required type="date" class="form-control" name="hasta" value="{{ date("Y-m-d") }}">
+                                <input required type="date" class="form-control" name="hasta" value="<?php echo e(date("Y-m-d")); ?>">
                             </div>
 
                             <button type="submit" class="btn btn-success">Buscar</button>
@@ -57,35 +57,36 @@
             <th scope="col">Monto</th>
             <th scope="col">Fecha</th>
             <th scope="col">Hora</th>
-            @if($titulo == "Retiros del día")
+            <?php if($titulo == "Retiros del día"): ?>
                 <th scope="col">Borrar</th>
-            @endif
+            <?php endif; ?>
           </tr>
         </thead>
         <tbody>
-            @foreach ($controls as $control)
+            <?php $__currentLoopData = $controls; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $control): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr class="text-uppercase" >
-                <th scope="row">{{ $control->id }}</th>
-                <td>{{ $control->admin }}</td>
-                <td><b>$</b> {{ $control->monto }}</td>
-                <td>{{ date('d/m/Y', strtotime($control->created_at)) }}</td>
-                <td>{{ date('H:i', strtotime($control->created_at)) }} <b class="text-lowercase">hs</b></td>
-                @if($titulo == "Retiros del día")
+                <th scope="row"><?php echo e($control->id); ?></th>
+                <td><?php echo e($control->admin); ?></td>
+                <td><b>$</b> <?php echo e($control->monto); ?></td>
+                <td><?php echo e(date('d/m/Y', strtotime($control->created_at))); ?></td>
+                <td><?php echo e(date('H:i', strtotime($control->created_at))); ?> <b class="text-lowercase">hs</b></td>
+                <?php if($titulo == "Retiros del día"): ?>
                     <td>
-                        <form action="{{ route('control.delete', [$id = $control->id]) }}" method="POST">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
+                        <form action="<?php echo e(route('control.delete', [$id = $control->id])); ?>" method="POST">
+                            <?php echo e(csrf_field()); ?>
+
+                            <?php echo e(method_field('DELETE')); ?>
+
                             <button class="btn btn-danger" type="submit">
                                 <span class="oi oi-trash"></span>
                             </button>
                         </form>
                     </td>
-                @endif
+                <?php endif; ?>
             </tr>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
-      {{--  <div class="pagination-bar text-center">
-            {{ $controls->links() }}
-     </div>  --}}
-@endsection
+      
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('control.index', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,7 +1,7 @@
 @extends('admin')
 
 @section('content2')
-    
+
     <div class="d-flex justify-content-between align-items-end">
         <h1 class="mt-2 mb-3">Listado de {{ $type }}s</h1>
         <p>
@@ -9,17 +9,17 @@
             <a href="{{route('products.index')}}" class="btn btn-info">ir a Productos</a>
         </p>
     </div>
-    
+
     <table class="table">
         <thead class="thead-dark"></thead>
-            <tr></tr>
+            <tr>
                 <th scope="col">Nombre</th>
                 <th scope="col">Editar</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($categories as $category)
-                <tr>
+                <tr class="text-uppercase">
                     <td>{{ $category->nombre }}</td>
                     <td>
                         <form action="{{ route('categories.delete', $category) }}" method="POST">
